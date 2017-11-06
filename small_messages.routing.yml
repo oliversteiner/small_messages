@@ -1,0 +1,88 @@
+#
+# Start
+#
+small_messages.admin:
+  path: 'messages'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
+    _title: 'Small Messages'
+  requirements:
+    _permission: 'administer content'
+
+#
+# messages List
+#
+small_messages.messages:
+  path: 'smmg/messages'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
+    _title: 'Small Messages'
+  requirements:
+    _permission: 'administer content'
+
+#
+# subscriber List
+#
+small_messages.subscribers:
+  path: 'smmg/subscribers'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\AdminController:subscribersTemplate'
+    _title: 'Small Messages'
+  requirements:
+    _permission: 'administer content'
+
+#
+# test config
+#
+small_messages.admin.test_config:
+  path: 'smmg/config'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\AdminController::smmgConfig'
+    _title: 'Config'
+  requirements:
+    _permission: 'administer content'
+
+#
+# Sandbox
+#
+small_messages.sandbox:
+  path: 'smmg/sandbox'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController:sandboxPage'
+    _title: 'Sandbox'
+  requirements:
+    _permission: 'administer content'
+
+
+
+small_messages.send_message:
+  path: 'smmg/send/{message_id}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::sendMessage'
+    _title: 'Test Send Message'
+  requirements:
+    _permission: 'administer content'
+
+#
+# AJAX toggleSubscriberGroup
+#
+small_messages.ajax.toggle_subsciber_group:
+  path: '/smmg/ajax/toggle_subsciber_group/{target_nid}/{subscriber_group_tid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberGroup'
+    target_nid: null
+    subscriber_group_tid: null
+    _title: 'Toggle Subscriber'
+  requirements:
+    _permission: 'administer content'
+
+#
+# AJAX toggleSubscriberGroup
+#
+small_messages.ajax.prepare_send:
+  path: '/smmg/ajax/prepare_send/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::prepareSend'
+    _title: 'Nachricht bereit zum senden'
+  requirements:
+    _permission: 'administer content'

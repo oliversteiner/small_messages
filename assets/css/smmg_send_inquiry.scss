@@ -1,0 +1,127 @@
+@import 'variables';
+
+// Buttons
+
+div.smmg-subscriber-group-tag {
+  font-size: 15px;
+  padding: 5px 7px;
+}
+.smmg-subscriber-group-tag span.badge {
+  margin-left: 10px;
+  background-color: $color-smmg-tag-button-active-hover;
+}
+// Messages
+
+.smmg-message-status {
+
+  // Konzert findet statt
+  &-ok {
+    @include box-ok;
+  }
+
+  // Konzert noch offen
+  &-warning {
+    @include box-warning;
+  }
+
+  // Konzert Abgesagt
+  &-error {
+    @include box-error;
+  }
+
+}
+// Nachricht Details
+
+.smmg-body {
+  height: 60px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.smmg-body-komplete {
+  height: auto;
+}
+// Empfänger Liste einblenden
+
+.smmg-subscriber-list {
+  padding-top: 20px;
+
+  h4.smmg-subscriber-list-title {
+    font-weight: bold;
+    border-bottom: solid 1px grey;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul li {
+    list-style: none;
+  }
+
+}
+.smmg-subscriber-list-edit {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  border: 1px solid transparent;
+  padding: 2px 7px;
+  display: inline-block;
+  border-radius: 10px;
+}
+.smmg-subscriber-list-edit:hover {
+  background-color: $color-smmg-tag-button;
+}
+.smmg-subscriber-list-remove:hover,
+.smmg-subscriber-list-edit:hover .smmg-subscriber-list-remove {
+  visibility: visible }
+.smmg-subscriber-list-remove {
+  margin-left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  visibility: hidden;
+}
+.smmg-subscriber-list-remove:hover {
+  margin-left: 10px;
+  font-size: 16px;
+  color: red;
+}
+// Test
+div.row > div {
+  // border: solid 1px green;
+}
+.smmg-subscriber-list {
+  margin:10px;
+}
+
+.smmg-subscriber-list-footer {
+  margin-top: 10px;
+  border-top: 1px solid $color-smmg-tag-border;
+  padding: 10px;
+  color: $color-80;
+  font-size: 0.9em;
+}
+
+.ajax-container.active{
+    @include box-ok;
+}
+
+.smmg-subscriber-list-column{
+    column-width: 200px;
+    column-gap: 10px;
+    column-rule: none;
+
+}
+
+
+.smmg-subscriber-foot{
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+
+  button.btn.btn-default{
+    display: inline-flex;
+    margin-right: 10px;
+  }
+}

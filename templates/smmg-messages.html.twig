@@ -1,0 +1,80 @@
+{{ attach_library('small_messages/small_messages.main') }}
+
+
+<!-- Add you custom twig html here -->
+<div class="well well-ost">
+
+
+    {% set link_messages = path('small_messages.messages') %}
+    {% set link_subscribers = path('small_messages.subscribers') %}
+
+    {# TAB #}
+    <div class="smmg-tab-container">
+        <a type="button"
+           class="btn btn-lg smmg-tab active"
+           id="smmg-tab-messages"
+           href="{{ link_messages }}">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            Nachrichten
+        </a>
+
+        <a type="button"
+           class="btn btn-lg smmg-tab "
+           id="smmg-tab-subscribers"
+           href="{{ link_subscribers }}">
+
+            <i class="fa fa-users" aria-hidden="true"></i>
+            Empfängerliste
+        </a>
+
+    </div>
+
+
+    {# Toolbox #}
+
+
+    <div class="smmg-toolbox">
+
+        {# Action #}
+        <div class="smmg-toolbox-action">
+
+            {# Neu Nachricht  #}
+            <a type="button" class="btn btn-success use-ajax" data-dialog-type="modal"
+               href="/node/add/newsletter?destination={{ link_messages }}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>
+                neue Nachricht erstellen
+            </a>
+
+
+            {# Neu Nachricht  #}
+            <a type="button"
+               class="btn btn-default use-ajax disabled"
+               data-dialog-type="modal"
+               href="/node/add/newsletter?destination={{ link_messages }}"
+               data-toggle="tooltip"
+               data-placement="left"
+               title="Funktion noch nicht verfügbar">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>
+                neue Nachricht aus Vorlage
+
+            </a>
+
+        </div>
+
+        {# Feedback #}
+        <div class="ajax-container"></div>
+
+
+        {# Filter #}
+        <div class="smmg-toolbox-filter">
+
+
+        </div>
+        <div class="smmg-views">
+
+        {{ drupal_view('smmg_messages_list','messages_admin') }}
+        </div>
+    </div>
+
+
+</div>

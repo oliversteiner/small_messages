@@ -1,0 +1,14 @@
+{
+  "name": "drupal/small_messages",
+  "type": "drupal-module",
+  "description": "Ein kleines Nachrichten System",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/small_messages",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/small_messages",
+    "source": "http://cgit.drupalcode.org/small_messages"
+  },
+  "require": { }
+}

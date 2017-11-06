@@ -1,0 +1,141 @@
+@import 'variables';
+
+.smmg-tab-container {
+  margin-bottom: 20px;
+
+  .smmg-tab {
+    color: grey;
+  }
+
+  .smmg-tab:hover {
+    color: #19201e;
+  }
+
+  .active {
+    color: $color-smmg-link;
+  }
+
+}
+.smmg-toolbox-action {
+  margin-bottom: 20px;
+}
+// Button Anwenden ausblenden:
+
+*[id^=edit-submit-smmg-] {
+
+//  display: none;
+
+  background-color: white;
+  color: grey;
+  border: solid 1px #ccc;
+}
+
+
+*[id^=edit-field-newsletter-mailto-groups] .form-item {
+  display: inline-block;
+  margin-right: 25px;
+}
+*[id^="edit-delete--"] {
+  margin-left: 40px;
+}
+a.vat-button-send {
+  opacity: 1;
+  border: solid 1px $color-smmg-line;
+  color: green;
+}
+a.vat-button-send.message-sended {
+  opacity: 0.5;
+  color: grey;
+}
+*[id^=views-exposed-form-smmg] {
+  border-bottom: solid 1px $color-smmg-line;
+  border-top: solid 1px $color-smmg-line;
+  margin: 10px 0;
+  padding: 10px 0;
+
+  label {
+    display: inline-block;
+    font-size: small;
+    font-weight: 400;
+    margin: 5px;
+  }
+  .form-type-select {
+    margin-right: 20px;
+  }
+
+  select {
+    font-size: small;
+    -webkit-appearance: none;
+    border: solid 1px #ccc;
+    color: $color-smmg-link;
+  }
+  .select-wrapper {
+    display: inline-block;
+  }
+
+}
+.smmg-tab-messages a { color: grey }
+.btn-tag {
+  display: inline-block;
+  padding: 3px 6px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: $color-smmg-tag-text;
+  background: $color-smmg-tag-button;
+  border: 1px solid $color-smmg-tag-border;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+.btn-tag:hover {
+  text-decoration: none;
+  background-color: $color-smmg-tag-button-hover;
+  color: $color-smmg-tag-text-hover;
+}
+.btn-tag.active {
+  background-color: $color-smmg-tag-button-active;
+  color: $color-smmg-tag-text-active;
+  border: 1px solid $color-smmg-tag-border-active;
+}
+.btn-tag.active:hover {
+  background-color: $color-smmg-tag-button-active-hover;
+  color: $color-smmg-tag-text-active-hover;
+  border: 1px solid $color-smmg-tag-border-active-hover;
+}
+// Tabelle
+
+.table-striped > tbody > tr:hover td {
+  background-color: #d7ebc3;
+}
+.table-striped > tbody > tr:hover {
+  .btn-tag {
+    background-color: white;
+  }
+  .btn-tag:hover {
+    text-decoration: none;
+    background-color: $color-smmg-tag-button-hover;
+    color: $color-smmg-tag-text-hover;
+  }
+  .btn-tag.active {
+    background-color: $color-smmg-tag-button-active;
+    color: $color-smmg-tag-text-active;
+    border: 1px solid $color-smmg-tag-border-active;
+  }
+  .btn-tag.active:hover {
+    background-color: $color-smmg-tag-button-active-hover;
+    color: $color-smmg-tag-text-active-hover;
+    border: 1px solid $color-smmg-tag-border-active-hover;
+  }
+
+}
+

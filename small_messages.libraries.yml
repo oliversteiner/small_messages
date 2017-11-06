@@ -1,0 +1,22 @@
+small_messages.main:
+  css:
+    theme:
+      assets/css/smmg_main.css: {}
+  js:
+    assets/js/smmg.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+#
+#  send_inquiry
+#
+small_messages.send_inquiry:
+  css:
+    theme:
+      assets/css/smmg_send_inquiry.css: {}
+  js:
+    assets/js/smmg_send_inquiry.js: {}
+  dependencies:
+    - core/drupalSettings
+    - core/jquery
+    - core/jquery.once

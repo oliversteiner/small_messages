@@ -1,0 +1,102 @@
+$color-smmg-line: rgb(213, 213, 213);
+$color-smmg-link: #982b20;
+$color-smmg-active: rgb(185, 229, 172);
+
+// tag
+$color-smmg-tag-button: rgb(230, 230, 230);
+$color-smmg-tag-text: rgb(25, 32, 30);
+$color-smmg-tag-border: rgb(213, 213, 213);
+
+// hover
+$color-smmg-tag-button-hover: rgb(139, 181, 169);
+$color-smmg-tag-text-hover: rgb(244, 255, 246);
+$color-smmg-tag-border: rgb(203, 228, 214);
+
+// active
+$color-smmg-tag-button-active: rgb(139, 181, 169);
+$color-smmg-tag-text-active: rgb(244, 255, 246);
+$color-smmg-tag-border-active: rgb(213, 213, 213);
+
+// active hover
+$color-smmg-tag-button-active-hover: rgb(77, 100, 93);
+$color-smmg-tag-text-active-hover: rgb(244, 255, 246);
+$color-smmg-tag-border-active-hover: rgb(46, 62, 56);
+
+
+
+// Black
+$color-90: rgb(17, 17, 17);
+$color-80: rgb(41, 41, 41);
+$color-50: rgb(126, 126, 126);
+$color-30: rgb(171, 171, 171);
+$color-20: rgb(194, 194, 194);
+$color-10: rgb(220, 219, 212);
+$color-5: rgb(225, 225, 225);
+$color-2: rgb(246, 246, 246);
+
+$color-debug: rgb(255, 221, 138);
+
+// OK
+$color-ok-border: #2eb741;
+$color-ok-background: #daffd4;
+$color-ok-text: #185746;
+
+// Warning
+$color-warning-border: #ffd29b;
+$color-warning-background: #fff8cf;
+$color-warning-text: #7f5930;
+
+// Error
+$color-error-border: #ffb4aa;
+$color-error-background: #ffe6e5;
+$color-error-text: #7f2013;
+
+
+@mixin box-message {
+  margin: 20px 0;
+  border-radius: 5px;
+  color: black;
+  padding: 10px;
+}
+
+// BOX ok
+@mixin box-ok {
+  @include box-message;
+  border: solid 1px $color-ok-border;
+  background-color: $color-ok-background;
+  color: $color-ok-text;
+}
+// BOX warning
+@mixin box-warning {
+  @include box-message;
+  //
+  border: solid 1px $color-warning-border;
+  background-color: $color-warning-background;
+  color: $color-warning-text;
+}
+// BOX error
+@mixin box-error {
+  @include box-message;
+  padding: 10px;
+  //
+  border: solid 1px $color-error-border;
+  background-color: $color-error-background;
+  color: $color-error-text;
+}
+
+// Ajax
+.ajax-message {
+}
+// Ajax
+.ajax-message-ok {
+  @include box-ok;
+}
+// Ajax
+.ajax-message-warning {
+  @include box-warning;
+}
+// Ajax
+.ajax-message-error {
+  @include box-error;
+}
+

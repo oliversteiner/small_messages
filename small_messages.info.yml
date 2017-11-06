@@ -1,0 +1,5 @@
+name: Small Messages
+type: module
+description: Ein kleines Nachrichten System
+core: 8.x
+package: Messages

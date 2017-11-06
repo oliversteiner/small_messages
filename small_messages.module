@@ -1,0 +1,76 @@
+<?php
+
+  /**
+   * @file
+   * Contains small_messages.module.
+   */
+
+  use Drupal\Core\Routing\RouteMatchInterface;
+
+
+  /**
+   * Implements hook_help().
+   */
+  function small_messages_help($route_name, RouteMatchInterface $route_match) {
+    switch ($route_name) {
+      // Main module help for the small_messages module.
+      case 'help.page.small_messages':
+        $output = '';
+        $output .= '<h3>' . t('About') . '</h3>';
+        $output .= '<p>' . t('Ein kleines Nachrichten-System') . '</p>';
+        return $output;
+
+      default:
+    }
+  }
+
+
+  /**
+   * Implements hook_theme().
+   */
+  function small_messages_theme() {
+    return [
+      'small_messages' => [
+        'render element' => 'children',
+      ],
+    ];
+  }
+
+
+  /**
+   * Implements hook_mail().
+   */
+  function small_messages_mail($key, &$message, $params) {
+
+    switch ($key) {
+
+
+      case 'EMAIL_PLAIN':
+
+        $message['from'] = $params['from'];
+        $message['subject'] = $params['title'];
+        $message['body'][] = $params['message'];
+        break;
+
+
+      case 'EMAIL_SMTP' :
+
+        $message['from'] = $params['from'];
+        $message['subject'] = $params['title'];
+        $message['headers'] = [
+          'MIME-Version' => '1.0',
+          'Content-Type' => "multipart/alternative",
+          'Content-Transfer-Encoding' => '8Bit',
+          'X-Mailer' => 'Drupal',
+        ];
+        $message['body'][] = "\r\n--\r\n";
+        $message['body'][] = 'Content-Type: text/plain; charset=utf-8;';
+        $message['body'][] = $params['message'];
+        $message['body'][] = "\r\n--\r\n";
+        $message['body'][] = "Content-Type: text/html; charset=utf-8;";
+        $message['body'][] = $params['htmltext'];
+        $message['body'][] = "\r\n-- --\r\n";
+        break;
+    }
+
+  }
