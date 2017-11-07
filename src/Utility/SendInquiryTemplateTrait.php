@@ -91,7 +91,7 @@
      * @return mixed
      *
      */
-    protected function getMessageData($nid) {
+    public function getMessageData($nid) {
 
 
 

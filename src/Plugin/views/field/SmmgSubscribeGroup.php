@@ -39,7 +39,6 @@
     protected function defineOptions() {
       $options = parent::defineOptions();
 
-
       return $options;
     }
 
@@ -56,10 +55,10 @@
      */
     public function render(ResultRow $values) {
 
-      $destination = 'smmg/ajax/toggle_subsciber_group';
 
+      $field = 'field_smmg_subscriber_tags';
       $elements = [];
-      $default_classes = ['use-ajax','btn-tag'];
+      $default_classes = ['use-ajax', 'btn-tag'];
       $active_tids = [];
 
       // load all Tags
@@ -71,7 +70,7 @@
       // Load Active Tags
       $node = $values->_entity;
       $nid = $values->_entity->id();
-      $active_tags = $values->_entity->get('field_empfaenger_gruppe')
+      $active_tags = $values->_entity->get($field)
         ->getValue();
 
       // save only tid
@@ -82,12 +81,16 @@
 
       foreach ($default_tags as $default_tag) {
 
-
         $term_id = $default_tag->tid;
         $term_name = $default_tag->name;
 
-        // Link
-        $link = "$destination/$nid/$term_id";
+        // url for SubscriberController::toggleSubsciberTag'
+        $url = Url::fromRoute('small_messages.toggle_subscriber_tag',
+          [
+            'target_nid' => $term_id,
+            'subscriber_tag_tid' => $term_name,
+          ]);
+
 
         // class
         if (in_array($term_id, $active_tids)) {
@@ -103,10 +106,10 @@
         $elements[$term_name] = [
           '#title' => $term_name,
           '#type' => 'link',
-          '#url' => Url::fromUri('internal:/' . $link),
+          '#url' => Url::fromUri('internal:/' . $url->toString()),
           '#attributes' => [
             'class' => $class,
-            'id' => 'subscibe-group-'.$nid.'-'.$term_id,
+            'id' => 'subscibe-group-' . $nid . '-' . $term_id,
           ],
         ];
 

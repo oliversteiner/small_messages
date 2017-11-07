@@ -26,10 +26,10 @@
     /**
      * @return \Drupal\Core\Ajax\AjaxResponse
      */
-    public function toggleSubsciberGroup($target_nid, $subscriber_group_tid) {
+    public function toggleSubsciberTag($target_nid, $subscriber_group_tid) {
 
 
-      $result = SubscriberTrait::toggleSubscriberGroup($target_nid, $subscriber_group_tid);
+      $result = SubscriberTrait::toggleSubscriberTag($target_nid, $subscriber_group_tid);
 
 
       $response = new AjaxResponse();

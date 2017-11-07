@@ -133,7 +133,7 @@
 
 
       $.ajax({
-        url     : Drupal.url('smmg/ajax/toggle_subsciber_group/' + subscriber_id + '/' + subscriber_group_id),
+        url     : Drupal.url('smmg/ajax/togglesubscriber_group/' + subscriber_id + '/' + subscriber_group_id),
         type    : 'POST',
         data    : {},
         dataType: 'json',

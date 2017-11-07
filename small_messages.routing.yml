@@ -66,13 +66,13 @@ small_messages.send_message:
 #
 # AJAX toggleSubscriberGroup
 #
-small_messages.ajax.toggle_subsciber_group:
-  path: '/smmg/ajax/toggle_subsciber_group/{target_nid}/{subscriber_group_tid}'
+small_messages.toggle_subscriber_tag:
+  path: '/smmg/toggle_subscriber_tag/{target_nid}/{subscriber_tag_tid}'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberGroup'
+    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberTag'
     target_nid: null
-    subscriber_group_tid: null
-    _title: 'Toggle Subscriber'
+    subscriber_tag_tid: null
+    _title: 'Toggle Subscriber Tag'
   requirements:
     _permission: 'administer content'
 

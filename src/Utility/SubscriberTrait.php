@@ -108,7 +108,7 @@
      *
      *
      */
-    public static function toggleSubscriberGroup($target_nid, $subscriber_group_nid) {
+    public static function toggleSubscriberTag($target_nid, $subscriber_group_nid) {
 
       // 1. error?
       // 2. add or remove

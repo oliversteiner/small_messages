@@ -13,7 +13,7 @@
 
     use SendInquiryTemplateTrait;
 
-    public  function generateMessagePlain($message, $search_keys, $placeholders) {
+    public static function generateMessagePlain($message, $search_keys, $placeholders) {
       {
         // load Design Template
         $entity = \Drupal::entityTypeManager()
@@ -37,7 +37,7 @@
 
     }
 
-    public  function generateMessageHtml($message, $search_keys, $placeholders) {
+    public static function generateMessageHtml($message, $search_keys, $placeholders) {
 
       // load Design Template
       $entity = \Drupal::entityTypeManager()

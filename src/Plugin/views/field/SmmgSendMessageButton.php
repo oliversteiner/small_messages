@@ -3,6 +3,11 @@
    * @file
    * Definition of
    * Drupal\small_messages\Plugin\views\field\SmmgSendMessageButton
+   *
+   * Field used:
+   *
+   * - field_smmg_message_send_date
+   *
    */
 
   namespace Drupal\small_messages\Plugin\views\field;
@@ -57,7 +62,7 @@
       $node = $values->_entity;
       $bundle = $node->bundle();
       $nid = $values->_entity->id();
-      $send_date = $node->get('field_smms_send_date')->getValue();
+      $send_date = $node->get('field_smmg_message_send_date')->getValue();
       $destination = 'smmg/messages';
 
       $elements = [];
