@@ -1,9 +1,7 @@
 {{ attach_library('small_messages/small_messages.main') }}
 
 
-    {% set link_messages = path('small_messages.messages') %}
-    {% set link_subscribers = path('small_messages.subscribers') %}
-    {% set link_send = path('small_messages.subscribers') %}
+    {% set link_send = path('small_messages.send_message', {'message_id': message.id}) %}
 
 
 
@@ -18,48 +16,48 @@
     <h3>{{ message.title }}</h3>
     <div class="smmg-body">
 
-        {% set body = {
-        '#type':   'processed_text',
-        '#text':    message.body.value,
-        '#format':  message.body.format,
-        } %}
+        {{ message.text.value|raw }}
 
-        {{ body }}
     </div>
     <div>
         <a type="button" class="btn btn-sm btn-default smmg-body-toggle-trigger">komplette Nachricht anzeigen</a>
     </div>
 </div>
 <h2>Vorschau:</h2>
-<div>
-    <a type="button" class="btn btn-sm btn-default smmg-body-plaintext-toggle">Text Email</a>
-    <a type="button" class="btn btn-sm btn-default smmg-body-htmltext-toggle"> HTML Email</a>
-</div>
-<div id="smmg-body-plaintext" style="display: none">
-    {{ body }}
-</div>
+<div class="well">
+    <div>
+        <a type="button" class="btn btn-sm btn-default smmg-body-plaintext-toggle">Text Email</a>
+        <a type="button" class="btn btn-sm btn-default smmg-body-htmltext-toggle"> HTML Email</a>
+    </div>
+    <div id="smmg-body-plaintext" class="smmg-mail-preview-container" style="display: none">
+    <pre>    {{ message.text_plain|raw }}
+        </pre>
 
-<div id="smmg-body-htmltext" style="display: none">
-    {{ body }}
+    </div>
+
+    <div id="smmg-body-htmltext" class="smmg-mail-preview-container" style="display: none">
+        {{ message.text_html_body|raw }}
+    </div>
 </div>
 
 
 <h2>Empfänger:</h2>
 <div class="well">
 
+
     <div>
 
-        {% for group_tag in subscriber %}
+        {% for tag_tag in subscriber %}
 
-            <div class="btn-tag active smmg-subscriber-group-tag smmg-subscriber-list-trigger"
-                 data-subscriber-group-id="{{ group_tag.id }}">
-                {{ group_tag.title }} <span class="badge">{{ group_tag.number }}</span></div>
+            <div class="btn-tag active smmg-subscriber-tag-tag smmg-subscriber-list-trigger"
+                 data-subscriber-tag-id="{{ tag_tag.id }}">
+                {{ tag_tag.title }} <span class="badge">{{ tag_tag.number }}</span></div>
 
         {% endfor %}
 
 
         <div class="btn btn-sm   smmg-subscriber-list-trigger smmg-subscriber-list-description"
-             data-subscriber-group-id="0">Alle Empfänger auflisten
+             data-subscriber-tag-id="0">Alle Empfänger auflisten
         </div>
 
     </div>
@@ -67,11 +65,11 @@
 
     <div class="ajax-container"></div>
     <div class="smmg-subscriber-list">
-        {% for group in subscriber %}
-            <div class="smmg-subscriber-list-block-{{ group.id }}" style="display:none">
-                <h4 class="smmg-subscriber-list-title">{{ group.title }}</h4>
+        {% for tag in subscriber %}
+            <div class="smmg-subscriber-list-block-{{ tag.id }}" style="display:none">
+                <h4 class="smmg-subscriber-list-title">{{ tag.title }}</h4>
                 <ul class="smmg-subscriber-list-column">
-                    {% for item in group.list %}
+                    {% for item in tag.list %}
 
                         <li class="smmg-subscriber-member-{{ item.id }}">
                             <div class="smmg-subscriber-list-edit">
@@ -80,7 +78,7 @@
 
                                 <span class="smmg-subscriber-list-remove"
                                       data-subscriber-id="{{ item.id }}"
-                                      data-subscriber-group-id="{{ group.id }}"
+                                      data-subscriber-tag-id="{{ tag.id }}"
                                       data-toggle="tooltip"
                                       data-delay="1000"
                                       data-placement="right"

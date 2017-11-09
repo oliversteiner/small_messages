@@ -2,11 +2,11 @@
 
 // Buttons
 
-div.smmg-subscriber-group-tag {
+div.smmg-subscriber-tag-tag {
   font-size: 15px;
   padding: 5px 7px;
 }
-.smmg-subscriber-group-tag span.badge {
+.smmg-subscriber-tag-tag span.badge {
   margin-left: 10px;
   background-color: $color-smmg-tag-button-active-hover;
 }
@@ -92,9 +92,8 @@ div.row > div {
   // border: solid 1px green;
 }
 .smmg-subscriber-list {
-  margin:10px;
+  margin: 10px;
 }
-
 .smmg-subscriber-list-footer {
   margin-top: 10px;
   border-top: 1px solid $color-smmg-tag-border;
@@ -102,26 +101,35 @@ div.row > div {
   color: $color-80;
   font-size: 0.9em;
 }
-
-.ajax-container.active{
-    @include box-ok;
+div.ajax-container {
+  margin: 10px;
+  padding: 10px;
 }
 
-.smmg-subscriber-list-column{
-    column-width: 200px;
-    column-gap: 10px;
-    column-rule: none;
-
+div.ajax-container.active {
+  @include box-ok;
 }
-
-
-.smmg-subscriber-foot{
+.smmg-subscriber-list-column {
+  column-width: 200px;
+  column-gap: 10px;
+  column-rule: none;
+}
+.smmg-subscriber-foot {
   padding: 10px;
   display: flex;
   justify-content: flex-end;
 
-  button.btn.btn-default{
+  button.btn.btn-default {
     display: inline-flex;
     margin-right: 10px;
   }
+}
+.smmg-mail-preview-container {
+  max-width: 650px;
+  border: 5px solid silver;
+  margin:  20px 0;
+}
+.smmg-placeholder {
+  background-color: #b1de0e;
+  padding: 2px;
 }

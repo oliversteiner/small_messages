@@ -1,0 +1,85 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: small_messages\n"
+"POT-Creation-Date: 2017-11-09 08:41+0100\n"
+"PO-Revision-Date: 2017-11-09 08:49+0100\n"
+"Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: t\n"
+"X-Poedit-SearchPath-0: .\n"
+
+
+
+
+#: src/Controller/MessageController.php:379
+msgid "There was a problem sending your email notification to @email."
+msgstr "Es gab ein Problem beim Versenden Ihrer E-Mail-Benachrichtigung an @email"
+
+#: src/Controller/MessageController.php:385
+msgid "An email notification has been sent to @email "
+msgstr "Die E-Mail wurde an folgende Adresse gesendet: @email"
+
+#templates/smmg-messages.html.twig
+msgid "Messages"
+msgstr "Nachrichten"
+
+#templates/smmg-messages.html.twig
+msgid "Subscribers List"
+msgstr "Empfängerliste"
+
+#templates/smmg-messages.html.twig
+msgid "Create new message"
+msgstr "neue Nachricht erstellen"
+
+
+#templates/smmg-messages.html.twig
+msgid "New message from template"
+msgstr "neue Nachricht aus Vorlage"
+
+
+#templates/smmg-messages.html.twig
+msgid "xx"
+msgstr "xx"
+
+#templates/smmg-send-inquiry.html.twig
+msgid "xx"
+msgstr "xx"
+
+#templates/smmg-send-inquiry.html.twig
+msgid "Remove from subscribers list"
+msgstr "aus der Empfängerliste entfernen"
+
+#templates/smmg-send-inquiry.html.twig
+msgid "List all Subscribers"
+msgstr "Alle Empfänger auflisten"
+
+#templates/smmg-send-inquiry.html.twig
+msgid "This message was sent already once on {{ message. send_date }}."
+msgstr "Diese Nachricht wurde am {{ message.send_date }} schon einmal verschickt."
+
+#templates/smmg-send-inquiry.html.twig
+msgid "The message is sent only once to the recipient, even if it appears in several groups"
+msgstr "Die Nachricht wird nur einmal an den Empfänger verschickt, auch wenn er in mehreren Gruppen erscheint."
+
+
+# All
+msgid "Subscriber"
+msgstr "Empfänger"
+
+msgid "Subscribers"
+msgstr "Empfänger"
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Send Message"
+msgstr "Nachricht Senden"
+
+msgid "Message sended"
+msgstr "Nachricht wurde verschickt"

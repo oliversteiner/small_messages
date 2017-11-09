@@ -13,22 +13,27 @@
 
     use SendInquiryTemplateTrait;
 
-    public static function generateMessagePlain($message, $search_keys, $placeholders) {
+    public static function generateMessagePlain($text, $search_keys, $placeholders, $template_nid) {
       {
+
         // load Design Template
         $entity = \Drupal::entityTypeManager()
           ->getStorage('node')
-          ->load($message['template']);
-        $design_template = $entity->get('field_smmg_template_plain')->getValue();
+          ->load($template_nid);
+
+
+        $design_template_content = $entity->get('field_smmg_template_plaint')
+          ->getValue();
+        $design_template = $design_template_content[0]['value'];
 
         // insert Message in to Design Template
-        $template_with_message = str_replace('@@_text_@@', $message, $design_template);
-        $body_content = '';
+        $template_with_message = str_replace('@@_text_@@', $text, $design_template);
+        $body_content = $template_with_message;
 
         // Replace all Placeholders with Values
         foreach ($search_keys as $index => $search_key) {
           $replace = $placeholders[$index];
-          $body_content = str_replace($search_key, $replace, $template_with_message);
+          $body_content = str_replace($search_key, $replace, $body_content);
         }
 
         // Output
@@ -37,66 +42,57 @@
 
     }
 
-    public static function generateMessageHtml($message, $search_keys, $placeholders) {
+    public static function generateMessageHtml($message, $search_keys, $placeholders, $template_nid, $body_only = FALSE) {
 
       // load Design Template
       $entity = \Drupal::entityTypeManager()
         ->getStorage('node')
-        ->load($message['template']);
-      $design_template = $entity->get('field_smmg_template_html')->getValue();
+        ->load($template_nid);
+
+      $template_html_head = '';
+      $e_template_html_head = $entity->get('field_smmg_template_html_head')
+        ->getValue();
+      if (!empty($e_template_html_head)) {
+        $template_html_head = $e_template_html_head[0]['value'];
+      }
+
+      $template_html_body = $entity->get('field_smmg_template_html_body')
+        ->getValue();
+      $template_html_body = $template_html_body[0]['value'];
+
 
       // Desfine the HTML -Parts
       $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> ';
       $html_start = '<html xmlns="http://www.w3.org/1999/xhtml">';
-      $head = '<head>
-    <!--[if gte mso 9]>
-    <xml>
-        <o:OfficeDocumentSettings>
-            <o:AllowPNG/>
-            <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-    </xml>
-    <![endif]-->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width">
-    <!--[if !mso]><!-->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
-    <title>Newsletter</title>
-    <!-- Schriften IE -->
-    <!--[if !mso]><!-- -->
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet" type="text/css">
-    <!--<![endif]-->
-    <style type="text/css" id="media-query">
-        body {
-            margin: 0;
-            padding: 0; }
-        table, tr, td {
-            vertical-align: top;
-            border-collapse: collapse; }
-        * { line-height: inherit; }
-        /* Apple */
-        a[x-apple-data-detectors=true] {
-            color: inherit !important;
-            text-decoration: none !important; }
-    </style>
-      </head>';
+      $head = '<head>'.$template_html_head.'</head>';
       $body_start = '<body>';
-      $body_content = '';  // here comes the text
+      $body_content = '';
       $body_end = '</body>';
       $html_end = '</html>';
 
       // insert Message in to Design Template
-      $template_with_message = str_replace('@@_text_@@', $message, $design_template);
+      $template_with_message = str_replace('@@_text_@@', $message, $template_html_body);
+      $body_content = $template_with_message;
 
       // Replace all Placeholders with Values
       foreach ($search_keys as $index => $search_key) {
+
+
         $replace = $placeholders[$index];
-        $body_content = str_replace($search_key, $replace, $template_with_message);
+
+
+        $body_content = str_replace($search_key, $replace, $body_content);
       }
 
-      // assemble all HTMl - Parts
-      $html_file = $doctype.$html_start . $head . $body_start . $body_content . $body_end . $html_end;
+      if (FALSE === $body_only) {
 
+        // assemble all HTMl - Parts
+        $html_file = $doctype.$html_start.$head.$body_start.$body_content.$body_end.$html_end;
+      }
+      else {
+        $html_file = $body_content;
+
+      }
       // Output
       return $html_file;
     }
@@ -109,34 +105,60 @@
       return 'small_messages';
     }
 
+    /**
+     * @param      $message_nid
+     * @param bool $test
+     *
+     * @return mixed
+     *
+     *
+     */
+    protected static function startRun($message_nid, $test = FALSE) {
 
-    protected function startRun($message_nid, $test = FALSE) {
 
       // Message
-
-      // load Message
       $entity = \Drupal::entityTypeManager()
         ->getStorage('node')
         ->load($message_nid);
 
+      // NID
+      $nid = $entity->id();
+
       // Title
-      $message['id'] = $entity->id();
-      $message['title'] = $entity->label();
+      $title = $entity->label();
+      // Body
+      $text_content = $entity->get('field_smmg_text')->getValue();
+      $text_with_format = $text_content[0];
+      $text = $text_content[0]['value'];
 
-      $body = $entity->get('body')->getValue();
-      $message['body'] = $body[0]['value'];
+      // Send Date
+      $send_date = [];
+      if (!empty($entity->field_smmg_message_send_date)) {
+        // Load
+        $send_date_content = $entity->get('field_smmg_message_send_date')
+          ->getValue();
 
-      $design_template_id = $entity->get('field_smmg_design_template')
-        ->getValue();
-      $message['template'] = $design_template_id[0]['target_id'];
+        $send_date = $send_date_content[0]['value'];
+      }
+
+      // Template NID
+      $template_id = NULL;
+      if (!empty($entity->field_smmg_design_template)) {
+        // Load
+        $design_template = $entity->get('field_smmg_design_template')
+          ->getValue();
+
+        $design_template_id = $design_template[0]['target_id'];
+
+      }
 
 
-      // subscribers
+      // subscriber
       $subscriber = [];
-      if (!empty($entity->field_newsletter_mailto_groups)) {
+      if (!empty($entity->field_smmg_subscriber_tags)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_tags')
           ->getValue();
 
         // save only tid
@@ -147,7 +169,6 @@
 
 
       $group_index = 0;
-      $output['message'] = $message;
 
       // Adresses
 
@@ -170,66 +191,91 @@
         $node_subscripters = \Drupal::entityTypeManager()
           ->getStorage('node')
           ->loadByProperties([
-            'type' => 'goenner',
-            'field_empfaenger_gruppe' => $term_id,
-            // 'field_newsletter' => 1 // TODO activate Field Newsletter
+            'field_smmg_subscriber_tags' => $term_id,
           ]);
 
         foreach ($node_subscripters as $entity) {
 
-          $id = $entity->id();
+          $subscripter_nid = $entity->id();
 
-          if (in_array($id, $unique_list)) {
-            // übersprichen, da schon erfasse
+          if (in_array($subscripter_nid, $unique_list)) {
+            // übersprichen, da schon erfasset
 
             // dpm('die ID '.$id.' ist doppelt.');
           }
           // neue ID:
           else {
 
-            $unique_list[] = $id;
+            $unique_list[] = $subscripter_nid;
+
+            // accept_newsletter
+            $accept_newsletter = 0;
+            if (!empty($entity->field_smmg_accept_newsletter)) {
+              $e_accept_newsletter = $entity->get('field_smmg_accept_newsletter')
+                ->getValue();
+
+              if (!empty($e_accept_newsletter)) {
+                $accept_newsletter = $e_accept_newsletter['value'];
+              }
+            }
 
             // email
-            $email = [];
+            $email = '';
             if (!empty($entity->field_e_mail)) {
-              $email = $entity->get('field_e_mail')
+              $e_email = $entity->get('field_e_mail')
                 ->getValue();
-              $email = $email[0]['value'];
-
+              if (!empty($e_email)) {
+                $email = $e_email[0]['value'];
+              }
             }
 
             // vorname
-            $vorname = [];
+            $vorname = '';
             if (!empty($entity->field_vorname)) {
-              $vorname = $entity->get('field_vorname')
+              $e_vorname = $entity->get('field_vorname')
                 ->getValue();
-              $vorname = $vorname[0]['value'];
+              if (!empty($e_vorname)) {
+                $vorname = $e_vorname[0]['value'];
+              }
+
 
             }
 
             // nachname
-            $nachname = [];
+            $nachname = '';
             if (!empty($entity->field_nachname)) {
-              $nachname = $entity->get('field_nachname')
+              $e_nachname = $entity->get('field_nachname')
                 ->getValue();
-              $nachname = $nachname[0]['value'];
+              if (!empty($e_nachname)) {
+                $nachname = $e_nachname[0]['value'];
+              }
             }
 
 
-            $list[$list_index]['id'] = $id;
-            $list[$list_index]['titel'] = $entity->label();
-            $list[$list_index]['vorname'] = $vorname;
-            $list[$list_index]['nachname'] = $nachname;
-            $list[$list_index]['email'] = $email;
+            $list_named[$list_index]['id'] = $subscripter_nid;
+            $list_named[$list_index]['titel'] = $entity->label();
+            $list_named[$list_index]['vorname'] = $vorname;
+            $list_named[$list_index]['nachname'] = $nachname;
+            $list_named[$list_index]['email'] = $email;
+            $list_named[$list_index]['accept_newsletter'] = $accept_newsletter;
+
+            $list[$list_index][0] = $subscripter_nid;
+            $list[$list_index][1] = $entity->label();
+            $list[$list_index][2] = $vorname;
+            $list[$list_index][3] = $nachname;
+            $list[$list_index][4] = $email;
+            $list[$list_index][5] = $accept_newsletter;
 
             $list_index++;
           } // else
+
         } // foreach
 
         $group_index++;
       }
 
-      $output['addresses'] = $list;
+      $output['addresses'] = $list_named;
+      $output['placeholders'] = $list;
       $output['unique'] = $unique_list;
 
       $search_keys = [
@@ -238,52 +284,37 @@
         '@@_vorname_@@',
         '@@_nachname_@@',
         '@@_email_@@',
+        '@@_accept_@@',
       ];
 
-      $message = $output['body'];
 
-      if ($test) {
-        // generiere mit dem ersten Datensatz die email:
-        $placeholders = $output['addresses'][0];
 
-        // Links zur Vorschau
-        $url_mail_plaintext = 'smmg/preview_message/plain/' . $message_nid . '/' . $search_keys . '/' . $placeholders;
-        $url_mail_html = 'smmg/preview_plaintext/html/' . $message_nid . '/' . $search_keys . '/' . $placeholders;
+      foreach ($list as $subscriber) {
 
-        // Output Drupal Message
-        $d_message = '';
-        $d_message .= 'generated Email:<strong>' . $output['message']['title'] . '</strong> ';
-        $d_message .= 'Emailbody:';
-        $d_message .= '[<a href="' . $url_mail_plaintext . '">Plaintext</a>]';
-        $d_message .= '[<a href="' . $url_mail_html . '">HTML</a>]';
+        $placeholders = $subscriber;
 
-        drupal_set_message($d_message);
-      }
 
-      foreach ($output['addresses'] as $address) {
-
-        $placeholders = $address;
-
-        $body_plain = $this->generateMessagePlain($message, $search_keys, $placeholders);
-        $body_html = $this->generateMessageHtml($message, $search_keys, $placeholders);
+        $text_plain = MessageController::generateMessagePlain($text, $search_keys, $placeholders, $design_template_id);
+        $text_html = MessageController::generateMessageHtml($text, $search_keys, $placeholders, $design_template_id);
 
 
         if ($test) {
 
-          $d_message = '';
-          $d_message = '[test] ' . $address['email'];
-          drupal_set_message($d_message);
-
-
+          dpm('[test] send to - ' . $subscriber[4]);
         }
         else {
-          $data['title'] = $output['message']['title'];
-          $data['message'] = $body_plain;
-          $data['htmltext'] = $body_html;
+          $data['title'] = $title;
+          $data['message'] = $text_plain;
+          $data['htmltext'] = $text_html;
           $data['from'] = "newsletter@konzert-um-3.ch";
-          $data['to'] = $address['email'];
+          $data['to'] = $subscriber[4];
 
-          self::_sendmail($data);
+          if(!empty($subscriber[4])){
+
+
+               self::_sendmail($data);
+          }
+
 
         }
 
@@ -297,16 +328,19 @@
      * @return array
      *
      */
-    public function testSendMessage($message_id) {
+    public function testSendMessage() {
 
+      $message_id =1201;
 
       self::startRun($message_id, TRUE);
 
-
+/*
       return [
         '#type' => 'markup',
         '#markup' => $this->t('sendMessage:'),
-      ];
+      ];*/
+
+
     }
 
     /**
@@ -316,13 +350,15 @@
     public function sendMessage($message_id) {
 
 
-      self::startRun($message_id);
+      $result = self::startRun($message_id);
 
 
       return [
         '#type' => 'markup',
-        '#markup' => $this->t('sendMessage:'),
+        '#markup' => $this->t('sendMessage'),
       ];
+
+
     }
 
     /**
@@ -354,6 +390,11 @@
       return $form;
     }
 
+
+    /**
+     * @param $data
+     *
+     */
     private static function _sendmail($data) {
 
 
@@ -367,14 +408,15 @@
       // System
       $mailManager = \Drupal::service('plugin.manager.mail');
       $module = 'small_messages';
-      $key = 'EMAIL_SMTP'; // Replace with Your key
+      $key = 'HTML'; // Replace with Your key
       $langcode = \Drupal::currentUser()->getPreferredLangcode();
-      $send = TRUE;
+      $send = true;
 
 
       // Send
       $result = $mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
-      if ($result['result'] != TRUE) {
+
+      if ((@$result['result'] != TRUE)) {
 
         $message = t('There was a problem sending your email notification to @email.', ['@email' => $to]);
         drupal_set_message($message, 'error');
