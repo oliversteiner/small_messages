@@ -1,5 +1,9 @@
 name: Small Messages
 type: module
 description: Ein kleines Nachrichten System
-core: 8.x
+core: 8.4
+project: small_messages
+version: 8.4-1.0
 package: Messages
+'interface translation project': small_messages
+'interface translation server pattern': modules/small_messages/%project-%version.%language.po
