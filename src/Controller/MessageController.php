@@ -198,28 +198,28 @@
 
             }
 
-            // vorname
-            $vorname = [];
-            if (!empty($entity->field_vorname)) {
-              $vorname = $entity->get('field_vorname')
+            // forename
+            $forename = [];
+            if (!empty($entity->field_forename)) {
+              $forename = $entity->get('field_forename')
                 ->getValue();
-              $vorname = $vorname[0]['value'];
+              $forename = $forename[0]['value'];
 
             }
 
-            // nachname
-            $nachname = [];
-            if (!empty($entity->field_nachname)) {
-              $nachname = $entity->get('field_nachname')
+            // surname
+            $surname = [];
+            if (!empty($entity->field_surname)) {
+              $surname = $entity->get('field_surname')
                 ->getValue();
-              $nachname = $nachname[0]['value'];
+              $surname = $surname[0]['value'];
             }
 
 
             $list[$list_index]['id'] = $id;
-            $list[$list_index]['titel'] = $entity->label();
-            $list[$list_index]['vorname'] = $vorname;
-            $list[$list_index]['nachname'] = $nachname;
+            $list[$list_index]['title'] = $entity->label();
+            $list[$list_index]['forename'] = $forename;
+            $list[$list_index]['surname'] = $surname;
             $list[$list_index]['email'] = $email;
 
             $list_index++;
@@ -234,16 +234,16 @@
 
       $search_keys = [
         '@@_id_@@',
-        '@@_titel_@@',
-        '@@_vorname_@@',
-        '@@_nachname_@@',
+        '@@_title_@@',
+        '@@_forename_@@',
+        '@@_surname_@@',
         '@@_email_@@',
       ];
 
       $message = $output['body'];
 
       if ($test) {
-        // generiere mit dem ersten Datensatz die email:
+        // Get the first data row to get the preview placeholders
         $placeholders = $output['addresses'][0];
 
         // Links zur Vorschau
@@ -270,7 +270,6 @@
 
         if ($test) {
 
-          $d_message = '';
           $d_message = '[test] ' . $address['email'];
           drupal_set_message($d_message);
 
@@ -305,7 +304,7 @@
 
       return [
         '#type' => 'markup',
-        '#markup' => $this->t('sendMessage:'),
+        '#markup' => $this->t('Test: Send Message'),
       ];
     }
 
@@ -316,12 +315,12 @@
     public function sendMessage($message_id) {
 
 
-      self::startRun($message_id);
+      self::startRun($message_id,FALSE);
 
 
       return [
         '#type' => 'markup',
-        '#markup' => $this->t('sendMessage:'),
+        '#markup' => $this->t('Message sended'),
       ];
     }
 
@@ -354,15 +353,17 @@
       return $form;
     }
 
+    /**
+     * @param $data
+     *
+     */
     private static function _sendmail($data) {
-
 
       $params['title'] = $data['title'];
       $params['message'] = $data['message'];
       $params['htmltext'] = $data['htmltext'];
       $params['from'] = $data['from'];
       $to = $data['to'];
-
 
       // System
       $mailManager = \Drupal::service('plugin.manager.mail');
@@ -391,6 +392,4 @@
     }
 
 
-    public function adminTemplateAction() {
-    }
   }
