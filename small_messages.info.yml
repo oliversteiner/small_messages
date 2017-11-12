@@ -1,7 +1,7 @@
 name: Small Messages
 type: module
 description: A lightweight Message / Newsletter system
-core: 8.4
+core: 8.x
 project: small_messages
 version: 8.4-1.0
 package: Messages
