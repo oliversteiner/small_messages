@@ -22,7 +22,6 @@
     }
 
 
-
     /**
      * @return \Drupal\Core\Ajax\AjaxResponse
      */
@@ -33,15 +32,15 @@
 
 
       $response = new AjaxResponse();
-      $selector = '#subscibe-group-'.$target_nid.'-'.$subscriber_group_tid;
+      $selector = '#subscibe-group-' . $target_nid . '-' . $subscriber_group_tid;
 
       if ($result['mode'] == 'add') {
-        $response->addCommand(new InvokeCommand($selector,'addClass',['active']));
+        $response->addCommand(new InvokeCommand($selector, 'addClass', ['active']));
 
       }
 
       elseif ($result['mode'] == 'remove') {
-        $response->addCommand(new InvokeCommand($selector,'removeClass',['active']));
+        $response->addCommand(new InvokeCommand($selector, 'removeClass', ['active']));
 
       }
 
@@ -55,5 +54,50 @@
 
     }
 
+
+    public function addSubscription($nid = NULL) {
+
+      $result = SubscriberTrait::toggleSubscription($nid, 'add');
+
+      $response = new AjaxResponse();
+
+      if ($result['status'] === TRUE) {
+        $message = 'Success : ' . $nid;
+        $class = 'success';
+
+      }
+      else {
+        $message = 'Error : ' . $nid;
+        $class = 'error';
+      }
+
+      $response->addCommand(new ReplaceCommand('.ajax-container', '<div class="ajax-container ' . $class . '">' . $message . '</div>'));
+
+      return $response;
+
+    }
+
+
+    public function removeSubscription($nid = NULL) {
+
+      $result = SubscriberTrait::toggleSubscription($nid, 'remove');
+
+      $response = new AjaxResponse();
+
+      if ($result['status'] === TRUE) {
+        $message = 'Success : ' . $nid;
+        $class = 'success';
+
+      }
+      else {
+        $message = 'Error : ' . $nid;
+        $class = 'error';
+      }
+
+      $response->addCommand(new ReplaceCommand('.ajax-container', '<div class="ajax-container ' . $class . '">' . $message . '</div>'));
+
+      return $response;
+
+    }
 
   }

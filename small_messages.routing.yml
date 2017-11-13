@@ -86,3 +86,15 @@ small_messages.ajax.prepare_send:
     _title: 'Nachricht bereit zum senden'
   requirements:
     _permission: 'administer content'
+
+#
+# subscriber List
+#
+small_messages.unsubscript:
+  path: 'unsubscribe/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\SubscriberController::removeSubscription'
+    _title: 'Unsubscribe from Newsletter'
+    nid: null
+  requirements:
+    _permission: 'access content'

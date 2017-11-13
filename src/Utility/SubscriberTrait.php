@@ -181,5 +181,68 @@
 
     }
 
+    static function toggleSubscription($nid = NULL, $mode = 'toggle') {
+      // Mode: toggle, add, remove
+
+      $output = [
+        'status' => FALSE,
+        'mode' => $mode,
+        'nid' => $nid,
+      ];
+
+      $field_name = 'field_smmg_accept_newsletter';
+
+      if ($nid) {
+
+
+        // Load Node
+        $entity = \Drupal::entityTypeManager()
+          ->getStorage('node')
+          ->load($nid);
+
+        // Field OK?
+        if (!empty($entity->{$field_name})) {
+          $entity_value = $entity->get($field_name)
+            ->getValue();
+          $actual_value = $entity_value[0];
+        }
+        else {
+          $actual_value = NULL;
+        }
+
+        // set value
+        switch ($mode) {
+
+          case 'toggle':
+            $actual_value == 1 ? $value = 0 : $value = 1;
+            break;
+
+          case 'add':
+            $value = 1;
+            break;
+
+          case 'remove':
+            $value = 0;
+            break;
+
+          default:
+            $value = $actual_value;
+            break;
+        }
+
+        // Apply changes
+        $entity->$field_name->setValue($value);
+        $entity->save();
+        $output['status'] = TRUE;
+
+      }
+      else {
+        // empty nid
+
+      }
+
+      return $output;
+
+    }
 
   }
