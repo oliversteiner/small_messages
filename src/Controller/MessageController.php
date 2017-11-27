@@ -312,7 +312,7 @@
           if(!empty($subscriber[4])){
 
 
-               self::_sendmail($data);
+               self::sendmail($data);
           }
 
 
@@ -395,7 +395,7 @@
      * @param $data
      *
      */
-    private static function _sendmail($data) {
+     static function sendmail($data) {
 
 
       $params['title'] = $data['title'];
