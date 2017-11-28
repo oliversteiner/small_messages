@@ -369,7 +369,7 @@
       $result = $this->startRun(1191);
 
 
-      kint($result);
+    //  kint($result);
 
       // Form mit test
 
@@ -425,7 +425,7 @@
       }
       else {
         $message = t('An email notification has been sent to @email ', ['@email' => $to]);
-        drupal_set_message($message);
+       // drupal_set_message($message);
         \Drupal::logger('mail-log')->notice($message);
 
       }

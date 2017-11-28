@@ -2,7 +2,7 @@
 # Start
 #
 small_messages.admin:
-  path: 'messages'
+  path: 'smmg/messages'
   defaults:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
@@ -91,7 +91,7 @@ small_messages.ajax.prepare_send:
 # subscriber List
 #
 small_messages.unsubscript:
-  path: 'unsubscribe/{nid}'
+  path: 'smmg/unsubscribe/{nid}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\SubscriberController::removeSubscription'
     _title: 'Unsubscribe from Newsletter'

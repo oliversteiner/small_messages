@@ -47,11 +47,11 @@
 
     <div>
 
-        {% for tag_tag in subscriber %}
+        {% for tag in subscriber %}
 
             <div class="btn-tag active smmg-subscriber-tag-tag smmg-subscriber-list-trigger"
-                 data-subscriber-tag-id="{{ tag_tag.id }}">
-                {{ tag_tag.title }} <span class="badge">{{ tag_tag.number }}</span></div>
+                 data-subscriber-tag-id="{{ tag.id }}">
+                {{ tag.title }} <span class="badge">{{ tag.number }}</span></div>
 
         {% endfor %}
 
