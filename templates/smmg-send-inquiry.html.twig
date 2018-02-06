@@ -6,12 +6,12 @@
 
 
 {% if message.send_date %}
-    <div class="smmg-message-status-warning">Diese Nachricht wurde am {{ message.send_date }} schon einmal verschickt.
+    <div class="smmg-message-status-warning">This message was sent at {{ message.send_date }}.
     </div>
 {% endif %}
 
 
-<h2>Nachricht:</h2>
+<h2> {% trans %} Message {% endtrans %}  </h2>
 <div class="well">
     <h3>{{ message.title }}</h3>
     <div class="smmg-body">
@@ -20,10 +20,10 @@
 
     </div>
     <div>
-        <a type="button" class="btn btn-sm btn-default smmg-body-toggle-trigger">komplette Nachricht anzeigen</a>
+        <a type="button" class="btn btn-sm btn-default smmg-body-toggle-trigger">{% trans %} view full message  {% endtrans %} </a>
     </div>
 </div>
-<h2>Vorschau:</h2>
+<h2>{% trans %} Preview {% endtrans %} </h2>
 <div class="well">
     <div>
         <a type="button" class="btn btn-sm btn-default smmg-body-plaintext-toggle">Text Email</a>
@@ -41,7 +41,7 @@
 </div>
 
 
-<h2>Empfänger:</h2>
+<h2>{% trans %} Subscribers {% endtrans %} </h2>
 <div class="well">
 
 
@@ -57,7 +57,8 @@
 
 
         <div class="btn btn-sm   smmg-subscriber-list-trigger smmg-subscriber-list-description"
-             data-subscriber-tag-id="0">Alle Empfänger auflisten
+             data-subscriber-tag-id="0">
+            {% trans %} Enumerate all recipients {% endtrans %}
         </div>
 
     </div>
@@ -82,7 +83,7 @@
                                       data-toggle="tooltip"
                                       data-delay="1000"
                                       data-placement="right"
-                                      title="aus der Empfängerliste entfernen">
+                                      title="{% trans %} remove from the recipient list {% endtrans %} ">
                                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                                     </span>
                             </div>
@@ -95,17 +96,17 @@
         {% endfor %}
 
         <div class="smmg-subscriber-list-footer">
-            <p>Pro Person wird die Nachricht nur einmal verschickt, auch wenn sie doppelt aufgeführt ist. Z. B. in
-                verschiedenen Gruppen</p>
+            <p>{% trans %} The message is sent only once, even if it is listed twice. For example, in
+                    various groups {% endtrans %} </p>
         </div>
     </div>
 </div>
 
 
 <div class="smmg-subscriber-foot">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} Cancel {% endtrans %} </button>
     <a href="{{ link_send }}" type="button" class="btn btn-primary">
         <i class="fa fa-paper-plane" aria-hidden="true"></i>
-        Nachricht Senden
+        {% trans %} Send message {% endtrans %}
     </a>
 </div>

@@ -7,7 +7,7 @@ small_messages.admin:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # messages List
@@ -18,7 +18,7 @@ small_messages.messages:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # subscriber List
@@ -29,7 +29,7 @@ small_messages.subscribers:
     _controller: '\Drupal\small_messages\Controller\AdminController:subscribersTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # test config
@@ -40,7 +40,7 @@ small_messages.admin.test_config:
     _controller: '\Drupal\small_messages\Controller\AdminController::smmgConfig'
     _title: 'Config'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # Sandbox
@@ -51,7 +51,7 @@ small_messages.sandbox:
     _controller: '\Drupal\small_messages\Controller\MessageController:sandboxPage'
     _title: 'Sandbox'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 
 
@@ -61,7 +61,7 @@ small_messages.send_message:
     _controller: '\Drupal\small_messages\Controller\MessageController::sendMessage'
     _title: 'Test Send Message'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # AJAX toggleSubscriberGroup
@@ -74,7 +74,7 @@ small_messages.toggle_subscriber_tag:
     subscriber_tag_tid: null
     _title: 'Toggle Subscriber Tag'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # AJAX toggleSubscriberGroup
@@ -85,7 +85,7 @@ small_messages.ajax.prepare_send:
     _controller: '\Drupal\small_messages\Controller\MessageController::prepareSend'
     _title: 'Nachricht bereit zum senden'
   requirements:
-    _permission: 'administer content'
+    _permission: 'admin small Messages'
 
 #
 # subscriber List
@@ -97,4 +97,4 @@ small_messages.unsubscript:
     _title: 'Unsubscribe from Newsletter'
     nid: null
   requirements:
-    _permission: 'access content'
+    _permission: 'admin small Messages'

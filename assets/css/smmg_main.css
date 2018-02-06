@@ -137,4 +137,9 @@ a.vat-button-send.message-sended {
   color: #f4fff6;
   border: 1px solid #2e3e38; }
 
+div.view-smmg-subscribers-list td.views-field.views-field-title,
+div.view-smmg-messages-list td.views-field.views-field-title {
+  width: auto;
+  margin-right: 50px; }
+
 /*# sourceMappingURL=smmg_main.css.map */

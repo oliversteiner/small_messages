@@ -18,7 +18,7 @@
       case 'help.page.small_messages':
         $output = '';
         $output .= '<h3>' . t('About') . '</h3>';
-        $output .= '<p>' . t('Ein kleines Nachrichten-System') . '</p>';
+        $output .= '<p>' . t('A lightweight message & news system') . '</p>';
         return $output;
 
       default:

@@ -1,5 +1,4 @@
 @import 'variables';
-
 .smmg-tab-container {
   margin-bottom: 20px;
 
@@ -23,14 +22,12 @@
 
 *[id^=edit-submit-smmg-] {
 
-//  display: none;
+  //  display: none;
 
   background-color: white;
   color: grey;
   border: solid 1px #ccc;
 }
-
-
 *[id^=edit-field-newsletter-mailto-groups] .form-item {
   display: inline-block;
   margin-right: 25px;
@@ -138,4 +135,10 @@ a.vat-button-send.message-sended {
   }
 
 }
-
+div.view-smmg-subscribers-list,
+div.view-smmg-messages-list {
+  td.views-field.views-field-title {
+    width: auto;
+    margin-right: 50px;
+  }
+}
