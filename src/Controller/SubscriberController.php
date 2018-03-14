@@ -25,14 +25,14 @@
     /**
      * @return \Drupal\Core\Ajax\AjaxResponse
      */
-    public function toggleSubsciberTag($target_nid, $subscriber_group_tid) {
+    public function toggleSubsciberTag($target_nid, $subscriber_tag_tid) {
 
 
-      $result = SubscriberTrait::toggleSubscriberTag($target_nid, $subscriber_group_tid);
+      $result = SubscriberTrait::toggleSubscriberTag($target_nid, $subscriber_tag_tid);
 
 
       $response = new AjaxResponse();
-      $selector = '#subscibe-group-' . $target_nid . '-' . $subscriber_group_tid;
+      $selector = '#subscibe-group-' . $target_nid . '-' . $subscriber_tag_tid;
 
       if ($result['mode'] == 'add') {
         $response->addCommand(new InvokeCommand($selector, 'addClass', ['active']));

@@ -142,3 +142,24 @@ div.view-smmg-messages-list {
     margin-right: 50px;
   }
 }
+
+
+// Editor
+
+.edit-field-smmg-message-tags {}
+
+.field--name-field-smmg-message-tags legend,
+.field--name-field-smmg-subscriber-tags legend{
+  margin-bottom: 0;
+}
+
+.field--name-field-smmg-message-tags input[type=checkbox],
+.field--name-field-smmg-subscriber-tags input[type=checkbox]{
+  margin-left: -16px;
+}
+
+.field--name-field-smmg-subscriber-tags .form-type-checkbox,
+.field--name-field-smmg-message-tags .form-type-checkbox {
+  display: inline-block;
+  margin-right: 20px;
+}

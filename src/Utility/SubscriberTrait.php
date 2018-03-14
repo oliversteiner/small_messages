@@ -100,14 +100,15 @@
       return $term;
     }
 
-    /**
-     * @param $target_nid
-     * @param $subscriber_group_nid
-     *
-     * @return mixed
-     *
-     *
-     */
+      /**
+       * @param $target_nid
+       * @param $subscriber_group_nid
+       *
+       * @return mixed
+       *
+       *
+       * @throws \Drupal\Core\Entity\EntityStorageException
+       */
     public static function toggleSubscriberTag($target_nid, $subscriber_group_nid) {
 
       // 1. error?
@@ -124,16 +125,17 @@
       $subscribers = [];
 
 
+
       // Load Node
       $entity = \Drupal::entityTypeManager()
         ->getStorage('node')
         ->load($target_nid);
 
       // Field OK?
-      if (!empty($entity->field_empfaenger_gruppe)) {
+      if (!empty($entity->field_smmg_subscriber_tags)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_empfaenger_gruppe')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_tags')
           ->getValue();
 
         // save only tid
@@ -162,12 +164,12 @@
         }
 
         // delete field
-        unset($entity->field_empfaenger_gruppe);
+        unset($entity->field_smmg_subscriber_tags);
 
         // fill field new
         foreach ($subscribers_unique as $tid) {
           $item['target_id'] = $tid;
-          $entity->field_empfaenger_gruppe[] = $item;
+          $entity->field_smmg_subscriber_tags[] = $item;
         }
 
 

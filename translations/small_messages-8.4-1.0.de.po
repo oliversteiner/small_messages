@@ -1,85 +1,101 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: small_messages\n"
-"POT-Creation-Date: 2017-11-09 08:41+0100\n"
-"PO-Revision-Date: 2017-11-09 08:49+0100\n"
+"POT-Creation-Date: 2018-02-14 23:36+0100\n"
+"PO-Revision-Date: 2018-02-17 12:34+0100\n"
 "Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: t\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: src/Controller/MessageController.php:358
+msgid "sendMessage"
+msgstr ""
 
-
-
-#: src/Controller/MessageController.php:379
+#: src/Controller/MessageController.php:421
 msgid "There was a problem sending your email notification to @email."
-msgstr "Es gab ein Problem beim Versenden Ihrer E-Mail-Benachrichtigung an @email"
+msgstr ""
+"Es gab ein Problem beim Senden Ihrer e-Mail-Benachrichtigung an @email."
 
-#: src/Controller/MessageController.php:385
-msgid "An email notification has been sent to @email "
-msgstr "Die E-Mail wurde an folgende Adresse gesendet: @email"
+#: src/Controller/MessageController.php:427
+msgid "An email notification has been sent to @email."
+msgstr "Eine e-Mail-Benachrichtigung wurde an @email gesendet."
 
-#templates/smmg-messages.html.twig
+# templates/smmg-messages.html.twig
+#: templates/smmg-messages.html.twig:18
+#: templates/smmg-send-inquiry.html.twig:16
 msgid "Messages"
 msgstr "Nachrichten"
 
-#templates/smmg-messages.html.twig
+# templates/smmg-messages.html.twig
+#: templates/smmg-messages.html.twig:27
 msgid "Subscribers List"
-msgstr "Empfängerliste"
+msgstr "Liste aller Empfänger"
 
-#templates/smmg-messages.html.twig
+# templates/smmg-messages.html.twig
+#: templates/smmg-messages.html.twig:45
 msgid "Create new message"
-msgstr "neue Nachricht erstellen"
+msgstr "Neue Nachricht erstellen"
 
-
-#templates/smmg-messages.html.twig
+# templates/smmg-messages.html.twig
+#: templates/smmg-messages.html.twig:58
 msgid "New message from template"
-msgstr "neue Nachricht aus Vorlage"
+msgstr "Neue Nachricht aus Vorlage"
 
+#: templates/smmg-send-inquiry.html.twig:10
+#, fuzzy
+#| msgid "This message was sent at %message.send_date%"
+msgid "This message was sent at %message.send_date%."
+msgstr "Diese Nachricht wurde am %message.send_date% schon einmal gesendet ."
 
-#templates/smmg-messages.html.twig
-msgid "xx"
-msgstr "xx"
+#: templates/smmg-send-inquiry.html.twig:25
+msgid "view full message"
+msgstr "vollständige Nachricht anzeigen"
 
-#templates/smmg-send-inquiry.html.twig
-msgid "xx"
-msgstr "xx"
-
-#templates/smmg-send-inquiry.html.twig
-msgid "Remove from subscribers list"
-msgstr "aus der Empfängerliste entfernen"
-
-#templates/smmg-send-inquiry.html.twig
-msgid "List all Subscribers"
-msgstr "Alle Empfänger auflisten"
-
-#templates/smmg-send-inquiry.html.twig
-msgid "This message was sent already once on {{ message. send_date }}."
-msgstr "Diese Nachricht wurde am {{ message.send_date }} schon einmal verschickt."
-
-#templates/smmg-send-inquiry.html.twig
-msgid "The message is sent only once to the recipient, even if it appears in several groups"
-msgstr "Die Nachricht wird nur einmal an den Empfänger verschickt, auch wenn er in mehreren Gruppen erscheint."
-
-
-# All
-msgid "Subscriber"
-msgstr "Empfänger"
-
-msgid "Subscribers"
-msgstr "Empfänger"
-
+#: templates/smmg-send-inquiry.html.twig:28
 msgid "Preview"
 msgstr "Vorschau"
 
-msgid "Send Message"
-msgstr "Nachricht Senden"
+#: templates/smmg-send-inquiry.html.twig:46
+msgid "Subscribers"
+msgstr "Empfänger"
 
-msgid "Message sended"
-msgstr "Nachricht wurde verschickt"
+#: templates/smmg-send-inquiry.html.twig:63
+msgid "Enumerate all recipients"
+msgstr "Alle Empfänger auflisten"
+
+#: templates/smmg-send-inquiry.html.twig:88
+msgid "remove from the recipient list"
+msgstr "aus der Empfängerliste entfernen"
+
+#: templates/smmg-send-inquiry.html.twig:101
+#, fuzzy
+#| msgid ""
+#| "The message is sent only once, even if it is listed twice.\n"
+#| " For example, in various groups"
+msgid ""
+"The message is sent only once, even if it is listed twice.\n"
+"                    For example, in various groups."
+msgstr ""
+"Die Nachricht wird nur einmal gesendet, auch wenn der Empfänger doppelt "
+"aufgeführt ist.\n"
+" Zum Beispiel in verschiedenen Gruppen."
+
+#: templates/smmg-send-inquiry.html.twig:109
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: templates/smmg-send-inquiry.html.twig:112
+msgid "Send message"
+msgstr "Nachricht senden"
+
+#: templates/smmg-subscribers.html.twig:57
+msgid "import Subscribers"
+msgstr "Abonnenten importieren"

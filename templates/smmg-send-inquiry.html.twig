@@ -6,12 +6,15 @@
 
 
 {% if message.send_date %}
-    <div class="smmg-message-status-warning">This message was sent at {{ message.send_date }}.
+
+    <div class="smmg-message-status-warning">{% trans %}This message was sent at {{ message.send_date }}. {% endtrans %}</div>
+
+    <div class="smmg-message-status-warning">Diese Nachricht wurde schon einmal gesendet am {{ message.send_date }}.
     </div>
 {% endif %}
 
 
-<h2> {% trans %} Message {% endtrans %}  </h2>
+<h2> {% trans %} Messages {% endtrans %}  </h2>
 <div class="well">
     <h3>{{ message.title }}</h3>
     <div class="smmg-body">
@@ -20,7 +23,8 @@
 
     </div>
     <div>
-        <a type="button" class="btn btn-sm btn-default smmg-body-toggle-trigger">{% trans %} view full message  {% endtrans %} </a>
+        <a type="button"
+           class="btn btn-sm btn-default smmg-body-toggle-trigger">{% trans %} view full message  {% endtrans %} </a>
     </div>
 </div>
 <h2>{% trans %} Preview {% endtrans %} </h2>
@@ -96,8 +100,8 @@
         {% endfor %}
 
         <div class="smmg-subscriber-list-footer">
-            <p>{% trans %} The message is sent only once, even if it is listed twice. For example, in
-                    various groups {% endtrans %} </p>
+            <p>{% trans %} The message is sent only once, even if it is listed twice.
+                    For example, in various groups. {% endtrans %} </p>
         </div>
     </div>
 </div>
