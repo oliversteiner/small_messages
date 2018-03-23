@@ -1,4 +1,5 @@
 @import 'variables';
+
 .smmg-tab-container {
   margin-bottom: 20px;
 
@@ -22,12 +23,14 @@
 
 *[id^=edit-submit-smmg-] {
 
-  //  display: none;
+//  display: none;
 
   background-color: white;
   color: grey;
   border: solid 1px #ccc;
 }
+
+
 *[id^=edit-field-newsletter-mailto-groups] .form-item {
   display: inline-block;
   margin-right: 25px;
@@ -134,32 +137,4 @@ a.vat-button-send.message-sended {
     border: 1px solid $color-smmg-tag-border-active-hover;
   }
 
-}
-div.view-smmg-subscribers-list,
-div.view-smmg-messages-list {
-  td.views-field.views-field-title {
-    width: auto;
-    margin-right: 50px;
-  }
-}
-
-
-// Editor
-
-.edit-field-smmg-message-tags {}
-
-.field--name-field-smmg-message-tags legend,
-.field--name-field-smmg-subscriber-tags legend{
-  margin-bottom: 0;
-}
-
-.field--name-field-smmg-message-tags input[type=checkbox],
-.field--name-field-smmg-subscriber-tags input[type=checkbox]{
-  margin-left: -16px;
-}
-
-.field--name-field-smmg-subscriber-tags .form-type-checkbox,
-.field--name-field-smmg-message-tags .form-type-checkbox {
-  display: inline-block;
-  margin-right: 20px;
 }

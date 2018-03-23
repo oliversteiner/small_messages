@@ -2,8 +2,6 @@
 
   namespace Drupal\small_messages\Utility;
 
-  use Drupal\small_messages\Controller\MessageController;
-
   /**
    *
    * @see \Drupal\Core\Render\Element\InlineTemplate
@@ -91,7 +89,9 @@
      * @return mixed
      *
      */
-    public function getMessageData($nid) {
+    protected function getMessageData($nid) {
+
+
 
 
       $entity = \Drupal::entityTypeManager()
@@ -103,39 +103,25 @@
 
       // Title
       $title = $entity->label();
+
       // Body
-      $text_content = $entity->get('field_smmg_text')->getValue();
-      $text_with_format = $text_content[0];
-      $text = $text_content[0]['value'];
+      $body = $entity->get('body')->getValue();
 
       // Send Date
       $send_date = [];
-      if (!empty($entity->field_smmg_message_send_date)) {
+      if (!empty($entity->field_smms_send_date)) {
         // Load
-        $send_date_content = $entity->get('field_smmg_message_send_date')
+        $send_date = $entity->get('field_smms_send_date')
           ->getValue();
-
-        $send_date = $send_date_content[0]['value'];
-      }
-
-      // Template NID
-      $template_id = NULL;
-      if (!empty($entity->field_smmg_design_template)) {
-        // Load
-        $design_template = $entity->get('field_smmg_design_template')
-          ->getValue();
-
-        $design_template_id = $design_template[0]['target_id'];
-
       }
 
 
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_smmg_subscriber_tags)) {
+      if (!empty($entity->field_newsletter_mailto_groups)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_smmg_subscriber_tags')
+        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
           ->getValue();
 
         // save only tid
@@ -145,45 +131,15 @@
       }
 
 
-      $search_keys = [
-        '@@_id_@@',
-        '@@_titel_@@',
-        '@@_vorname_@@',
-        '@@_nachname_@@',
-        '@@_email_@@',
-      ];
+      $output['id'] = $nid;
+      $output['title'] = $title;
+      $output['body'] = $body[0]; // must be rendert in twig
+      $output['subscriber'] = $subscriber;
+      $output['send_date'] = $send_date;
 
 
-      $placeholders = [
-        '[ID]',
-        '<span class="smmg-placeholder">[TITEL]</span>',
-        '<span class="smmg-placeholder">[VORNAME]</span>',
-        '<span class="smmg-placeholder">[NACHNAME]</span>',
-        '<span class="smmg-placeholder">[EMAIL]</span>',
-      ];
-
-
-      $text_plain = MessageController::generateMessagePlain($text, $search_keys, $placeholders, $design_template_id);
-      $text_html_body_only = MessageController::generateMessageHtml($text, $search_keys, $placeholders, $design_template_id, true);
-
-
-      $message['id'] = $nid;
-      $message['title'] = $title;
-      $message['text'] = $text_with_format; // must be rendered in twig
-      $message['text_plain'] = $text_plain;
-      $message['text_html_body'] = $text_html_body_only;
-      $message['subscriber'] = $subscriber;
-      $message['send_date'] = $send_date;
-      $message['search_keys'] = $search_keys;
-      $message['placeholders'] = $placeholders;
-
-
-      return $message;
+      return $output;
     }
-
-
-
-
 
     protected function getSubscriberData($nid) {
 
@@ -194,10 +150,10 @@
         ->load($nid);
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_smmg_subscriber_tags)) {
+      if (!empty($entity->field_newsletter_mailto_groups)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_smmg_subscriber_tags')
+        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
           ->getValue();
 
         // save only tid
@@ -224,11 +180,15 @@
         $title = $group->label();
 
 
+
+
+
         // get all
         $node_subscripters = \Drupal::entityTypeManager()
           ->getStorage('node')
           ->loadByProperties([
-            'field_smmg_subscriber_tags' => $term_id,
+            'type' => 'goenner',
+            'field_empfaenger_gruppe' => $term_id,
           ]);
 
         $nummer = count($node_subscripters);
@@ -240,9 +200,8 @@
           $list[$list_index]['name'] = $item->label();
           $list_index++;
         }
-
+        
         // Output
-
 
         $output[$group_index]['id'] = $term_id;
         $output[$group_index]['title'] = $title;
@@ -265,10 +224,10 @@
         ->load($nid);
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_smmg_subscriber_tags)) {
+      if (!empty($entity->field_newsletter_mailto_groups)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_smmg_subscriber_tags')
+        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
           ->getValue();
 
         // save only tid
@@ -299,7 +258,8 @@
         $node_subscripters = \Drupal::entityTypeManager()
           ->getStorage('node')
           ->loadByProperties([
-            'field_smmg_subscriber_tags' => $term_id,
+            'type' => 'goenner',
+            'field_empfaenger_gruppe' => $term_id,
           ]);
 
         $nummer = count($node_subscripters);

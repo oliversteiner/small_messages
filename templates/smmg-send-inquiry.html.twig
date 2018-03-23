@@ -1,68 +1,50 @@
 {{ attach_library('small_messages/small_messages.main') }}
 
 
-    {% set link_send = path('small_messages.send_message', {'message_id': message.id}) %}
+    {% set link_messages = path('small_messages.messages') %}
+    {% set link_subscribers = path('small_messages.subscribers') %}
 
 
 
 {% if message.send_date %}
-
-    <div class="smmg-message-status-warning">{% trans %}This message was sent at {{ message.send_date }}. {% endtrans %}</div>
-
-    <div class="smmg-message-status-warning">Diese Nachricht wurde schon einmal gesendet am {{ message.send_date }}.
-    </div>
+    <div class="smmg-message-status-warning">Diese Nachricht wurde am {{ message.send_date }} schon einmal verschickt.</div>
 {% endif %}
 
 
-<h2> {% trans %} Messages {% endtrans %}  </h2>
+<h2>Nachricht:</h2>
 <div class="well">
     <h3>{{ message.title }}</h3>
     <div class="smmg-body">
 
-        {{ message.text.value|raw }}
+        {% set body = {
+        '#type':   'processed_text',
+        '#text':    message.body.value,
+        '#format':  message.body.format,
+        } %}
 
-    </div>
-    <div>
-        <a type="button"
-           class="btn btn-sm btn-default smmg-body-toggle-trigger">{% trans %} view full message  {% endtrans %} </a>
-    </div>
-</div>
-<h2>{% trans %} Preview {% endtrans %} </h2>
-<div class="well">
-    <div>
-        <a type="button" class="btn btn-sm btn-default smmg-body-plaintext-toggle">Text Email</a>
-        <a type="button" class="btn btn-sm btn-default smmg-body-htmltext-toggle"> HTML Email</a>
-    </div>
-    <div id="smmg-body-plaintext" class="smmg-mail-preview-container" style="display: none">
-    <pre>    {{ message.text_plain|raw }}
-        </pre>
-
+        {{ body }}
     </div>
 
-    <div id="smmg-body-htmltext" class="smmg-mail-preview-container" style="display: none">
-        {{ message.text_html_body|raw }}
-    </div>
+    <div><a type="button" class="btn btn-sm btn-default smmg-body-toggle-trigger">komplette Nachricht anzeigen</a></div>
 </div>
 
 
-<h2>{% trans %} Subscribers {% endtrans %} </h2>
+<h2>Empfänger:</h2>
 <div class="well">
-
 
     <div>
 
-        {% for tag in subscriber %}
+        {% for group_tag in subscriber %}
 
-            <div class="btn-tag active smmg-subscriber-tag-tag smmg-subscriber-list-trigger"
-                 data-subscriber-tag-id="{{ tag.id }}">
-                {{ tag.title }} <span class="badge">{{ tag.number }}</span></div>
+            <div class="btn-tag active smmg-subscriber-group-tag smmg-subscriber-list-trigger"
+                 data-subscriber-group-id="{{ group_tag.id }}">
+                {{ group_tag.title }} <span class="badge">{{ group_tag.number }}</span></div>
 
         {% endfor %}
 
 
         <div class="btn btn-sm   smmg-subscriber-list-trigger smmg-subscriber-list-description"
-             data-subscriber-tag-id="0">
-            {% trans %} Enumerate all recipients {% endtrans %}
+             data-subscriber-group-id="0">Alle Empfänger auflisten
         </div>
 
     </div>
@@ -70,11 +52,11 @@
 
     <div class="ajax-container"></div>
     <div class="smmg-subscriber-list">
-        {% for tag in subscriber %}
-            <div class="smmg-subscriber-list-block-{{ tag.id }}" style="display:none">
-                <h4 class="smmg-subscriber-list-title">{{ tag.title }}</h4>
+        {% for group in subscriber %}
+            <div class="smmg-subscriber-list-block-{{ group.id }}" style="display:none">
+                <h4 class="smmg-subscriber-list-title">{{ group.title }}</h4>
                 <ul class="smmg-subscriber-list-column">
-                    {% for item in tag.list %}
+                    {% for item in group.list %}
 
                         <li class="smmg-subscriber-member-{{ item.id }}">
                             <div class="smmg-subscriber-list-edit">
@@ -83,11 +65,11 @@
 
                                 <span class="smmg-subscriber-list-remove"
                                       data-subscriber-id="{{ item.id }}"
-                                      data-subscriber-tag-id="{{ tag.id }}"
+                                      data-subscriber-group-id="{{ group.id }}"
                                       data-toggle="tooltip"
                                       data-delay="1000"
                                       data-placement="right"
-                                      title="{% trans %} remove from the recipient list {% endtrans %} ">
+                                      title="aus der Empfängerliste entfernen">
                                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                                     </span>
                             </div>
@@ -100,17 +82,16 @@
         {% endfor %}
 
         <div class="smmg-subscriber-list-footer">
-            <p>{% trans %} The message is sent only once, even if it is listed twice.
-                    For example, in various groups. {% endtrans %} </p>
+            <p>Pro Person wird die Nachricht nur einmal verschickt, auch wenn sie doppelt aufgeführt ist. Z. B. in
+                verschiedenen Gruppen</p>
         </div>
     </div>
 </div>
 
 
 <div class="smmg-subscriber-foot">
-    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans %} Cancel {% endtrans %} </button>
-    <a href="{{ link_send }}" type="button" class="btn btn-primary">
-        <i class="fa fa-paper-plane" aria-hidden="true"></i>
-        {% trans %} Send message {% endtrans %}
-    </a>
+    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+    <button type="button" class="btn btn-primary"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+        Nachricht Senden
+    </button>
 </div>

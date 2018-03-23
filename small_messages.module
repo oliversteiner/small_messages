@@ -5,7 +5,6 @@
    * Contains small_messages.module.
    */
 
-  use Drupal\Core\Form\FormStateInterface;
   use Drupal\Core\Routing\RouteMatchInterface;
 
 
@@ -18,7 +17,7 @@
       case 'help.page.small_messages':
         $output = '';
         $output .= '<h3>' . t('About') . '</h3>';
-        $output .= '<p>' . t('A lightweight message & news system') . '</p>';
+        $output .= '<p>' . t('Ein kleines Nachrichten-System') . '</p>';
         return $output;
 
       default:
@@ -61,40 +60,17 @@
         $message['headers'] = [
           'MIME-Version' => '1.0',
           'Content-Type' => "multipart/alternative",
-          'Content-Transfer-Encoding' => 'quoted-printable',
+          'Content-Transfer-Encoding' => '8Bit',
           'X-Mailer' => 'Drupal',
         ];
         $message['body'][] = "\r\n--\r\n";
         $message['body'][] = 'Content-Type: text/plain; charset=utf-8;';
         $message['body'][] = $params['message'];
         $message['body'][] = "\r\n--\r\n";
-        $message['body'][] = "Content-Type: text/html; charset=UTF-8; format=flowed; delsp=yes;";
+        $message['body'][] = "Content-Type: text/html; charset=utf-8;";
         $message['body'][] = $params['htmltext'];
         $message['body'][] = "\r\n-- --\r\n";
         break;
-
-
-      case 'HTML':
-
-        $message['from'] = $params['from'];
-        $message['subject'] = $params['title'];
-        $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed; delsp=yes';
-        $message['body'][] = $params['htmltext'];
-        break;
-
     }
 
-  }
-  /**
-   * Implements hook_form_alter().
-   */
-
-  function small_messages_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-    // EDIT FORM KONZERT
-    if ($form_id == 'node_messages_edit_form' or $form_id == 'node_messages_form') {
-
-
-
-    }
   }

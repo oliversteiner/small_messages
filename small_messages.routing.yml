@@ -2,12 +2,12 @@
 # Start
 #
 small_messages.admin:
-  path: 'smmg/messages'
+  path: 'messages'
   defaults:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # messages List
@@ -18,7 +18,7 @@ small_messages.messages:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # subscriber List
@@ -29,7 +29,7 @@ small_messages.subscribers:
     _controller: '\Drupal\small_messages\Controller\AdminController:subscribersTemplate'
     _title: 'Small Messages'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # test config
@@ -40,7 +40,7 @@ small_messages.admin.test_config:
     _controller: '\Drupal\small_messages\Controller\AdminController::smmgConfig'
     _title: 'Config'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # Sandbox
@@ -51,30 +51,30 @@ small_messages.sandbox:
     _controller: '\Drupal\small_messages\Controller\MessageController:sandboxPage'
     _title: 'Sandbox'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 
 
-small_messages.send_message:
-  path: 'smmg/send/{message_id}'
+small_messages.test.send_message:
+  path: 'smmg/send'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::sendMessage'
     _title: 'Test Send Message'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # AJAX toggleSubscriberGroup
 #
-small_messages.toggle_subscriber_tag:
-  path: '/smmg/toggle_subscriber_tag/{target_nid}/{subscriber_tag_tid}'
+small_messages.ajax.toggle_subsciber_group:
+  path: '/smmg/ajax/toggle_subsciber_group/{target_nid}/{subscriber_group_tid}'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberTag'
+    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberGroup'
     target_nid: null
-    subscriber_tag_tid: null
-    _title: 'Toggle Subscriber Tag'
+    subscriber_group_tid: null
+    _title: 'Toggle Subscriber'
   requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
 
 #
 # AJAX toggleSubscriberGroup
@@ -85,16 +85,4 @@ small_messages.ajax.prepare_send:
     _controller: '\Drupal\small_messages\Controller\MessageController::prepareSend'
     _title: 'Nachricht bereit zum senden'
   requirements:
-    _permission: 'admin small Messages'
-
-#
-# subscriber List
-#
-small_messages.unsubscript:
-  path: 'smmg/unsubscribe/{nid}'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\SubscriberController::removeSubscription'
-    _title: 'Unsubscribe from Newsletter'
-    nid: null
-  requirements:
-    _permission: 'admin small Messages'
+    _permission: 'administer content'
