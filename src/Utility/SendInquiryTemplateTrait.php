@@ -109,9 +109,9 @@
 
       // Send Date
       $send_date = [];
-      if (!empty($entity->field_smms_send_date)) {
+      if (!empty($entity->field_smmg_message_send_date)) {
         // Load
-        $send_date = $entity->get('field_smms_send_date')
+        $send_date = $entity->get('field_smmg_message_send_date')
           ->getValue();
       }
 

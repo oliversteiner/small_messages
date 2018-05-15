@@ -57,7 +57,7 @@
       $node = $values->_entity;
       $bundle = $node->bundle();
       $nid = $values->_entity->id();
-      $send_date = $node->get('field_smms_send_date')->getValue();
+      $send_date = $node->get('field_smmg_message_send_date')->getValue();
       $destination = 'smmg/messages';
 
       $elements = [];
