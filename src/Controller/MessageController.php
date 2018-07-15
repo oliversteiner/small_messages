@@ -20,8 +20,92 @@
       return 'small_messages';
     }
 
+      public static function generateMessagePlain($text, $search_keys, $placeholders, $template_nid) {
+          {
 
-    public function startRun($message_nid) {
+              // load Design Template
+              $entity = \Drupal::entityTypeManager()
+                  ->getStorage('node')
+                  ->load($template_nid);
+
+
+              $design_template_content = $entity->get('field_smmg_template_plaint')
+                  ->getValue();
+              $design_template = $design_template_content[0]['value'];
+
+              // insert Message in to Design Template
+              $template_with_message = str_replace('@@_text_@@', $text, $design_template);
+              $body_content = $template_with_message;
+
+              // Replace all Placeholders with Values
+              foreach ($search_keys as $index => $search_key) {
+                  $replace = $placeholders[$index];
+                  $body_content = str_replace($search_key, $replace, $body_content);
+              }
+
+              // Output
+              return $body_content;
+          }
+
+      }
+
+      public static function generateMessageHtml($message, $search_keys, $placeholders, $template_nid, $body_only = FALSE) {
+
+          // load Design Template
+          $entity = \Drupal::entityTypeManager()
+              ->getStorage('node')
+              ->load($template_nid);
+
+          $template_html_head = '';
+          $e_template_html_head = $entity->get('field_smmg_template_html_head')
+              ->getValue();
+          if (!empty($e_template_html_head)) {
+              $template_html_head = $e_template_html_head[0]['value'];
+          }
+
+          $template_html_body = $entity->get('field_smmg_template_html_body')
+              ->getValue();
+          $template_html_body = $template_html_body[0]['value'];
+
+
+          // Desfine the HTML -Parts
+          $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> ';
+          $html_start = '<html xmlns="http://www.w3.org/1999/xhtml">';
+          $head = '<head>'.$template_html_head.'</head>';
+          $body_start = '<body>';
+          $body_content = '';
+          $body_end = '</body>';
+          $html_end = '</html>';
+
+          // insert Message in to Design Template
+          $template_with_message = str_replace('@@_text_@@', $message, $template_html_body);
+          $body_content = $template_with_message;
+
+          // Replace all Placeholders with Values
+          foreach ($search_keys as $index => $search_key) {
+
+
+              $replace = $placeholders[$index];
+
+
+              $body_content = str_replace($search_key, $replace, $body_content);
+          }
+
+          if (FALSE === $body_only) {
+
+              // assemble all HTMl - Parts
+              $html_file = $doctype.$html_start.$head.$body_start.$body_content.$body_end.$html_end;
+          }
+          else {
+              $html_file = $body_content;
+
+          }
+          // Output
+          return $html_file;
+      }
+
+
+      public function startRun($message_nid) {
 
       // Message
 
