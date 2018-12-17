@@ -1,0 +1,21 @@
+uuid: cda42ade-48c8-46e4-8c9a-6156c72a03a8
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_resigning_date
+    - node.type.member
+  module:
+    - datetime
+id: node.member.field_resigning_date
+field_name: field_resigning_date
+entity_type: node
+bundle: member
+label: Austrittsdatum
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,19 @@
+uuid: 614727bb-b1b1-4157-a022-6110cde56b02
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mobile
+    - node.type.member
+id: node.member.field_mobile
+field_name: field_mobile
+entity_type: node
+bundle: member
+label: Mobile
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

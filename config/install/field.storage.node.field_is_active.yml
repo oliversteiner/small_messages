@@ -1,0 +1,18 @@
+uuid: 852d2c0b-1f5a-4bae-9bd5-df0bce689b3a
+langcode: de
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_is_active
+field_name: field_is_active
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
