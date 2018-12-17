@@ -1,0 +1,22 @@
+uuid: d1b4befb-949c-45f5-a92d-9d0e213a543a
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.smmg_message_design_template
+  module:
+    - text
+id: node.smmg_message_design_template.body
+field_name: body
+entity_type: node
+bundle: smmg_message_design_template
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

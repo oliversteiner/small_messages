@@ -1,0 +1,31 @@
+uuid: 858fcc14-4de5-432e-893d-3c225e20cf97
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.member
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    einfaches_html_nur_text: '0'
+    basic_html: '0'
+    restricted_html: '0'
+    full_html: '0'
+    plain_text: '0'
+    html: '0'
+id: node.member.body
+field_name: body
+entity_type: node
+bundle: member
+label: Notiz
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

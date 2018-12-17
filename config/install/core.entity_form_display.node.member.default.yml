@@ -1,0 +1,315 @@
+uuid: 73bffe14-e7ab-4c3b-a155-ca9e95d03dcf
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.field.node.member.body
+    - field.field.node.member.field_accounting
+    - field.field.node.member.field_donation
+    - field.field.node.member.field_e_mail
+    - field.field.node.member.field_erfasst_von
+    - field.field.node.member.field_geburtsdatum
+    - field.field.node.member.field_gender
+    - field.field.node.member.field_image
+    - field.field.node.member.field_is_active
+    - field.field.node.member.field_is_annually
+    - field.field.node.member.field_is_resigned
+    - field.field.node.member.field_member_amount
+    - field.field.node.member.field_member_is_public
+    - field.field.node.member.field_member_type
+    - field.field.node.member.field_mobile
+    - field.field.node.member.field_nachname
+    - field.field.node.member.field_ort
+    - field.field.node.member.field_plz
+    - field.field.node.member.field_resigning_date
+    - field.field.node.member.field_smmg_accept_newsletter
+    - field.field.node.member.field_smmg_subscriber_tags
+    - field.field.node.member.field_strasse
+    - field.field.node.member.field_telefon
+    - field.field.node.member.field_vorname
+    - image.style.thumbnail
+    - node.type.member
+  module:
+    - datetime
+    - field_group
+    - image
+    - text
+third_party_settings:
+  field_group:
+    group_allgemein:
+      children:
+        - field_gender
+        - field_vorname
+        - field_nachname
+        - field_e_mail
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: true
+        required_fields: true
+      label: Allgemein
+    group_adresse:
+      children:
+        - field_strasse
+        - field_plz
+        - field_ort
+      parent_name: ''
+      weight: 3
+      format_type: details
+      format_settings:
+        label: Adresse
+        required_fields: true
+        id: ''
+        classes: ''
+        open: false
+      label: Adresse
+    group_goenner_sponsor:
+      children:
+        - field_member_type
+        - field_member_is_public
+        - field_member_amount
+        - field_is_annually
+        - field_accounting
+        - field_erfasst_von
+        - field_donation
+      parent_name: ''
+      weight: 4
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Gönner / Sponsor'
+    group_newsletter:
+      children:
+        - field_smmg_accept_newsletter
+        - field_smmg_subscriber_tags
+      parent_name: ''
+      weight: 5
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: true
+        required_fields: true
+      label: Newsletter
+    group_weitere_angaben:
+      children:
+        - field_mobile
+        - field_telefon
+        - field_geburtsdatum
+        - body
+      parent_name: ''
+      weight: 6
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Weitere Angaben'
+    group_austritt:
+      children:
+        - field_is_active
+        - field_resigning_date
+      parent_name: ''
+      weight: 7
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: Austritt
+id: node.member.default
+targetEntityType: node
+bundle: member
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 29
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  field_accounting:
+    weight: 17
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_donation:
+    weight: 19
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_e_mail:
+    weight: 12
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: email_default
+    region: content
+  field_erfasst_von:
+    weight: 18
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_geburtsdatum:
+    weight: 28
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_gender:
+    weight: 9
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_image:
+    weight: 1
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_is_active:
+    weight: 8
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_is_annually:
+    weight: 16
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_member_amount:
+    weight: 15
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_member_is_public:
+    weight: 14
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_member_type:
+    weight: 13
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_mobile:
+    weight: 26
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_nachname:
+    weight: 11
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_ort:
+    weight: 18
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_plz:
+    weight: 17
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_resigning_date:
+    weight: 9
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_smmg_accept_newsletter:
+    weight: 23
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_smmg_subscriber_tags:
+    weight: 24
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_strasse:
+    weight: 16
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_telefon:
+    weight: 27
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_vorname:
+    weight: 10
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_is_resigned: true
+  langcode: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

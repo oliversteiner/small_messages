@@ -1,0 +1,23 @@
+uuid: 250cbbd1-29c9-4e7d-81e6-30c182046843
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_plz
+    - node.type.member
+id: node.member.field_plz
+field_name: field_plz
+entity_type: node
+bundle: member
+label: PLZ
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

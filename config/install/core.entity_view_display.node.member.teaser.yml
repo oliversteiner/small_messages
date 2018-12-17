@@ -1,0 +1,77 @@
+uuid: 8b78bd06-9adf-4e26-aa3b-17591081d6fa
+langcode: de
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.member.body
+    - field.field.node.member.field_accounting
+    - field.field.node.member.field_donation
+    - field.field.node.member.field_e_mail
+    - field.field.node.member.field_erfasst_von
+    - field.field.node.member.field_geburtsdatum
+    - field.field.node.member.field_gender
+    - field.field.node.member.field_image
+    - field.field.node.member.field_is_active
+    - field.field.node.member.field_is_annually
+    - field.field.node.member.field_is_resigned
+    - field.field.node.member.field_member_amount
+    - field.field.node.member.field_member_is_public
+    - field.field.node.member.field_member_type
+    - field.field.node.member.field_mobile
+    - field.field.node.member.field_nachname
+    - field.field.node.member.field_ort
+    - field.field.node.member.field_plz
+    - field.field.node.member.field_resigning_date
+    - field.field.node.member.field_smmg_accept_newsletter
+    - field.field.node.member.field_smmg_subscriber_tags
+    - field.field.node.member.field_strasse
+    - field.field.node.member.field_telefon
+    - field.field.node.member.field_vorname
+    - node.type.member
+  module:
+    - text
+    - user
+id: node.member.teaser
+targetEntityType: node
+bundle: member
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_accounting: true
+  field_donation: true
+  field_e_mail: true
+  field_erfasst_von: true
+  field_geburtsdatum: true
+  field_gender: true
+  field_image: true
+  field_is_active: true
+  field_is_annually: true
+  field_is_resigned: true
+  field_member_amount: true
+  field_member_is_public: true
+  field_member_type: true
+  field_mobile: true
+  field_nachname: true
+  field_ort: true
+  field_plz: true
+  field_resigning_date: true
+  field_smmg_accept_newsletter: true
+  field_smmg_subscriber_tags: true
+  field_strasse: true
+  field_telefon: true
+  field_vorname: true
+  langcode: true

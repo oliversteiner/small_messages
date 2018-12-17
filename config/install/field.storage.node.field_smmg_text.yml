@@ -1,0 +1,19 @@
+uuid: 6af9eb0f-7c04-4040-b92e-0f9c326d32e7
+langcode: de
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_smmg_text
+field_name: field_smmg_text
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

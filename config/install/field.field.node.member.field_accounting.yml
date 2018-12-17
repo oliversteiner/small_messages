@@ -1,0 +1,29 @@
+uuid: 49c76731-29b8-4547-82d6-515fb19d712b
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_accounting
+    - node.type.member
+    - taxonomy.vocabulary.accounting
+id: node.member.field_accounting
+field_name: field_accounting
+entity_type: node
+bundle: member
+label: 'Status Rechnung'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      accounting: accounting
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: accounting
+field_type: entity_reference

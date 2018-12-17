@@ -1,0 +1,19 @@
+uuid: 2e3f090f-02d1-4b0a-ab79-43e1ddd28891
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ort
+    - node.type.member
+id: node.member.field_ort
+field_name: field_ort
+entity_type: node
+bundle: member
+label: Ort
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

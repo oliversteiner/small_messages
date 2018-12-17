@@ -1,0 +1,19 @@
+uuid: bada978e-77fb-4485-a678-dadf01e6a54f
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_e_mail
+    - node.type.member
+id: node.member.field_e_mail
+field_name: field_e_mail
+entity_type: node
+bundle: member
+label: E-Mail
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

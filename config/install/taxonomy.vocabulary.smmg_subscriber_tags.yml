@@ -1,0 +1,9 @@
+uuid: 6d8e9286-9c50-4cec-9b5f-f6c700b35155
+langcode: de
+status: true
+dependencies: {  }
+name: smmg_subscriber_tags
+vid: smmg_subscriber_tags
+description: ''
+hierarchy: 0
+weight: 0

@@ -1,0 +1,21 @@
+uuid: 2c3d8f49-787c-45c5-bdd2-0de251c66b5e
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_message_send_date
+    - node.type.smmg_message
+  module:
+    - datetime
+id: node.smmg_message.field_smmg_message_send_date
+field_name: field_smmg_message_send_date
+entity_type: node
+bundle: smmg_message
+label: 'Message sent'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

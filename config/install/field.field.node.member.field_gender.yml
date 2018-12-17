@@ -1,0 +1,29 @@
+uuid: d4989512-c73b-43e9-a128-cf6a4bf27716
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gender
+    - node.type.member
+    - taxonomy.vocabulary.gender
+id: node.member.field_gender
+field_name: field_gender
+entity_type: node
+bundle: member
+label: Anrede
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      gender: gender
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

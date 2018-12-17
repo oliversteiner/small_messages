@@ -1,0 +1,9 @@
+uuid: 5a8a4708-795f-49e3-95a2-bdd99a5738e7
+langcode: de
+status: true
+dependencies: {  }
+name: smmg_message_tags
+vid: smmg_message_tags
+description: ''
+hierarchy: 0
+weight: 0

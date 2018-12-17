@@ -1,0 +1,29 @@
+uuid: 87269a21-cee2-4d7d-8673-4121da5b7b77
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_subscriber_tags
+    - node.type.smmg_message
+    - taxonomy.vocabulary.smmg_subscriber_tags
+id: node.smmg_message.field_smmg_subscriber_tags
+field_name: field_smmg_subscriber_tags
+entity_type: node
+bundle: smmg_message
+label: 'Empfänger Gruppen'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_subscriber_tags: smmg_subscriber_tags
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

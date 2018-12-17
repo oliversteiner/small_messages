@@ -1,0 +1,11 @@
+uuid: e754b771-39fc-48a5-80b1-7b64ac3ef3a8
+langcode: de
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_subscriber_tags
+id: taxonomy_term.smmg_subscriber_tags
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_subscriber_tags
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,27 @@
+uuid: b5fa3f40-51b7-4674-98d1-ba78d55cd61c
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_template_files
+    - node.type.smmg_message_design_template
+  module:
+    - file
+id: node.smmg_message_design_template.field_smmg_template_files
+field_name: field_smmg_template_files
+entity_type: node
+bundle: smmg_message_design_template
+label: Dateien
+description: "Use your own Template Files: \r\n - your_template.html\r\n - your_template.txt"
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: small_messages/templates
+  file_extensions: 'txt html'
+  max_filesize: 1MB
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

@@ -1,0 +1,29 @@
+uuid: 6f4367b1-0986-4d8f-852b-f2d476b66c8f
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_erfasst_von
+    - node.type.member
+    - taxonomy.vocabulary.member_origin
+id: node.member.field_erfasst_von
+field_name: field_erfasst_von
+entity_type: node
+bundle: member
+label: 'Erfasst von'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      member_origin: member_origin
+    sort:
+      field: name
+      direction: asc
+    auto_create: true
+    auto_create_bundle: ''
+field_type: entity_reference

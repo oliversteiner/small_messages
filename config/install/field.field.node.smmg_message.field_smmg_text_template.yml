@@ -1,0 +1,23 @@
+uuid: 6cf6d33d-47e7-4dde-bfe1-999fa1d7863f
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_text_template
+    - node.type.smmg_message
+id: node.smmg_message.field_smmg_text_template
+field_name: field_smmg_text_template
+entity_type: node
+bundle: smmg_message
+label: 'Als Vorlage speichern'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Ja
+  off_label: Nein
+field_type: boolean

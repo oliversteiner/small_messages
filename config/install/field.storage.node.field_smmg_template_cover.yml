@@ -1,0 +1,30 @@
+uuid: a16cb596-ddbe-49cf-8b11-f187ee42be3d
+langcode: de
+status: true
+dependencies:
+  module:
+    - file
+    - image
+    - node
+id: node.field_smmg_template_cover
+field_name: field_smmg_template_cover
+entity_type: node
+type: image
+settings:
+  uri_scheme: public
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+  target_type: file
+  display_field: false
+  display_default: false
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

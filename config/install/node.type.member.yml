@@ -1,0 +1,17 @@
+uuid: 5fdee0e0-3bf0-4c3c-8da0-e24653f2d223
+langcode: de
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Member
+type: member
+description: ''
+help: ''
+new_revision: false
+preview_mode: 0
+display_submitted: true

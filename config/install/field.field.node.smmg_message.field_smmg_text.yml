@@ -1,0 +1,30 @@
+uuid: c060e44e-2fdf-4d4f-a52f-b52faa61e538
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_text
+    - node.type.smmg_message
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    full_html: full_html
+    einfaches_html_nur_text: '0'
+    basic_html: '0'
+    restricted_html: '0'
+    plain_text: '0'
+    html: '0'
+id: node.smmg_message.field_smmg_text
+field_name: field_smmg_text
+entity_type: node
+bundle: smmg_message
+label: Text
+description: 'Platzhalter:     @@_vorname_@@, @@_nachname_@@, @@_email_@@'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

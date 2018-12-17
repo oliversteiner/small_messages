@@ -1,0 +1,11 @@
+uuid: ecc3cf00-a780-4103-b370-4238c0200f26
+langcode: de
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_message_tags
+id: taxonomy_term.smmg_message_tags
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_message_tags
+default_langcode: site_default
+language_alterable: false

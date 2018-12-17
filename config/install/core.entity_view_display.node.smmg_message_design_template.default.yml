@@ -1,0 +1,73 @@
+uuid: bcb6de58-de1b-47bd-827d-0034a89a0057
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.field.node.smmg_message_design_template.body
+    - field.field.node.smmg_message_design_template.field_smmg_template_cover
+    - field.field.node.smmg_message_design_template.field_smmg_template_files
+    - field.field.node.smmg_message_design_template.field_smmg_template_html_body
+    - field.field.node.smmg_message_design_template.field_smmg_template_html_head
+    - field.field.node.smmg_message_design_template.field_smmg_template_plaint
+    - node.type.smmg_message_design_template
+  module:
+    - file
+    - image
+    - text
+    - user
+id: node.smmg_message_design_template.default
+targetEntityType: node
+bundle: smmg_message_design_template
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_smmg_template_cover:
+    weight: 106
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_smmg_template_files:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: file_default
+    region: content
+  field_smmg_template_html_body:
+    weight: 103
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_smmg_template_html_head:
+    weight: 104
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_smmg_template_plaint:
+    weight: 105
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true
