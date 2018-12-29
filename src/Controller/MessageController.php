@@ -25,8 +25,7 @@
 
               // load Design Template
               $entity = \Drupal::entityTypeManager()
-                  ->getStorage('node')
-                  ->load($template_nid);
+                  ->getStorage('node');
 
 
               $design_template_content = $entity->get('field_smmg_template_plaint')
@@ -231,7 +230,7 @@
         $data['title'] = $output['message']['title'];
         $data['message'] = $output['message']['plaintext'];
         $data['htmltext'] =$output['message']['htmltext'];
-        $data['from'] = "newsletter@konzert-um-3.ch";
+        $data['from'] = "newsletter@drullo.ch";
         $data['to'] =$address['email'];
 
         self::sendmail($data);
@@ -264,8 +263,6 @@
 
       $result = $this->startRun(1191);
 
-
-      kint($result);
 
       // Form mit test
 
@@ -304,11 +301,6 @@
       $send = true;
 
 
-      // Inhalt
-      /*      $params['title'] = 'Email Titel Test';
-            $params['message'] = '5 Plaintext test';
-            $params['htmltext'] = '<text style="color:#4ea3ff; font-size:50px;">3 HTML Text Test</text>';
-            $params['from'] = 'newsletter@konzert-um-3.ch';*/
 
 
       // Send
