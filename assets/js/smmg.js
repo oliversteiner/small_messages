@@ -1,42 +1,42 @@
-(function ($, Drupal, drupalSettings) {
-
-  "use strict";
+(function($, Drupal, drupalSettings) {
+  'use strict';
 
   Drupal.behaviors.smmgMainBehavior = {
-    attach: function (context, settings) {
-
+    attach: function(context, settings) {
       console.log('smmg');
       test();
 
-// Auto Send Filter
-      $('*[id^=edit-empfaenger-gruppe]').change(function () {
+      // Auto Send Filter
+      $('*[id^=edit-empfaenger-gruppe]').change(function() {
         updateView();
       });
 
-      $('*[id^=edit-goenner-typ]').change(function () {
+      $('*[id^=edit-goenner-typ]').change(function() {
         updateView();
       });
 
-      $('*[id^=edit-goenner-status]').change(function () {
+      $('*[id^=edit-goenner-status]').change(function() {
         updateView();
       });
 
-      $('*[id^=edit-field-newsletter-mailto-groups]').change(function () {
+      $('*[id^=edit-field-newsletter-mailto-groups]').change(function() {
         updateView();
       });
 
-      $('*[id^=edit-field-gruppe-target-id]').change(function () {
+      $('*[id^=edit-field-gruppe-target-id]').change(function() {
         updateView();
       });
 
-      $('*[id^=edit-items-per-page]').change(function () {
+      $('*[id^=edit-items-per-page]').change(function() {
         updateView();
       });
 
       // Editor status element ausblenden
-      $('*[id^="edit-meta"]').parent().parent().hide();
-
-    }
+      $('*[id^="edit-meta"]')
+        .parent()
+        .parent()
+        .hide();
+    },
   };
 
   /**
@@ -45,23 +45,15 @@
    */
   function test() {
     console.log('smmg - test');
-
-
   }
 
-
-  function updateView(){
+  function updateView() {
     // Bootstrap Theme
     var $submit_button = $('*[id^=edit-submit-smmg]');
 
     $submit_button.trigger('click');
-   // $submit_button.click();
-
+    // $submit_button.click();
 
     $('.smmg-views .view-content').fadeTo('medium', 0);
-
-
   }
-
-
 })(jQuery, Drupal, drupalSettings);
