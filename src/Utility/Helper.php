@@ -8,12 +8,22 @@ use Drupal\node\Entity\Node;
 class Helper
 {
 
-    public static function getTerms($vid)
+    public static function getTermsByID($vid)
     {
         $term_list = [];
         $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
         foreach ($terms as $term) {
             $term_list[$term->tid] = $term->name;
+        }
+        return $term_list;
+    }
+
+    public static function getTermsByName($vid)
+    {
+        $term_list = [];
+        $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+        foreach ($terms as $term) {
+            $term_list[$term->name] = $term->id;
         }
         return $term_list;
     }
@@ -82,7 +92,7 @@ class Helper
 
     public static function getToken($node_or_node_id)
     {
-        $field_name = 'field_token';
+        $field_name = 'field_smmg_token';
         $result = false;
 
         if (is_numeric($node_or_node_id)) {
