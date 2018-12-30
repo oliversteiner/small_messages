@@ -122,4 +122,58 @@ class Helper
         $token = bin2hex(Crypt::randomBytes(20));
         return $token;
     }
+
+    public static function getTemplates($module = "small_messages", $template_names = [])
+    {
+        $templates = [];
+
+
+        // Default Names
+        $default_directory = "templates";
+        $default_root_type = "module";
+        $default_module_name = $module;
+        $module_name_url = str_replace('_', '-', $module);
+        $default_template_prefix = $module_name_url."-";
+        $default_template_suffix = ".html.twig";
+
+
+        // Get Config
+        $config = \Drupal::config($module.'.settings');
+
+        // Load Path Module from Settings
+        $config_root_type = $config->get('get_path_type');
+        $config_module_name = $config->get('get_path_name');
+
+        foreach ($template_names as $template_name) {
+
+            // change "_" with "-"
+            $template_name_url = str_replace('_', '-', $template_name);
+
+            // Default
+            $root_type = $default_root_type;
+            $module_name = $default_module_name;
+            $template_full_name = '/' . $default_directory . '/' . $default_template_prefix . $template_name_url . $default_template_suffix;
+
+            // If Path Module is set
+            if ($config_root_type && $config_module_name) {
+                $root_type = $config_root_type;
+                $module_name = $config_module_name;
+
+                // If Template Name is set
+                $config_template_name = $config->get('template_' . $template_name);
+                if ($config_template_name) {
+                    $template_full_name = $config_template_name;
+                }
+
+            }
+
+            $template_path = drupal_get_path($root_type, $module_name) . $template_full_name;
+
+            // output
+            $templates[$template_name] = $template_path;
+        }
+
+
+        return $templates;
+    }
 }
