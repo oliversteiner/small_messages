@@ -31,27 +31,6 @@ small_messages.subscribers:
   requirements:
     _permission: 'administer content'
 
-#
-# test config
-#
-small_messages.admin.test_config:
-  path: 'smmg/config'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\AdminController::smmgConfig'
-    _title: 'Config'
-  requirements:
-    _permission: 'administer content'
-
-#
-# Sandbox
-#
-small_messages.sandbox:
-  path: 'smmg/sandbox'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\MessageController:sandboxPage'
-    _title: 'Sandbox'
-  requirements:
-    _permission: 'administer content'
 
 
 
@@ -69,7 +48,7 @@ small_messages.test.send_message:
 small_messages.ajax.toggle_subsciber_group:
   path: '/smmg/ajax/toggle_subsciber_group/{target_nid}/{subscriber_group_tid}'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubsciberGroup'
+    _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubscriberGroup'
     target_nid: null
     subscriber_group_tid: null
     _title: 'Toggle Subscriber'

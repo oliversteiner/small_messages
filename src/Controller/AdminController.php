@@ -39,24 +39,5 @@ class AdminController extends ControllerBase {
     ];
   }
 
-  /**
-   * @return array
-   */
-  public function sandboxPage() {
-
-    $output[1] = 'test';
-
-    $form['list'] = [
-      '#markup' => '<p>Sandbox</p>' .
-        '<hr>' .
-
-        '<div class="small_messages-sandbox"><pre>' .$output[1]. '</pre></div>' .
-        '<hr>',
-    ];
-
-
-    return $form;
-  }
-
 
 }

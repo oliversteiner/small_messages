@@ -185,35 +185,35 @@ class MessageController extends ControllerBase
 
                     // email
                     $email = [];
-                    if (!empty($entity->field_e_mail)) {
-                        $email = $entity->get('field_e_mail')
+                    if (!empty($entity->field_email)) {
+                        $email = $entity->get('field_email')
                             ->getValue();
                         $email = $email[0]['value'];
 
                     }
 
-                    // vorname
-                    $vorname = [];
-                    if (!empty($entity->field_vorname)) {
-                        $vorname = $entity->get('field_vorname')
+                    // first_name
+                    $first_name = [];
+                    if (!empty($entity->field_first_name)) {
+                        $first_name = $entity->get('field_first_name')
                             ->getValue();
-                        $vorname = $vorname[0]['value'];
+                        $first_name = $first_name[0]['value'];
 
                     }
 
-                    // nachname
-                    $nachname = [];
-                    if (!empty($entity->field_nachname)) {
-                        $nachname = $entity->get('field_nachname')
+                    // last_name
+                    $last_name = [];
+                    if (!empty($entity->field_last_name)) {
+                        $last_name = $entity->get('field_last_name')
                             ->getValue();
-                        $nachname = $nachname[0]['value'];
+                        $last_name = $last_name[0]['value'];
                     }
 
 
                     $list[$list_index]['id'] = $id;
                     $list[$list_index]['titel'] = $entity->label();
-                    $list[$list_index]['nachname'] = $nachname;
-                    $list[$list_index]['vorname'] = $vorname;
+                    $list[$list_index]['last_name'] = $last_name;
+                    $list[$list_index]['first_name'] = $first_name;
                     $list[$list_index]['email'] = $email;
 
                     $list_index++;
