@@ -1,9 +1,0 @@
-uuid: 58124df0-230b-422b-a842-889cea8061ff
-langcode: de
-status: true
-dependencies: {  }
-name: accounting
-vid: accounting
-description: ''
-hierarchy: 0
-weight: 0

@@ -1,9 +1,0 @@
-uuid: e1c9292c-02d0-433a-8988-640a2b675a80
-langcode: de
-status: true
-dependencies: {  }
-name: 'Gönner Typ'
-vid: goenner_typ
-description: ''
-hierarchy: 0
-weight: 0

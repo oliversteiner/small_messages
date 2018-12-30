@@ -1,9 +1,0 @@
-uuid: a72168de-31e1-4b07-9488-317c41e37132
-langcode: de
-status: true
-dependencies: {  }
-id: club_member
-label: 'Club Member'
-weight: 5
-is_admin: null
-permissions: {  }
