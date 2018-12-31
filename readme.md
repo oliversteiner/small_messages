@@ -51,8 +51,6 @@ smmg_template_files (for .html an .txt files)
 smmg_message_tags
 smmg_subscriber_tags
 
-### Taxonomy Fild
-ssmg_ignore_accept_nl
 
 
 ### Fields to add to the Subscribers
