@@ -5,10 +5,13 @@
    * Contains small_messages.module.
    */
 
-  use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 
 
-  /**
+/**
    * Implements hook_help().
    */
   function small_messages_help($route_name, RouteMatchInterface $route_match) {
@@ -74,3 +77,43 @@
     }
 
   }
+
+/**
+ * Implements hook_node_access().
+ *
+ * @param NodeInterface $node
+ * @param $op
+ * @param AccountInterface $account
+ * @return mixed
+ */
+function small_messages_node_access(NodeInterface $node, $op, AccountInterface $account)
+{
+    $bundle_id = 'member';
+    $role_id = 'small_messages';
+
+    $bundle = $node->bundle();
+    $roles = $account->getRoles();
+
+    // Default checks
+    if (!is_object($node)) {
+        return AccessResult::neutral();
+    } else {
+
+        // block http://example.com/node/123
+        $parameter_node = \Drupal::routeMatch()->getRawParameter('node');
+
+        if ($op == 'view' && $parameter_node == $node->id()) {
+
+            // Restrict access to full node
+            if ($bundle == $bundle_id && in_array($role_id, $roles)) {
+                return AccessResult::neutral();
+            } else {
+                return AccessResult::forbidden();
+            }
+        }
+    }
+
+    // Default
+    return AccessResult::neutral();
+
+}
