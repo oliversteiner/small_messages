@@ -12,7 +12,7 @@ v 1.4
 ## Recommended modules
 - fontawesome
 
-## This Modules adds those 2 new Content Types:
+## Content Types
 ### Small Message
 smmg_message
 - smmg_message_text (the actual Message )
@@ -29,10 +29,14 @@ smmg_template
 - smmg_template_plain_text
 - smmg_template_cover (Preview Image for fast recognition)
 
-### Taxonomy
-smmg_message_group
-smmg_subscriber_group
+## Taxonomy
+- smmg_message_group
+- smmg_subscriber_group
 
+## Roles
+- smmg_member
+- smmg_editor
+- smmg_admin
 
 ## Install:
 
