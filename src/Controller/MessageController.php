@@ -31,7 +31,7 @@ class MessageController extends ControllerBase
                 ->getStorage('node');
 
 
-            $design_template_content = $entity->get('field_smmg_template_plaint')
+            $design_template_content = $entity->get('field_smmg_template_plain_text')
                 ->getValue();
             $design_template = $design_template_content[0]['value'];
 
@@ -128,10 +128,10 @@ class MessageController extends ControllerBase
 
         // subscribers
         $subscriber = [];
-        if (!empty($entity->field_newsletter_mailto_groups)) {
+        if (!empty($entity->field_smmg_subscriber_group)) {
 
             // Load all items
-            $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
+            $subscriber_groups_items = $entity->get('field_smmg_subscriber_group')
                 ->getValue();
 
             // save only tid
@@ -166,8 +166,7 @@ class MessageController extends ControllerBase
                 ->getStorage('node')
                 ->loadByProperties([
                     'type' => 'goenner',
-                    'field_empfaenger_gruppe' => $term_id,
-                    //   'field_newsletter' => 1
+                    'field_smmg_subscriber_group' => $term_id,
                 ]);
 
             foreach ($node_subscripters as $entity) {

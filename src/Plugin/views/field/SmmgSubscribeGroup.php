@@ -71,7 +71,7 @@
       // Load Active Tags
       $node = $values->_entity;
       $nid = $values->_entity->id();
-      $active_tags = $values->_entity->get('field_empfaenger_gruppe')
+      $active_tags = $values->_entity->get('field_smmg_subscriber_group')
         ->getValue();
 
       // save only tid

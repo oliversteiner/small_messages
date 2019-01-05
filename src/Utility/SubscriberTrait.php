@@ -133,7 +133,7 @@
       if (!empty($entity->field_empfaenger_gruppe)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_empfaenger_gruppe')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_group')
           ->getValue();
 
         // save only tid
@@ -162,12 +162,12 @@
         }
 
         // delete field
-        unset($entity->field_empfaenger_gruppe);
+        unset($entity->field_smmg_subscriber_group);
 
         // fill field new
         foreach ($subscribers_unique as $tid) {
           $item['target_id'] = $tid;
-          $entity->field_empfaenger_gruppe[] = $item;
+          $entity->field_smmg_subscriber_group[] = $item;
         }
 
 

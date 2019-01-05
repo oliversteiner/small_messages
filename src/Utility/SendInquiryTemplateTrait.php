@@ -109,19 +109,19 @@
 
       // Send Date
       $send_date = [];
-      if (!empty($entity->field_smmg_message_send_date)) {
+      if (!empty($entity->field_smmg_send_date)) {
         // Load
-        $send_date = $entity->get('field_smmg_message_send_date')
+        $send_date = $entity->get('field_smmg_send_date')
           ->getValue();
       }
 
 
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_newsletter_mailto_groups)) {
+      if (!empty($entity->field_smmg_subscriber_group)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_group')
           ->getValue();
 
         // save only tid
@@ -150,10 +150,10 @@
         ->load($nid);
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_newsletter_mailto_groups)) {
+      if (!empty($entity->field_smmg_subscriber_group)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_group')
           ->getValue();
 
         // save only tid
@@ -188,7 +188,7 @@
           ->getStorage('node')
           ->loadByProperties([
             'type' => 'goenner',
-            'field_empfaenger_gruppe' => $term_id,
+            'field_smmg_subscriber_group' => $term_id,
           ]);
 
         $nummer = count($node_subscripters);
@@ -224,10 +224,10 @@
         ->load($nid);
       // subscriber
       $subscriber = [];
-      if (!empty($entity->field_newsletter_mailto_groups)) {
+      if (!empty($entity->field_smmg_subscriber_group)) {
 
         // Load all items
-        $subscriber_groups_items = $entity->get('field_newsletter_mailto_groups')
+        $subscriber_groups_items = $entity->get('field_smmg_subscriber_group')
           ->getValue();
 
         // save only tid
@@ -259,7 +259,7 @@
           ->getStorage('node')
           ->loadByProperties([
             'type' => 'goenner',
-            'field_empfaenger_gruppe' => $term_id,
+            'field_smmg_subscriber_group' => $term_id,
           ]);
 
         $nummer = count($node_subscripters);
