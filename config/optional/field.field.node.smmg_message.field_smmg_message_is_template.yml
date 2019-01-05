@@ -1,0 +1,23 @@
+uuid: d16bf824-4fed-47b1-ba0f-a1df9d05f1d4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_message_is_template
+    - node.type.smmg_message
+id: node.smmg_message.field_smmg_message_is_template
+field_name: field_smmg_message_is_template
+entity_type: node
+bundle: smmg_message
+label: 'Is Template'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

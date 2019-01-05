@@ -1,0 +1,11 @@
+uuid: 4f8ad879-cfd9-4cd7-adea-6461204a5b72
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_message_group
+id: taxonomy_term.smmg_message_group
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_message_group
+default_langcode: site_default
+language_alterable: false

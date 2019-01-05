@@ -1,0 +1,9 @@
+uuid: 61f903fb-0798-4c53-b259-55fe9af7cea6
+langcode: und
+status: true
+dependencies: {  }
+name: 'SMMG Message Group'
+vid: smmg_message_group
+description: ''
+hierarchy: 0
+weight: 0
