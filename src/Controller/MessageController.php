@@ -315,7 +315,7 @@ class MessageController extends ControllerBase
             \Drupal::logger('mail-log')->error($message);
             return;
         } else {
-            $message = t('An email notification has been sent to @email ', ['@email' => $to]);
+            $message = t('An email notification has been sent to @email.', ['@email' => $to]);
             drupal_set_message($message);
             \Drupal::logger('mail-log')->notice($message);
 

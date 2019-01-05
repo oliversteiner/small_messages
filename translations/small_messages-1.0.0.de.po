@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-01-05 15:56+0100\n"
+"PO-Revision-Date: 2019-01-05 15:56+0100\n"
+"Last-Translator: Oliver Steiner <oliver@mollo.ch>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: t\n"
+"X-Poedit-SearchPath-0: src\n"
+"X-Poedit-SearchPath-1: templates\n"
+
+#: src/Controller/MessageController.php:258
+msgid "sendMessage:"
+msgstr "Nachricht gesendet:"
+
+#: src/Controller/MessageController.php:313 src/Utility/Email.php:112
+msgid "There was a problem sending your email notification to @email."
+msgstr "Es gab ein Problem beim Senden der e-Mail-Benachrichtigung an @email."
+
+#: src/Controller/MessageController.php:318 src/Utility/Email.php:117
+msgid "An email notification has been sent to @email."
+msgstr "Eine e-Mail-Benachrichtigung wurde an @email gesendet."
+
+#: src/Utility/Email.php:63
+msgid "Config Page"
+msgstr "Einstellungen"
+
+#: src/Utility/Email.php:64
+msgid ""
+"Test mode active. No email was sent to the subscriber. Disable test mode on "
+"@link."
+msgstr ""
+"Testmodus aktiv. Es werden keine E-Mails an den Abonnenten geschickt. "
+"Testmodus kann auf der Seite @link deaktiviert werden."
+
+#~ msgid "An email notification has been sent to @email "
+#~ msgstr "Eine Email-Benachrichtigung wurde an @email gesendet."

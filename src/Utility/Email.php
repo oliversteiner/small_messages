@@ -114,7 +114,7 @@ class Email
             \Drupal::logger('mail-log')->error($message);
             return;
         } else {
-            $message = t('An email notification has been sent to @email ', ['@email' => $to]);
+            $message = t('An email notification has been sent to @email.', ['@email' => $to]);
             \Drupal::messenger()->addMessage($message);
             \Drupal::logger('mail-log')->notice($message);
 
