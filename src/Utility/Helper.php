@@ -3,7 +3,9 @@
 namespace Drupal\small_messages\Utility;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
 
 class Helper
 {
@@ -26,6 +28,48 @@ class Helper
             $term_list[$term->name] = $term->id;
         }
         return $term_list;
+    }
+
+    /**
+     * @param $name
+     * @return bool|number
+     * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+     * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+     */
+    public static function getOrigin($name)
+    {
+
+        $vid = 'smmg_origin';
+        $tid = false;
+
+        $term_list = [];
+        $term_names = [];
+
+        // Load Origin Terms
+        $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+        foreach ($terms as $term) {
+            $term_list[$term->name] = $term->id;
+            $term_names[] = $term->name;
+        }
+
+        // add Term $name if not in list
+        if (in_array($name, $term_names)) {
+            $tid = $term_list[$name];
+        } else {
+            try {
+                $new_tid = Term::create([
+                    'name' => $name,
+                    'vid' => $vid,
+                ])->save();
+
+                $tid = $new_tid;
+
+            } catch (EntityStorageException $e) {
+            }
+        }
+
+        // return Term ID
+        return $tid;
     }
 
     /**
@@ -96,9 +140,8 @@ class Helper
         $result = false;
 
         if (is_numeric($node_or_node_id)) {
-            $entity = Node::load( $node_or_node_id);
-        }
-        else{
+            $entity = Node::load($node_or_node_id);
+        } else {
             $entity = $node_or_node_id;
         }
 
@@ -133,12 +176,12 @@ class Helper
         $default_root_type = "module";
         $default_module_name = $module;
         $module_name_url = str_replace('_', '-', $module);
-        $default_template_prefix = $module_name_url."-";
+        $default_template_prefix = $module_name_url . "-";
         $default_template_suffix = ".html.twig";
 
 
         // Get Config
-        $config = \Drupal::config($module.'.settings');
+        $config = \Drupal::config($module . '.settings');
 
         // Load Path Module from Settings
         $config_root_type = $config->get('get_path_type');
