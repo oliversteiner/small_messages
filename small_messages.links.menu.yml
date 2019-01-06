@@ -1,0 +1,16 @@
+#
+# Setting Page
+#
+small_messages.settings_form:
+  title: 'General'
+  description: 'Configure default Small Messages settings'
+  route_name: small_messages.settings
+  parent: small_messages.group.admin
+  weight: 0
+
+small_messages.group.admin:
+  title: 'Small Messages'
+  route_name: system.admin_config_small_messages
+  parent: system.admin_config
+  description: 'Small Messages Configuration'
+  weight: -999

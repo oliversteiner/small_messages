@@ -1,3 +1,25 @@
+
+# Settings
+# ---------------------------------
+#
+small_messages.settings:
+  path: '/admin/config/small_messages/small_messages/settings'
+  defaults:
+    _form: '\Drupal\small_messages\Form\SmallMessagesSettingsForm'
+    _title: 'Small Messages Settings'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
+
+system.admin_config_small_messages:
+  path: '/admin/config/small_messages'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Small Messages'
+  requirements:
+    _permission: 'access administration pages'
+
 #
 # Start
 #

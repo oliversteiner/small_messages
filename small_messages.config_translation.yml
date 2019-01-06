@@ -1,0 +1,5 @@
+small_messages.config:
+  title: 'Small Messages Translatable config'
+  base_route_name: small_messages.admin.config
+  names:
+    - small_messages.config
