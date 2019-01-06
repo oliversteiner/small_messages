@@ -11,7 +11,7 @@ class Email
     {
 
         // Build Settings Name
-        $module_settings_route = $module.'.settings';
+        $module_settings_route = $module . '.settings';
 
         // Load Settings
         $config = \Drupal::config($module_settings_route);
@@ -24,9 +24,10 @@ class Email
         $first_name = $data['address']['first_name'];
         $last_name = $data['address']['last_name'];
         $email_subscriber = $data['address']['email'];
+        $module = $data['module'];
 
-        $title = $data['title'];
-        $email_title = "$title: $first_name $last_name";
+
+        $email_title = empty($data['title']) ? "$module - $first_name $last_name" : $data['title'];
 
         // HTML
         $template_html = file_get_contents($templates['email_html']);
@@ -72,13 +73,13 @@ class Email
 
             $message_html = self::generateMessageHtml($message_html_body);
 
-            $data['title'] = $email_title;
-            $data['message_plain'] = $build_plain;
-            $data['message_html'] = $message_html;
-            $data['from'] = $email_address_from;
-            $data['to'] = $email_address_to;
+            $email['title'] = $email_title;
+            $email['message_plain'] = $build_plain;
+            $email['message_html'] = $message_html;
+            $email['from'] = $email_address_from;
+            $email['to'] = $email_address_to;
 
-             self::sendmail($data);
+            self::sendmail($email);
 
         }
 
@@ -86,14 +87,14 @@ class Email
 
     }
 
-    static function sendmail($data)
+    static function sendmail($email)
     {
-        $params['title'] = $data['title'];
-        $params['message_html'] = $data['message_html'];
-        $params['message_plain'] = $data['message_html'];
+        $params['title'] = $email['title'];
+        $params['message_html'] = $email['message_html'];
+        $params['message_plain'] = $email['message_html'];
 
-        $params['from'] = $data['from'];
-        $to = $data['to'];
+        $params['from'] = $email['from'];
+        $to = $email['to'];
 
 
         // System
@@ -146,11 +147,11 @@ class Email
         $email['from'] = '';
         $email['to'] = [];
 
-        $config = \Drupal::config($module.'.settings');
+        $config = \Drupal::config($module . '.settings');
 
         $email_from = $config->get('email_from');
 
-        $str_multible_email_to = $config->get('email_to');
+        $str_multiple_email_to = $config->get('email_to');
 
         $email_from = trim($email_from);
         $is_valid = \Drupal::service('email.validator')->isValid($email_from);
@@ -160,7 +161,7 @@ class Email
         }
 
 
-        $arr_email_to = explode(",", $str_multible_email_to);
+        $arr_email_to = explode(",", $str_multiple_email_to);
 
         foreach ($arr_email_to as $email_to) {
             $email_to = trim($email_to);
