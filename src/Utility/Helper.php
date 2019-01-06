@@ -5,6 +5,7 @@ namespace Drupal\small_messages\Utility;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 
 class Helper
@@ -81,7 +82,7 @@ class Helper
      * @param bool $force_array
      * @return boolean | string | array
      */
-    public static function getFieldValue(Node $node, $field_name, $term_list = null, $force_array = false)
+    public static function getFieldValue(NodeInterface $node, $field_name, $term_list = null, $force_array = false)
     {
         $field_name = 'field_' . $field_name;
         $result = false;
