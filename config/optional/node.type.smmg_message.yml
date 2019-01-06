@@ -3,15 +3,11 @@ langcode: de
 status: true
 dependencies:
   module:
-    - hide_revision_field
     - menu_ui
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-  hide_revision_field:
-    hide: false
-    personalizable: false
 _core:
   default_config_hash: SjbbxfPI2_-C8iOtbx0tygYx9SITLxGNtKU59pVcnyU
 name: 'SMMG Messages'
