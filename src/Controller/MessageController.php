@@ -176,7 +176,6 @@ class MessageController extends ControllerBase
                 if (in_array($id, $unique_list)) {
                     // übersprichen, da schon erfasse
 
-                    // dpm('die ID '.$id.' ist doppelt.');
                 } // neue ID:
                 else {
 

@@ -53,7 +53,6 @@ class Helper
             $term_names[] = $term->name;
         }
 
-        dpm($term_names);
 
         // add Term $name if not in list
         if (in_array($name, $term_names)) {
