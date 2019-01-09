@@ -38,16 +38,16 @@
 .smmg-toolbox-action {
   margin-bottom: 20px; }
 
-*[id^=edit-submit-smmg-] {
+*[id^='edit-submit-smmg-'] {
   background-color: white;
   color: grey;
   border: solid 1px #ccc; }
 
-*[id^=edit-field-newsletter-mailto-groups] .form-item {
+*[id^='edit-field-newsletter-mailto-groups'] .form-item {
   display: inline-block;
   margin-right: 25px; }
 
-*[id^="edit-delete--"] {
+*[id^='edit-delete--'] {
   margin-left: 40px; }
 
 a.vat-button-send {
@@ -55,28 +55,28 @@ a.vat-button-send {
   border: solid 1px #d5d5d5;
   color: green; }
 
-a.vat-button-send.message-sended {
+a.vat-button-send.message-is-send {
   opacity: 0.5;
   color: grey; }
 
-*[id^=views-exposed-form-smmg] {
+*[id^='views-exposed-form-smmg'] {
   border-bottom: solid 1px #d5d5d5;
   border-top: solid 1px #d5d5d5;
   margin: 10px 0;
   padding: 10px 0; }
-  *[id^=views-exposed-form-smmg] label {
+  *[id^='views-exposed-form-smmg'] label {
     display: inline-block;
     font-size: small;
     font-weight: 400;
     margin: 5px; }
-  *[id^=views-exposed-form-smmg] .form-type-select {
+  *[id^='views-exposed-form-smmg'] .form-type-select {
     margin-right: 20px; }
-  *[id^=views-exposed-form-smmg] select {
+  *[id^='views-exposed-form-smmg'] select {
     font-size: small;
     -webkit-appearance: none;
     border: solid 1px #ccc;
     color: #982b20; }
-  *[id^=views-exposed-form-smmg] .select-wrapper {
+  *[id^='views-exposed-form-smmg'] .select-wrapper {
     display: inline-block; }
 
 .smmg-tab-messages a {
