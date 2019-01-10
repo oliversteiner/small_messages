@@ -5,15 +5,16 @@
 <div class="well well-ost">
 
 
-    {% set link_messages = path('small_messages.messages') %}
-    {% set link_subscribers = path('small_messages.subscribers') %}
+    {% set link_messages = path('small_messages.main') %}
+    {% set link_subscribers = path('small_messages.main') %}
+
 
     {# TAB #}
     <div class="smmg-tab-container">
         <a type="button"
            class="btn btn-lg smmg-tab active"
            id="smmg-tab-messages"
-           href="{{ link_messages }}">
+           href="{{ link_messages }}/list">
             <i class="fa fa-envelope" aria-hidden="true"></i>
             Nachrichten
         </a>
@@ -21,7 +22,7 @@
         <a type="button"
            class="btn btn-lg smmg-tab "
            id="smmg-tab-subscribers"
-           href="{{ link_subscribers }}">
+           href="{{ link_subscribers }}/list/members">
 
             <i class="fa fa-users" aria-hidden="true"></i>
             Empfängerliste
@@ -40,7 +41,7 @@
 
             {# Neu Nachricht  #}
             <a type="button" class="btn btn-success use-ajax" data-dialog-type="modal"
-               href="/node/add/newsletter?destination={{ link_messages }}">
+               href="/node/add/newsletter?destination={{ link_messages }}/list">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"> </span>
                 neue Nachricht erstellen
             </a>
@@ -50,7 +51,7 @@
             <a type="button"
                class="btn btn-default use-ajax disabled"
                data-dialog-type="modal"
-               href="/node/add/newsletter?destination={{ link_messages }}"
+               href="/node/add/newsletter?destination={{ link_messages }}/list"
                data-toggle="tooltip"
                data-placement="left"
                title="Funktion noch nicht verfügbar">
@@ -71,8 +72,6 @@
 
         </div>
         <div class="smmg-views">
-
-        {{ drupal_view('smmg_messages_list','messages_admin') }}
         </div>
     </div>
 
