@@ -38,7 +38,7 @@ class Helper
         $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
         foreach ($terms as $term) {
             if($term->name == $term_name){
-                $tid = $term->id;
+                $tid = $term->tid;
                 break;
             }
         }
