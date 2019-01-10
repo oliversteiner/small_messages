@@ -23,6 +23,28 @@ class Helper
         return $term_list;
     }
 
+    public static function getTermNameByID($term_id)
+    {
+        $term = Term::load($term_id);
+        $name = $term->getName();
+
+        return $name;
+    }
+
+    public static function getTermIDByName($term_name, $vid)
+    {
+        $tid = 0;
+
+        $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+        foreach ($terms as $term) {
+            if($term->name == $term_name){
+                $tid = $term->id;
+                break;
+            }
+        }
+        return $tid;
+    }
+
     public static function getTermsByName($vid)
     {
         $term_list = [];
@@ -32,6 +54,8 @@ class Helper
         }
         return $term_list;
     }
+
+
 
     /**
      * @param $name
