@@ -147,6 +147,3 @@ function small_messages_views_pre_render(ViewExecutable $view)
     }
 
 }
-
-
-
