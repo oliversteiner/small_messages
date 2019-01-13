@@ -24,7 +24,7 @@ function small_messages_help($route_name, RouteMatchInterface $route_match)
         case 'help.page.small_messages':
             $output = '';
             $output .= '<h3>' . t('About') . '</h3>';
-            $output .= '<p>' . t('Ein kleines Nachrichten-System') . '</p>';
+            $output .= '<p>' . t('Some little Messages System') . '</p>';
             return $output;
 
         default:
@@ -37,19 +37,10 @@ function small_messages_help($route_name, RouteMatchInterface $route_match)
  */
 function small_messages_theme($existing, $type, $theme, $path)
 {
-    $module_path = drupal_get_path('module', 'small_messages');
-
-    $templates = $path . $module_path . '/templates';
-
-
     return [
         'small_messages' => [
             'render element' => 'children',
         ],
-        'icon' => [
-            'variables' => ['icon' => NULL],
-        ]
-
     ];
 }
 
@@ -155,67 +146,7 @@ function small_messages_views_pre_render(ViewExecutable $view)
     if (isset($view) && ($view->storage->id() == $view_id) && ($view->current_display == $display_id_messages)) {
     }
 
-    if (isset($view) && ($view->storage->id() == $view_id) && ($view->current_display == $display_id_members)) {
-    }
 }
-
-function small_messages_preprocess_page(&$variables)
-{
-    $node = \Drupal::routeMatch()->getParameter('node');
-    if ($node) {
-        //    $variables['title'] = $node->getTitle();
-        $variables['title'] = 'holla page';
-        //   $variables['title_prefix'] = '<i class="fas fa-duck"></i>i>';
-        $variables['title_prefix'] = '<i class="fas fa-duck"></i>i>';
-    }
-}
-
-
-/**
- * Implements hook_preprocess_HOOK() for page title templates.
- */
-function small_messages_preprocess_page_title(&$variables)
-{
-    // Since the title and the shortcut link are both block level elements,
-    // positioning them next to each other is much simpler with a wrapper div.
-    if (!empty($variables['title_suffix']['add_or_remove_shortcut']) && $variables['title']) {
-        // Add a wrapper div using the title_prefix and title_suffix render
-        // elements.
-        $variables['title_prefix']['shortcut_wrapper'] = [
-            '#markup' => '<div class="shortcut-wrapper clearfix">',
-            '#weight' => 100,
-        ];
-        $variables['title_suffix']['shortcut_wrapper'] = [
-            '#markup' => '</div>',
-            '#weight' => -99,
-        ];
-        // Make sure the shortcut link is the first item in title_suffix.
-        $variables['title_suffix']['add_or_remove_shortcut']['#weight'] = -100;
-    }
-    $variables['icon'] = '-icon-test';
-
-}
-
-/**
- * Implements hook_theme_registry_alter().
- */
-function small_messages_theme_registry_alter(&$theme_registry)
-{
-
-    $template_path = drupal_get_path('module', 'small_messages') . '/templates';
-
-    if (isset($theme_registry['page_title'])) {
-        $hooks = $theme_registry['page_title']['preprocess functions'];
-        if (($pos = array_search('small_messages_preprocess_page_title', $hooks)) !== FALSE) {
-            unset($hooks[$pos]);
-        }
-        $hooks[] = 'small_messages_preprocess_page_title';
-
-        $theme_registry['page_title']['preprocess functions'] = array_values($hooks);
-        $theme_registry['page_title']['path'] = $template_path;
-    }
-}
-
 
 
 
