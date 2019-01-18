@@ -110,7 +110,7 @@ function small_messages_node_access(NodeInterface $node, $op, AccountInterface $
         // block http://example.com/node/123
         $parameter_node = \Drupal::routeMatch()->getRawParameter('node');
 
-        if ($op == 'view' && $parameter_node == $node->id()) {
+        if ($op == 'view' && $parameter_node == $node->id() && in_array($bundle_id, $restricted_bundles)) {
 
             // Allow for admin roles
             if (in_array($bundle_id, $restricted_bundles) && in_array($role_id, $roles)) {
