@@ -1,4 +1,3 @@
-
 # Settings
 # ---------------------------------
 #
@@ -20,38 +19,20 @@ system.admin_config_small_messages:
   requirements:
     _permission: 'access administration pages'
 
+
+
+
 #
-# Start
+# Root
 #
-small_messages.admin:
-  path: 'messages'
+small_messages.main:
+  path: 'admin/smmg'
   defaults:
     _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
     _title: 'Small Messages'
   requirements:
     _permission: 'administer content'
 
-#
-# messages List
-#
-small_messages.messages:
-  path: 'smmg/messages'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
-    _title: 'Small Messages'
-  requirements:
-    _permission: 'administer content'
-
-#
-# subscriber List
-#
-small_messages.subscribers:
-  path: 'smmg/subscribers'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\AdminController:subscribersTemplate'
-    _title: 'Small Messages'
-  requirements:
-    _permission: 'administer content'
 
 
 
@@ -87,3 +68,4 @@ small_messages.ajax.prepare_send:
     _title: 'Nachricht bereit zum senden'
   requirements:
     _permission: 'administer content'
+

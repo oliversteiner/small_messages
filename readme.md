@@ -1,13 +1,18 @@
 # Small Messages
 Drupal 8 Module
 
-v 1.4
+v 1.0.0
 
+## TODO
+- [ ] implement is_send
+- [ ] Generate Template 'Default' on install
+- [ ] Generate Rules on Install
 
 ## Requirements
 - mailsystem
 - smtp
-- auto_entitylabel
+- views
+- views_admintools
 
 ## Recommended modules
 - fontawesome
@@ -20,7 +25,8 @@ smmg_message
 - smmg_design_template (Entity Reference: Tid to smmg_template node)
 - smmg_message_group ( Taxonomy Reference:  Categorize Messages)
 - smmg_subscriber_group( taxonomy Reference: Subscribers Groups)
-- smmg_send_date
+- smmg_send_date (timestamp)
+- smmg_message_is_send (boolean)
 
 ### Small Message Template
 smmg_template
@@ -44,3 +50,9 @@ smmg_template
 composer require drupal/mailsystem
 composer require drupal/smtp
 ```
+
+
+## Resources
+HTML Email Templates
+https://github.com/mailchimp/Email-Blueprints
+https://github.com/w8tcha/CKEditor-CodeMirror-Plugin

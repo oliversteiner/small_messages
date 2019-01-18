@@ -14,28 +14,25 @@
   .active {
     color: $color-smmg-link;
   }
-
 }
 .smmg-toolbox-action {
   margin-bottom: 20px;
 }
 // Button Anwenden ausblenden:
 
-*[id^=edit-submit-smmg-] {
-
-//  display: none;
+*[id^='edit-submit-smmg-'] {
+  //  display: none;
 
   background-color: white;
   color: grey;
   border: solid 1px #ccc;
 }
 
-
-*[id^=edit-field-newsletter-mailto-groups] .form-item {
+*[id^='edit-field-newsletter-mailto-groups'] .form-item {
   display: inline-block;
   margin-right: 25px;
 }
-*[id^="edit-delete--"] {
+*[id^='edit-delete--'] {
   margin-left: 40px;
 }
 a.vat-button-send {
@@ -43,11 +40,11 @@ a.vat-button-send {
   border: solid 1px $color-smmg-line;
   color: green;
 }
-a.vat-button-send.message-sended {
+a.vat-button-send.message-is-send {
   opacity: 0.5;
   color: grey;
 }
-*[id^=views-exposed-form-smmg] {
+*[id^='views-exposed-form-smmg'] {
   border-bottom: solid 1px $color-smmg-line;
   border-top: solid 1px $color-smmg-line;
   margin: 10px 0;
@@ -72,9 +69,10 @@ a.vat-button-send.message-sended {
   .select-wrapper {
     display: inline-block;
   }
-
 }
-.smmg-tab-messages a { color: grey }
+.smmg-tab-messages a {
+  color: grey;
+}
 .btn-tag {
   display: inline-block;
   padding: 3px 6px;
@@ -136,5 +134,4 @@ a.vat-button-send.message-sended {
     color: $color-smmg-tag-text-active-hover;
     border: 1px solid $color-smmg-tag-border-active-hover;
   }
-
 }
