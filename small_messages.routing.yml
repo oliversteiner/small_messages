@@ -19,9 +19,6 @@ system.admin_config_small_messages:
   requirements:
     _permission: 'access administration pages'
 
-
-
-
 #
 # Root
 #
@@ -32,9 +29,6 @@ small_messages.main:
     _title: 'Small Messages'
   requirements:
     _permission: 'administer content'
-
-
-
 
 
 small_messages.test.send_message:
