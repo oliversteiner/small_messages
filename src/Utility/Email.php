@@ -7,7 +7,13 @@ use Drupal\Core\Link;
 
 class Email
 {
-    public static function sendNotificationMail($module, $data, $templates)
+  /**
+   * @param $module
+   * @param $data
+   * @param $templates
+   * @return bool
+   */
+  public static function sendNotificationMail($module, $data, $templates)
     {
 
         // Build Settings Name
