@@ -5,6 +5,7 @@ namespace Drupal\small_messages\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
 use Drupal\small_messages\Utility\Email;
+use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 
 /**
@@ -40,8 +41,7 @@ class MessageController extends ControllerBase
     $search_keys,
     $placeholders,
     $template_nid
-  )
-  {
+  ) {
     // load Design Template
     $entity = \Drupal::entityTypeManager()->getStorage('node');
 
@@ -64,83 +64,8 @@ class MessageController extends ControllerBase
     return $body_content;
   }
 
-  public static function generateMessageHtml(
-    $message,
-    $search_keys,
-    $placeholders,
-    $template_nid,
-    $body_only = false
-  )
-  {
-    // load Design Template
-    $entity = \Drupal::entityTypeManager()
-      ->getStorage('node')
-      ->load($template_nid);
-
-    $template_html_head = '';
-    $e_template_html_head = $entity
-      ->get('field_smmg_template_html_head')
-      ->getValue();
-    if (!empty($e_template_html_head)) {
-      $template_html_head = $e_template_html_head[0]['value'];
-    }
-
-    $template_html_body = $entity
-      ->get('field_smmg_template_html_body')
-      ->getValue();
-    $template_html_body = $template_html_body[0]['value'];
-
-    // Desfine the HTML -Parts
-    $doctype =
-      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> ';
-    $html_start = '<html xmlns="http://www.w3.org/1999/xhtml">';
-    $head = '<head>' . $template_html_head . '</head>';
-    $body_start = '<body>';
-    $body_content = '';
-    $body_end = '</body>';
-    $html_end = '</html>';
-
-    // insert Message in to Design Template
-    $template_with_message = str_replace(
-      '@_text_@',
-      $message,
-      $template_html_body
-    );
-    $body_content = $template_with_message;
-
-    // Replace all Placeholders with Values
-    foreach ($search_keys as $index => $search_key) {
-      $replace = $placeholders[$index];
-
-      $body_content = str_replace($search_key, $replace, $body_content);
-    }
-
-    if (false === $body_only) {
-      // assemble all HTMl - Parts
-      $html_file =
-        $doctype .
-        $html_start .
-        $head .
-        $body_start .
-        $body_content .
-        $body_end .
-        $html_end;
-    } else {
-      $html_file = $body_content;
-    }
-    // Output
-    return $html_file;
-  }
-
   public function startRun($message_nid = null)
   {
-    // Build Settings Name
-    // $module_settings_route = $this->getModuleName() . '.settings';
-
-    // Load Settings
-    // $config = \Drupal::config($module_settings_route);
-    // $config_email_test = $config->get('email_test');
-
     $output = [];
     $message = [];
 
@@ -157,6 +82,11 @@ class MessageController extends ControllerBase
         $message['id'] = $entity->id();
 
         $message['title'] = $entity->label();
+
+        $message['template_nid'] = Helper::getFieldValue(
+          $entity,
+          'smmg_design_template'
+        );
 
         $message_html = $entity->get('field_smmg_message_text')->getValue();
         $message['message_html'] = $message_html[0]['value'];
@@ -180,7 +110,7 @@ class MessageController extends ControllerBase
       $group_index = 0;
       $output['message'] = $message;
 
-      // Adresses
+      // Addresses
 
       // load Groups
       $entity_groups = \Drupal::entityTypeManager()
@@ -208,8 +138,8 @@ class MessageController extends ControllerBase
           $id = $entity->id();
 
           if (in_array($id, $unique_list)) {
-            // übersprichen, da schon erfasst
-          } // neue ID:
+            // skip this id
+          }
           else {
             $unique_list[] = $id;
 
@@ -243,11 +173,9 @@ class MessageController extends ControllerBase
             $list_index++;
           } // else
         } // foreach
-
-        $group_index++;
       }
 
-
+      // Email Content
       $data['title'] = $output['message']['title'];
       $data['message_plain'] = $output['message']['plaintext'];
       $data['message_html'] = $output['message']['message_html'];
@@ -257,36 +185,48 @@ class MessageController extends ControllerBase
 
       // Send email for every email-address
       foreach ($list as $address) {
-
-        // replace Placeholders
-       $message =  $output['message']['plaintext'];
-       $message_proceeded  = Email::replacePlaceholderInText($message , $address);
-
-       // Plain Text
-        $data['message_plain'] = $message_proceeded;
-
-        // HTML Text
-        $data['message_html'] = $message_proceeded;
+        // To
         $data['to'] = $address['email'];
-        Email::sendNewsletterMail($this->getModuleName(), $data);
-      }
-
-
-      // Test without send
-      if ($this->emailTest()) {
 
         // replace Placeholders
-        $message =  $output['message']['plaintext'];
-        $message_proceeded  = Email::replacePlaceholderInText($message , $list[0]);
+        $plaintext = $output['message']['plaintext'];
+        $plaintext_proceeded = Email::replacePlaceholderInText(
+          $plaintext,
+          $address
+        );
 
-        $data['message_plain'] = $message_proceeded;
-        $data['to'] = $list[0]['email'];
+        // Plain Text
+        $data['message_plain'] = $plaintext_proceeded;
 
-        $build = Email::showEmail($this->getModuleName(), $data);
-      } else {
-        $build = $output;
+        // Combine Message with HTML Design Template
+        if ($this->emailTest()) {
+          $message_html = Email::generateMessageHtml($message, true); // render only body
+        } else {
+          $message_html = Email::generateMessageHtml($message); // render with HTML-HEAD
+        }
+
+        // replace Placeholders
+        $message_html_proceeded = Email::replacePlaceholderInText(
+          $message_html,
+          $address
+        );
+
+        // Add to Data
+        $data['message_html'] = $message_html_proceeded;
+
+        // Test without send
+        if ($this->emailTest()) {
+          // Display email
+          $build = Email::showEmail($this->getModuleName(), $data);
+          break; // stop after first proceed
+        } else {
+          // continue to send email
+
+          Email::sendNewsletterMail($this->getModuleName(), $data);
+
+          $build = $output;
+        }
       }
-
     } else {
       // Error
       $build = [

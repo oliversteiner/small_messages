@@ -12,7 +12,7 @@ class Email
    * @param $templates
    * @return bool
    */
-  public static function sendNotificationMail($module, $data, $templates)
+  public static function sendNotificationMail($module, $data, $templates): bool
   {
     // Build Settings Name
     $module_settings_route = $module . '.settings';
@@ -80,7 +80,10 @@ class Email
     }
 
     foreach ($email_addresses_to as $email_address_to) {
-      $message_html = generateMessageHtml($message_html_body);
+      $message_html = self::replacePlaceholderInText(
+        $message_html_body,
+        $data['address']
+      );
 
       $email['title'] = $email_title;
       $email['message_plain'] = $build_plain;
@@ -119,7 +122,7 @@ class Email
       \Drupal::messenger()->addWarning(
         t(
           $data['to'] .
-          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+            ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -178,44 +181,101 @@ class Email
     }
   }
 
-  public static function showEmail($modul, $email)
+  public static function showEmail($modul, $data)
   {
 
     $build = [
-      '#markup' => $email['message_plain'],
+      '#markup' =>
+        $data['message_plain'] . '<br><hr><br>' . $data['message_html'],
     ];
     return $build;
   }
 
-  public static function replacePlaceholderInText($message, $address)
+  /**
+   * @param $message
+   * @param $data
+   * @return mixed
+   */
+  public static function replacePlaceholderInText($message, $data)
   {
-    foreach ($address as $key => $value) {
-      $placeholder = '@_'.$key.'_@';
+    foreach ($data as $key => $value) {
+      $placeholder = '@_' . $key . '_@';
       $message = str_replace($placeholder, $value, $message);
     }
     return $message;
   }
 
+  /**
+   * @param $message
+   * @param bool $body_only
+   * @return string
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public static function generateMessageHtml(
+    $message,
+    $body_only = false
+  ): string {
+    $text = $message['message_html'];
+    $template_id = $message['template_nid'];
 
-  public static function generateMessageHtml($message)
-  {
+    // load Design Template
+    $entity = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->load($template_id);
 
-    // Build the HTML Parts
-    $doctype = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+    $template_html_head = '';
+    $e_template_html_head = $entity
+      ->get('field_smmg_template_html_head')
+      ->getValue();
+    if (!empty($e_template_html_head)) {
+      $template_html_head = $e_template_html_head[0]['value'];
+    }
+
+    $template_html_body = $entity
+      ->get('field_smmg_template_html_body')
+      ->getValue();
+    $template_html_body = $template_html_body[0]['value'];
+
+    // Define the HTML-Parts
+    $doctype =
+      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> ';
     $html_start = '<html xmlns="http://www.w3.org/1999/xhtml">';
-    $head = '<head></head>';
+    $head = '<head>' . $template_html_head . '</head>';
     $body_start = '<body>';
-    $body_content = $message;
+    $body_content = '';
     $body_end = '</body>';
     $html_end = '</html>';
 
-    // assemble all HTMl Parts
-    $html_file = $doctype . $html_start . $head . $body_start . $body_content . $body_end . $html_end;
+    // insert Message in to Design Template
+    $body_content = str_replace(
+      '@_text_@',
+       $text, $template_html_body
 
-    // HTML Output
+    );
+
+    // return only HTML Body Content, No HEADER
+    if ($body_only === true) {
+      $html_file = $body_content;
+    } else {
+      // assemble all HTMl - Parts
+      $html_file =
+        $doctype .
+        $html_start .
+        $head .
+        $body_start .
+        $body_content .
+        $body_end .
+        $html_end;
+    }
+    // Output
     return $html_file;
   }
 
+  /**
+   * @param string $module
+   * @return mixed
+   */
   public static function getEmailAddressesFromConfig($module = 'small_messages')
   {
     $email['from'] = '';
