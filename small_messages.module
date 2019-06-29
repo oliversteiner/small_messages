@@ -58,7 +58,7 @@ function small_messages_mail($key, &$message, $params)
 
             $message['from'] = $params['from'];
             $message['subject'] = $params['title'];
-            $message['body'][] = $params['message'];
+            $message['body'][] = $params['message_plain'];
             break;
 
 
@@ -74,10 +74,10 @@ function small_messages_mail($key, &$message, $params)
             ];
             $message['body'][] = "\r\n--\r\n";
             $message['body'][] = 'Content-Type: text/plain; charset=utf-8;';
-            $message['body'][] = $params['message'];
+            $message['body'][] = $params['message_plain'];
             $message['body'][] = "\r\n--\r\n";
             $message['body'][] = "Content-Type: text/html; charset=utf-8;";
-            $message['body'][] = $params['htmltext'];
+            $message['body'][] = $params['message_html'];
             $message['body'][] = "\r\n-- --\r\n";
             break;
     }

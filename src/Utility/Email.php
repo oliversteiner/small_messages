@@ -77,7 +77,7 @@ class Email
 
         foreach ($email_addresses_to as $email_address_to) {
 
-            $message_html = self::generateMessageHtml($message_html_body);
+            $message_html = generateMessageHtml($message_html_body);
 
             $email['title'] = $email_title;
             $email['message_plain'] = $build_plain;
@@ -85,7 +85,7 @@ class Email
             $email['from'] = $email_address_from;
             $email['to'] = $email_address_to;
 
-            self::sendmail($email);
+            self::sendmail($module, $email);
 
         }
 
@@ -93,11 +93,44 @@ class Email
 
     }
 
-    static function sendmail($email)
+  /**
+   * @param $module
+   * @param $data
+   * @param $templates
+   * @return bool
+   */
+  public static function sendNewsletterMail($module, $data)
+  {
+
+    // Build Settings Name
+    $module_settings_route = $module . '.settings';
+
+    // Load Settings
+    $config = \Drupal::config($module_settings_route);
+    $config_email_test = $config->get('email_test');
+
+
+    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
+    if ($config_email_test === 1) {
+      // test mode active
+      $link = Link::createFromRoute(t('Config Page'), $module_settings_route)->toString();
+      \Drupal::messenger()->addWarning(t($data['to']." - Test mode active. No email was sent to the subscriber. Disable test mode on @link.", array('@link' => $link)));
+
+    } else {
+
+      self::sendmail($module, $data);
+
+    }
+
+    return true;
+
+  }
+
+    static function sendmail($modul, $email)
     {
         $params['title'] = $email['title'];
-        $params['message_html'] = $email['message_html'];
         $params['message_plain'] = $email['message_html'];
+        $params['message_html'] = $email['message_html'];
 
         $params['from'] = $email['from'];
         $to = $email['to'];
@@ -105,7 +138,7 @@ class Email
 
         // System
         $mailManager = \Drupal::service('plugin.manager.mail');
-        $module = 'smmg_coupon';
+        $module = $modul;
         $key = 'EMAIL_SMTP';
         $langcode = \Drupal::currentUser()->getPreferredLangcode();
         $send = true;
@@ -129,7 +162,7 @@ class Email
 
     }
 
-    public static function generateMessageHtml($message)
+/*    public static function generateMessageHtml($message)
     {
 
         // Build the HTML Parts
@@ -146,7 +179,7 @@ class Email
 
         // HTML Output
         return $html_file;
-    }
+    }*/
 
     public static function getEmailAddressesFromConfig($module = 'small_messages')
     {

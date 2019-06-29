@@ -29,11 +29,11 @@
               this.updateView();
             });
 
-            $('*[id^=edit-goenner-typ]').change(() => {
+            $('*[id^=edit-smmg-member-typ]').change(() => {
               this.updateView();
             });
 
-            $('*[id^=edit-goenner-status]').change(() => {
+            $('*[id^=edit-smmg-member-status]').change(() => {
               this.updateView();
             });
 

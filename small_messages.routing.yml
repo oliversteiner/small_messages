@@ -31,11 +31,22 @@ small_messages.main:
     _permission: 'administer content'
 
 
-small_messages.test.send_message:
-  path: 'smmg/send'
+small_messages.test.send_messages:
+  path: 'smmg/send/{message_nid}'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\MessageController::sendMessage'
+    _controller: '\Drupal\small_messages\Controller\MessageController::startRun'
+    _title: 'Send Message'
+    _message_nid: NULL
+  requirements:
+    _permission: 'administer content'
+
+
+small_messages.test.send_message_test:
+  path: 'smmg/send/test/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::sendMessageTest'
     _title: 'Test Send Message'
+    _nid: NULL
   requirements:
     _permission: 'administer content'
 
