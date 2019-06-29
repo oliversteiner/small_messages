@@ -22,6 +22,19 @@ class MessageController extends ControllerBase
     return 'small_messages';
   }
 
+  protected function emailTest(): bool
+  {
+    // Build Settings Name
+    $module_settings_route = $this->getModuleName() . '.settings';
+
+    // Load Settings
+    $config = \Drupal::config($module_settings_route);
+    $config_email_test = $config->get('email_test');
+
+    // Return true if "Test mode" checked in settings
+    return $config_email_test ? true : false;
+  }
+
   public static function generateMessagePlain(
     $text,
     $search_keys,
@@ -195,7 +208,7 @@ class MessageController extends ControllerBase
           $id = $entity->id();
 
           if (in_array($id, $unique_list)) {
-            // übersprichen, da schon erfasse
+            // übersprichen, da schon erfasst
           } // neue ID:
           else {
             $unique_list[] = $id;
@@ -222,7 +235,7 @@ class MessageController extends ControllerBase
             }
 
             $list[$list_index]['id'] = $id;
-            $list[$list_index]['titel'] = $entity->label();
+            $list[$list_index]['title'] = $entity->label();
             $list[$list_index]['last_name'] = $last_name;
             $list[$list_index]['first_name'] = $first_name;
             $list[$list_index]['email'] = $email;
@@ -234,30 +247,54 @@ class MessageController extends ControllerBase
         $group_index++;
       }
 
-      $output['addresses'] = $list;
-      $output['unique'] = $unique_list;
 
-      foreach ($output['addresses'] as $address) {
-        $data['title'] = $output['message']['title'];
-        $data['message_plain'] = $output['message']['plaintext'];
-        $data['message_html'] = $output['message']['message_html'];
-        $data['from'] = Email::getEmailAddressesFromConfig(
-          $this->getModuleName()
-        );
+      $data['title'] = $output['message']['title'];
+      $data['message_plain'] = $output['message']['plaintext'];
+      $data['message_html'] = $output['message']['message_html'];
+      $data['from'] = Email::getEmailAddressesFromConfig(
+        $this->getModuleName()
+      );
+
+      // Send email for every email-address
+      foreach ($list as $address) {
+
+        // replace Placeholders
+       $message =  $output['message']['plaintext'];
+       $message_proceeded  = Email::replacePlaceholderInText($message , $address);
+
+       // Plain Text
+        $data['message_plain'] = $message_proceeded;
+
+        // HTML Text
+        $data['message_html'] = $message_proceeded;
         $data['to'] = $address['email'];
-
         Email::sendNewsletterMail($this->getModuleName(), $data);
       }
-      $build = $output;
+
+
+      // Test without send
+      if ($this->emailTest()) {
+
+        // replace Placeholders
+        $message =  $output['message']['plaintext'];
+        $message_proceeded  = Email::replacePlaceholderInText($message , $list[0]);
+
+        $data['message_plain'] = $message_proceeded;
+        $data['to'] = $list[0]['email'];
+
+        $build = Email::showEmail($this->getModuleName(), $data);
+      } else {
+        $build = $output;
+      }
+
     } else {
+      // Error
       $build = [
         '#markup' => $this->t('Error - Message ID: ' . $message_nid),
       ];
     }
 
-
     return $build;
-
   }
 
   /**
