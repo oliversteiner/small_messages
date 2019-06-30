@@ -72,6 +72,7 @@ class Email
   {
     $config_email_test = self::getConfigEmailTest($module);
 
+    dpm($templates);
     // Build Emailadresses
     $config_email_addresses = self::getEmailAddressesFromConfig($module);
 
@@ -79,7 +80,7 @@ class Email
     $first_name = $data['address']['first_name'];
     $last_name = $data['address']['last_name'];
     $email_subscriber = $data['address']['email'];
-    $module = $data['module'];
+
 
     $email_title = empty($data['title'])
       ? "$module - $first_name $last_name"
@@ -113,14 +114,14 @@ class Email
     $email_addresses_to = $config_email_addresses['to'];
 
     // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
-    if ($config_email_test == 1) {
+    if ($config_email_test) {
       // test mode active
       $link = Link::createFromRoute(
         t('Config Page'), $module . '.settings'
       )->toString();
       Drupal::messenger()->addWarning(
         t(
-          $email_addresses_to . ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          $email_addresses_to[0] . ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -146,8 +147,6 @@ class Email
 
     return true;
   }
-
-
 
 
   /**
