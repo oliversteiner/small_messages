@@ -50,7 +50,7 @@ class Helper
         $term_list = [];
         $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
         foreach ($terms as $term) {
-            $term_list[$term->name] = $term->id;
+            $term_list[$term->name] = $term->tid;
         }
         return $term_list;
     }
@@ -75,7 +75,7 @@ class Helper
         // Load Origin Terms
         $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
         foreach ($terms as $term) {
-            $term_list[$term->name] = $term->id;
+            $term_list[$term->name] = $term->tid;
             $term_names[] = $term->name;
         }
 
