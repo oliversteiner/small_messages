@@ -2,15 +2,18 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Link;
 
 class Email
 {
   /**
-   * @param $modul
-   * @param $email
+   * @param $module
+   * @param $data
    */
-  static function sendmail($modul, $email)
+  public static function sendmail($module, $data): void
   {
     // Debug
     $send = true;
@@ -25,10 +28,9 @@ class Email
     $to = $data['to'];
 
     // System
-    $mailManager = \Drupal::service('plugin.manager.mail');
-    $module = $modul;
+    $mailManager = Drupal::service('plugin.manager.mail');
     $key = 'EMAIL_SMTP';
-    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+    $langcode = Drupal::currentUser()->getPreferredLangcode();
 
     // Send mail
     $result = $mailManager->mail(
@@ -47,14 +49,15 @@ class Email
         'There was a problem sending your email notification to @email.',
         ['@email' => $to]
       );
-      \Drupal::messenger()->addMessage($message, 'error');
-      \Drupal::logger('mail-log')->error($message);
+      Drupal::messenger()->addMessage($message, 'error');
+      Drupal::logger('mail-log')->error($message);
     } else {
-      $message = t('An email notification has been sent to @email.', [
+      $message = t('An email notification has been sent to @email. Module was @module', [
         '@email' => $to,
+        '@module' => $module,
       ]);
-      \Drupal::messenger()->addMessage($message);
-      \Drupal::logger('mail-log')->notice($message);
+      Drupal::messenger()->addMessage($message);
+      Drupal::logger('mail-log')->notice($message);
     }
   }
 
@@ -93,7 +96,7 @@ class Email
     ];
 
     // Render Twig Template
-    $message_html_body = \Drupal::service('renderer')->render($build_html);
+    $message_html_body = Drupal::service('renderer')->render($build_html);
 
     // Plain
     $template_plain = file_get_contents($templates['email_plain']);
@@ -115,9 +118,9 @@ class Email
       $link = Link::createFromRoute(
         t('Config Page'), $module . '.settings'
       )->toString();
-      \Drupal::messenger()->addWarning(
+      Drupal::messenger()->addWarning(
         t(
-          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          $email_addresses_to . ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -138,101 +141,13 @@ class Email
       $data['from'] = $email_address_from;
       $data['to'] = $email_address_to;
 
-      self::sendmail($module, $email);
+      self::sendmail($module, $data);
     }
 
     return true;
   }
 
-  /**
-   * @param $module
-   * @param $data
-   * @param $templates
-   * @return bool
-   */
-  public static function sendCouponMail($module, $data, $templates)
-  {
-    $config_email_test = self::getConfigEmailTest($module);
 
-    // Build Emailadresses
-    $config_email_addresses = self::getEmailAddressesFromConfig($module);
-
-    // Data
-    $first_name = $data['address']['first_name'];
-    $last_name = $data['address']['last_name'];
-    $email_subscriber = $data['address']['email'];
-    $module = $data['module'];
-
-    $email_title = empty($data['title'])
-      ? "$module - $first_name $last_name"
-      : $data['title'];
-
-    // HTML
-    $template_html = file_get_contents($templates['email_html']);
-    $build_html = [
-      'description' => [
-        '#type' => 'inline_template',
-        '#template' => $template_html,
-        '#context' => $data,
-      ],
-    ];
-
-    // Render Twig Template
-    $message_html_body = \Drupal::service('renderer')->render($build_html);
-
-    // Plain
-    $template_plain = file_get_contents($templates['email_plain']);
-    $build_plain = [
-      'description' => [
-        '#type' => 'inline_template',
-        '#template' => $template_plain,
-        '#context' => $data,
-      ],
-    ];
-
-    // Get Email Addresses
-    $email_address_from = $config_email_addresses['from'];
-    $email_addresses_to = $config_email_addresses['to'];
-
-    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
-    if ($config_email_test == 1) {
-      // test mode active
-      $link = Link::createFromRoute(
-        t('Config Page'), $module . '.settings'
-      )->toString();
-      \Drupal::messenger()->addWarning(
-        t(
-          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
-          array('@link' => $link)
-        )
-      );
-
-      $data['message_plain'] = $build_plain;
-      $data['message_html'] = $message_html_body;
-      self::showEmail($module, $data);
-
-    } else {
-      // Add Subscriber email to email addresses
-      $email_addresses_to[] = $email_subscriber;
-    }
-
-    foreach ($email_addresses_to as $email_address_to) {
-      $message_html = self::replacePlaceholderInText(
-        $message_html_body,
-        $data['address']
-      );
-
-      $data['title'] = $email_title;
-      $data['message_plain'] = $build_plain;
-      $data['message_html'] = $message_html;
-      $data['from'] = $email_address_from;
-      $data['to'] = $email_address_to;
-
-      self::sendmail($module, $email);
-    }
-
-    return true;
-  }
 
 
   /**
@@ -253,7 +168,7 @@ class Email
         t('Config Page'),
         $module . '.settings'
       )->toString();
-      \Drupal::messenger()->addWarning(
+      Drupal::messenger()->addWarning(
         t(
           $data['to'] .
           ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
@@ -303,8 +218,8 @@ class Email
    * @param $message
    * @param bool $body_only
    * @return string
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
    */
   public static function generateMessageHtml(
     $message,
@@ -315,7 +230,7 @@ class Email
     $template_id = $message['template_nid'];
 
     // load Design Template
-    $entity = \Drupal::entityTypeManager()
+    $entity = Drupal::entityTypeManager()
       ->getStorage('node')
       ->load($template_id);
 
@@ -377,14 +292,14 @@ class Email
     $data['from'] = '';
     $data['to'] = [];
 
-    $config = \Drupal::config($module . '.settings');
+    $config = Drupal::config($module . '.settings');
 
     $email_from = $config->get('email_from');
 
     $str_multiple_email_to = $config->get('email_to');
 
     $email_from = trim($email_from);
-    $is_valid = \Drupal::service('email.validator')->isValid($email_from);
+    $is_valid = Drupal::service('email.validator')->isValid($email_from);
 
     if ($is_valid) {
       $data['from'] = $email_from;
@@ -394,13 +309,13 @@ class Email
 
     foreach ($arr_email_to as $email_to) {
       $email_to = trim($email_to);
-      $is_valid = \Drupal::service('email.validator')->isValid($email_to);
+      $is_valid = Drupal::service('email.validator')->isValid($email_to);
       if ($is_valid) {
         $data['to'][] = $email_to;
       }
     }
 
-    return $email;
+    return $data;
   }
 
 
@@ -414,7 +329,7 @@ class Email
     $module_settings_route = $module . '.settings';
 
     // Load Settings
-    $config = \Drupal::config($module_settings_route);
+    $config = Drupal::config($module_settings_route);
     return $config->get('email_test');
   }
 }
