@@ -7,6 +7,59 @@ use Drupal\Core\Link;
 class Email
 {
   /**
+   * @param $modul
+   * @param $email
+   */
+  static function sendmail($modul, $email)
+  {
+    // Debug
+    $send = true;
+
+    // Text
+    $params['title'] = $data['title'];
+    $params['message_plain'] = $data['message_html'];
+    $params['message_html'] = $data['message_html'];
+
+    // Addresses
+    $params['from'] = $data['from'];
+    $to = $data['to'];
+
+    // System
+    $mailManager = \Drupal::service('plugin.manager.mail');
+    $module = $modul;
+    $key = 'EMAIL_SMTP';
+    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+
+    // Send mail
+    $result = $mailManager->mail(
+      $module,
+      $key,
+      $to,
+      $langcode,
+      $params,
+      null,
+      $send
+    );
+
+    // Result
+    if ($result && isset($result['result']) && $result['result'] != true) {
+      $message = t(
+        'There was a problem sending your email notification to @email.',
+        ['@email' => $to]
+      );
+      \Drupal::messenger()->addMessage($message, 'error');
+      \Drupal::logger('mail-log')->error($message);
+    } else {
+      $message = t('An email notification has been sent to @email.', [
+        '@email' => $to,
+      ]);
+      \Drupal::messenger()->addMessage($message);
+      \Drupal::logger('mail-log')->notice($message);
+    }
+  }
+
+
+  /**
    * @param $module
    * @param $data
    * @param $templates
@@ -14,12 +67,7 @@ class Email
    */
   public static function sendNotificationMail($module, $data, $templates): bool
   {
-    // Build Settings Name
-    $module_settings_route = $module . '.settings';
-
-    // Load Settings
-    $config = \Drupal::config($module_settings_route);
-    $config_email_test = $config->get('email_test');
+    $config_email_test = self::getConfigEmailTest($module);
 
     // Build Emailadresses
     $config_email_addresses = self::getEmailAddressesFromConfig($module);
@@ -65,8 +113,7 @@ class Email
     if ($config_email_test == 1) {
       // test mode active
       $link = Link::createFromRoute(
-        t('Config Page'),
-        $module_settings_route
+        t('Config Page'), $module . '.settings'
       )->toString();
       \Drupal::messenger()->addWarning(
         t(
@@ -85,11 +132,11 @@ class Email
         $data['address']
       );
 
-      $email['title'] = $email_title;
-      $email['message_plain'] = $build_plain;
-      $email['message_html'] = $message_html;
-      $email['from'] = $email_address_from;
-      $email['to'] = $email_address_to;
+      $data['title'] = $email_title;
+      $data['message_plain'] = $build_plain;
+      $data['message_html'] = $message_html;
+      $data['from'] = $email_address_from;
+      $data['to'] = $email_address_to;
 
       self::sendmail($module, $email);
     }
@@ -103,26 +150,113 @@ class Email
    * @param $templates
    * @return bool
    */
-  public static function sendNewsletterMail($module, $data)
+  public static function sendCouponMail($module, $data, $templates)
+  {
+    $config_email_test = self::getConfigEmailTest($module);
+
+    // Build Emailadresses
+    $config_email_addresses = self::getEmailAddressesFromConfig($module);
+
+    // Data
+    $first_name = $data['address']['first_name'];
+    $last_name = $data['address']['last_name'];
+    $email_subscriber = $data['address']['email'];
+    $module = $data['module'];
+
+    $email_title = empty($data['title'])
+      ? "$module - $first_name $last_name"
+      : $data['title'];
+
+    // HTML
+    $template_html = file_get_contents($templates['email_html']);
+    $build_html = [
+      'description' => [
+        '#type' => 'inline_template',
+        '#template' => $template_html,
+        '#context' => $data,
+      ],
+    ];
+
+    // Render Twig Template
+    $message_html_body = \Drupal::service('renderer')->render($build_html);
+
+    // Plain
+    $template_plain = file_get_contents($templates['email_plain']);
+    $build_plain = [
+      'description' => [
+        '#type' => 'inline_template',
+        '#template' => $template_plain,
+        '#context' => $data,
+      ],
+    ];
+
+    // Get Email Addresses
+    $email_address_from = $config_email_addresses['from'];
+    $email_addresses_to = $config_email_addresses['to'];
+
+    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
+    if ($config_email_test == 1) {
+      // test mode active
+      $link = Link::createFromRoute(
+        t('Config Page'), $module . '.settings'
+      )->toString();
+      \Drupal::messenger()->addWarning(
+        t(
+          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          array('@link' => $link)
+        )
+      );
+
+      $data['message_plain'] = $build_plain;
+      $data['message_html'] = $message_html_body;
+      self::showEmail($module, $data);
+
+    } else {
+      // Add Subscriber email to email addresses
+      $email_addresses_to[] = $email_subscriber;
+    }
+
+    foreach ($email_addresses_to as $email_address_to) {
+      $message_html = self::replacePlaceholderInText(
+        $message_html_body,
+        $data['address']
+      );
+
+      $data['title'] = $email_title;
+      $data['message_plain'] = $build_plain;
+      $data['message_html'] = $message_html;
+      $data['from'] = $email_address_from;
+      $data['to'] = $email_address_to;
+
+      self::sendmail($module, $email);
+    }
+
+    return true;
+  }
+
+
+  /**
+   * @param $module
+   * @param $data
+   * @param $templates
+   * @return bool
+   */
+  public static function sendNewsletterMail($module, $data): bool
   {
     // Build Settings Name
-    $module_settings_route = $module . '.settings';
-
-    // Load Settings
-    $config = \Drupal::config($module_settings_route);
-    $config_email_test = $config->get('email_test');
+    $config_email_test = self::getConfigEmailTest($module);
 
     // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
     if ($config_email_test === 1) {
       // test mode active
       $link = Link::createFromRoute(
         t('Config Page'),
-        $module_settings_route
+        $module . '.settings'
       )->toString();
       \Drupal::messenger()->addWarning(
         t(
           $data['to'] .
-            ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -133,55 +267,13 @@ class Email
     return true;
   }
 
-  static function sendmail($modul, $email)
-  {
-    // Debug
-    $send = true;
 
-    // Text
-    $params['title'] = $email['title'];
-    $params['message_plain'] = $email['message_html'];
-    $params['message_html'] = $email['message_html'];
-
-    // Addresses
-    $params['from'] = $email['from'];
-    $to = $email['to'];
-
-    // System
-    $mailManager = \Drupal::service('plugin.manager.mail');
-    $module = $modul;
-    $key = 'EMAIL_SMTP';
-    $langcode = \Drupal::currentUser()->getPreferredLangcode();
-
-    // Send mail
-    $result = $mailManager->mail(
-      $module,
-      $key,
-      $to,
-      $langcode,
-      $params,
-      null,
-      $send
-    );
-
-    // Result
-    if ($result && isset($result['result']) && $result['result'] != true) {
-      $message = t(
-        'There was a problem sending your email notification to @email.',
-        ['@email' => $to]
-      );
-      \Drupal::messenger()->addMessage($message, 'error');
-      \Drupal::logger('mail-log')->error($message);
-    } else {
-      $message = t('An email notification has been sent to @email.', [
-        '@email' => $to,
-      ]);
-      \Drupal::messenger()->addMessage($message);
-      \Drupal::logger('mail-log')->notice($message);
-    }
-  }
-
-  public static function showEmail($modul, $data)
+  /**
+   * @param $modul
+   * @param $data
+   * @return array
+   */
+  public static function showEmail($module, $data)
   {
 
     $build = [
@@ -190,6 +282,7 @@ class Email
     ];
     return $build;
   }
+
 
   /**
    * @param $message
@@ -205,6 +298,7 @@ class Email
     return $message;
   }
 
+
   /**
    * @param $message
    * @param bool $body_only
@@ -215,7 +309,8 @@ class Email
   public static function generateMessageHtml(
     $message,
     $body_only = false
-  ): string {
+  ): string
+  {
     $text = $message['message_html'];
     $template_id = $message['template_nid'];
 
@@ -250,7 +345,7 @@ class Email
     // insert Message in to Design Template
     $body_content = str_replace(
       '@_text_@',
-       $text, $template_html_body
+      $text, $template_html_body
 
     );
 
@@ -272,14 +367,15 @@ class Email
     return $html_file;
   }
 
+
   /**
    * @param string $module
    * @return mixed
    */
   public static function getEmailAddressesFromConfig($module = 'small_messages')
   {
-    $email['from'] = '';
-    $email['to'] = [];
+    $data['from'] = '';
+    $data['to'] = [];
 
     $config = \Drupal::config($module . '.settings');
 
@@ -291,7 +387,7 @@ class Email
     $is_valid = \Drupal::service('email.validator')->isValid($email_from);
 
     if ($is_valid) {
-      $email['from'] = $email_from;
+      $data['from'] = $email_from;
     }
 
     $arr_email_to = explode(',', $str_multiple_email_to);
@@ -300,10 +396,25 @@ class Email
       $email_to = trim($email_to);
       $is_valid = \Drupal::service('email.validator')->isValid($email_to);
       if ($is_valid) {
-        $email['to'][] = $email_to;
+        $data['to'][] = $email_to;
       }
     }
 
     return $email;
+  }
+
+
+  /**
+   * @param $module
+   * @return string
+   */
+  public static function getConfigEmailTest($module): string
+  {
+// Build Settings Name
+    $module_settings_route = $module . '.settings';
+
+    // Load Settings
+    $config = \Drupal::config($module_settings_route);
+    return $config->get('email_test');
   }
 }
