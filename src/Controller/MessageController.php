@@ -41,7 +41,8 @@ class MessageController extends ControllerBase
     $search_keys,
     $placeholders,
     $template_nid
-  ) {
+  )
+  {
     // load Design Template
     $entity = \Drupal::entityTypeManager()->getStorage('node');
 
@@ -139,8 +140,7 @@ class MessageController extends ControllerBase
 
           if (in_array($id, $unique_list)) {
             // skip this id
-          }
-          else {
+          } else {
             $unique_list[] = $id;
 
             // email
@@ -213,16 +213,18 @@ class MessageController extends ControllerBase
 
         // Add to Data
         $data['message_html'] = $message_html_proceeded;
+        $module = $this->getModuleName();
 
         // Test without send
         if ($this->emailTest()) {
           // Display email
-          $build = Email::showEmail($this->getModuleName(), $data);
+          $build = Email::showEmail($module, $data);
           break; // stop after first proceed
         } else {
           // continue to send email
 
-          Email::sendNewsletterMail($this->getModuleName(), $data);
+          dpm($data);
+          Email::sendNewsletterMail($module, $data);
 
           $build = $output;
         }

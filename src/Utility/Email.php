@@ -18,10 +18,14 @@ class Email
     // Debug
     $send = true;
 
+    // remove Comments from HTML
+    $message_html = self::removeCommentsFromHTML($data['message_html']); // remove Comments
+
+
     // Text
     $params['title'] = $data['title'];
-    $params['message_plain'] = $data['message_html'];
-    $params['message_html'] = $data['message_html'];
+    $params['message_plain'] = $data['message_plain'];
+    $params['message_html'] = $message_html;
 
     // Addresses
     $params['from'] = $data['from'];
@@ -72,7 +76,6 @@ class Email
   {
     $config_email_test = self::getConfigEmailTest($module);
 
-    dpm($templates);
     // Build Emailadresses
     $config_email_addresses = self::getEmailAddressesFromConfig($module);
 
@@ -141,6 +144,7 @@ class Email
       $data['message_html'] = $message_html;
       $data['from'] = $email_address_from;
       $data['to'] = $email_address_to;
+
 
       self::sendmail($module, $data);
     }
@@ -331,4 +335,14 @@ class Email
     $config = Drupal::config($module_settings_route);
     return $config->get('email_test');
   }
+
+  /**
+   * @param $html
+   * @return string|string[]|null
+   */
+  public static function removeCommentsFromHTML($html)
+  {
+    return preg_replace('/<!--(.*)-->/Uis', '', $html);
+  }
 }
+
