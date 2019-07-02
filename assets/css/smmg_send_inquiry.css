@@ -5,7 +5,8 @@
   padding: 10px;
   border: solid 1px #2eb741;
   background-color: #daffd4;
-  color: #185746; }
+  color: #185746;
+}
 
 .ajax-message-warning {
   margin: 20px 0;
@@ -14,7 +15,8 @@
   padding: 10px;
   border: solid 1px #ffd29b;
   background-color: #fff8cf;
-  color: #7f5930; }
+  color: #7f5930;
+}
 
 .ajax-message-error {
   margin: 20px 0;
@@ -24,15 +26,17 @@
   padding: 10px;
   border: solid 1px #ffb4aa;
   background-color: #ffe6e5;
-  color: #7f2013; }
+  color: #7f2013;
+}
 
-div.smmg-subscriber-tag-tag {
+div.smmg-subscriber-group-tag {
   font-size: 15px;
-  padding: 5px 7px; }
+  padding: 5px 7px;
+}
 
-.smmg-subscriber-tag-tag span.badge {
+.smmg-subscriber-group-tag span.badge {
   margin-left: 10px;
-  background-color: #4d645d; }
+}
 
 .smmg-message-status-ok {
   margin: 20px 0;
@@ -41,7 +45,8 @@ div.smmg-subscriber-tag-tag {
   padding: 10px;
   border: solid 1px #2eb741;
   background-color: #daffd4;
-  color: #185746; }
+  color: #185746;
+}
 .smmg-message-status-warning {
   margin: 20px 0;
   border-radius: 5px;
@@ -49,7 +54,8 @@ div.smmg-subscriber-tag-tag {
   padding: 10px;
   border: solid 1px #ffd29b;
   background-color: #fff8cf;
-  color: #7f5930; }
+  color: #7f5930;
+}
 .smmg-message-status-error {
   margin: 20px 0;
   border-radius: 5px;
@@ -58,28 +64,54 @@ div.smmg-subscriber-tag-tag {
   padding: 10px;
   border: solid 1px #ffb4aa;
   background-color: #ffe6e5;
-  color: #7f2013; }
+  color: #7f2013;
+}
 
 .smmg-body {
   height: 60px;
   overflow: hidden;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  border: 1px solid silver;
+  padding: 11px;
+}
 
 .smmg-body-komplete {
-  height: auto; }
+  height: auto;
+}
+
+h3.smmg-message-title {
+  font-weight: bold;
+}
+
+.smmg-message-subscriber-list-container {
+  border: 1px silver solid;
+  padding: 10px;
+  margin-top: 30px;
+}
+
+h3.smmg-message-subscriber-list-title {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
 
 .smmg-subscriber-list {
-  padding-top: 20px; }
-  .smmg-subscriber-list h4.smmg-subscriber-list-title {
-    font-weight: bold;
-    border-bottom: solid 1px grey;
-    padding-bottom: 5px;
-    margin-bottom: 5px; }
-  .smmg-subscriber-list ul {
-    margin: 0;
-    padding: 0; }
-  .smmg-subscriber-list ul li {
-    list-style: none; }
+  padding-top: 20px;
+}
+.smmg-subscriber-list h4.smmg-subscriber-list-title {
+  font-weight: bold;
+  border-bottom: solid 1px grey;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+.smmg-subscriber-list ul {
+  margin: 0;
+  padding: 0;
+}
+.smmg-subscriber-list ul li {
+  list-style: none;
+}
 
 .smmg-subscriber-list-edit {
   margin-bottom: 5px;
@@ -87,69 +119,67 @@ div.smmg-subscriber-tag-tag {
   border: 1px solid transparent;
   padding: 2px 7px;
   display: inline-block;
-  border-radius: 10px; }
+  border-radius: 10px;
+}
 
 .smmg-subscriber-list-edit:hover {
-  background-color: #e6e6e6; }
+  background-color: #e6e6e6;
+}
 
 .smmg-subscriber-list-remove:hover,
 .smmg-subscriber-list-edit:hover .smmg-subscriber-list-remove {
-  visibility: visible; }
+  visibility: visible;
+}
 
 .smmg-subscriber-list-remove {
   margin-left: 10px;
   font-size: 16px;
   cursor: pointer;
-  visibility: hidden; }
+  visibility: hidden;
+}
 
 .smmg-subscriber-list-remove:hover {
   margin-left: 10px;
   font-size: 16px;
-  color: red; }
+  color: red;
+}
 
 .smmg-subscriber-list {
-  margin: 10px; }
+  margin: 10px;
+}
 
 .smmg-subscriber-list-footer {
   margin-top: 10px;
   border-top: 1px solid #cbe4d6;
   padding: 10px;
   color: #292929;
-  font-size: 0.9em; }
+  font-size: 0.9em;
+}
 
-div.ajax-container {
-  margin: 10px;
-  padding: 10px; }
-
-div.ajax-container.active {
+.ajax-container.active {
   margin: 20px 0;
   border-radius: 5px;
   color: black;
   padding: 10px;
   border: solid 1px #2eb741;
   background-color: #daffd4;
-  color: #185746; }
+  color: #185746;
+}
 
 .smmg-subscriber-list-column {
   column-width: 200px;
   column-gap: 10px;
-  column-rule: none; }
+  column-rule: none;
+}
 
 .smmg-subscriber-foot {
   padding: 10px;
   display: flex;
-  justify-content: flex-end; }
-  .smmg-subscriber-foot button.btn.btn-default {
-    display: inline-flex;
-    margin-right: 10px; }
-
-.smmg-mail-preview-container {
-  max-width: 650px;
-  border: 5px solid silver;
-  margin: 20px 0; }
-
-.smmg-placeholder {
-  background-color: #b1de0e;
-  padding: 2px; }
+  justify-content: flex-end;
+}
+.smmg-subscriber-foot button.btn.btn-default {
+  display: inline-flex;
+  margin-right: 10px;
+}
 
 /*# sourceMappingURL=smmg_send_inquiry.css.map */

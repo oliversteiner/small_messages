@@ -218,19 +218,19 @@ class Email
 
 
   /**
-   * @param $message
+   * @param $text
+   * @param $template_id
    * @param bool $body_only
    * @return string
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
    */
   public static function generateMessageHtml(
-    $message,
+    $text,
+    $template_id,
     $body_only = false
   ): string
   {
-    $text = $message['message_html'];
-    $template_id = $message['template_nid'];
 
     // load Design Template
     $entity = Drupal::entityTypeManager()

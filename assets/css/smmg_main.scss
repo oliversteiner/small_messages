@@ -135,3 +135,43 @@ a.vat-button-send.message-is-send {
     border: 1px solid $color-smmg-tag-border-active-hover;
   }
 }
+
+/*
+
+h1.page-title {
+  background: url('/libraries/fontawesome/svgs/solid/envelope.svg');
+  display: inline-block;
+  text-indent: 30px;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: left center ;
+}
+
+*/
+
+.tabs__tab a::before{
+  content: '';
+  width: 25px;
+  height: 15px;
+  top:-10px;
+  display: inline-block;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list"]::before {
+  background: url('/libraries/fontawesome/svgs/solid/envelope.svg');
+  background-repeat: no-repeat;
+  background-position: left center ;
+}
+
+
+a[data-drupal-link-system-path="admin/smmg/list/templates"]::before {
+  background: url('/libraries/fontawesome/svgs/solid/sticky-note.svg');
+  background-repeat: no-repeat;
+  background-position: left center ;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list/subscriber"]::before {
+  background: url('/libraries/fontawesome/svgs/solid/list.svg');
+  background-repeat: no-repeat;
+  background-position: left center ;
+}

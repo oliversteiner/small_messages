@@ -96,16 +96,14 @@ trait SubscriberTrait
    *
    * @return mixed
    *
-   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public static function toggleSubscriberGroup(
     $target_nid,
     $subscriber_group_nid
   ) {
-    // 1. error?
-    // 2. add or remove
-    // 3. node nid
-    // 4. Subscriber nid
+
 
     $output = [
       'status' => false,
@@ -113,38 +111,29 @@ trait SubscriberTrait
       'nid' => $target_nid,
       'tid' => $subscriber_group_nid,
     ];
-    $subscribers = [];
 
     // Load Node
     $entity = \Drupal::entityTypeManager()
       ->getStorage('node')
       ->load($target_nid);
 
-    // Field OK?
-    if (!empty($entity->field_empfaenger_gruppe)) {
-      // Load all items
-      $subscriber_groups_items = $entity
-        ->get('field_smmg_subscriber_group')
-        ->getValue();
+    try {
+      $subscribers = Helper::getFieldValue($entity, 'smmg_subscriber_group');
+      $subscribers_unique = array_unique($subscribers); // PERFORMING ?
+      $position = array_search(
+        $subscriber_group_nid,
+        $subscribers_unique,
+        true
+      );
 
-      // save only tid
-      foreach ($subscriber_groups_items as $item) {
-        $subscribers[] = $item['target_id'];
-      }
-
-      $subscribers_unique = array_unique($subscribers); // PERFORMANS ?
-      $position = array_search($subscriber_group_nid, $subscribers_unique);
-
-      if ($position !== false) {
-        // Remove Item
-        unset($subscribers_unique[$position]);
-
-        $output['mode'] = 'remove';
-      } else {
+      if ($position === false) {
         // Add Item
         $subscribers_unique[] = $subscriber_group_nid;
-
         $output['mode'] = 'add';
+      } else {
+        // Remove Item
+        unset($subscribers_unique[$position]);
+        $output['mode'] = 'remove';
       }
 
       // delete field
@@ -158,7 +147,10 @@ trait SubscriberTrait
 
       $entity->save();
       $output['status'] = true;
+    } catch (\Exception $e) {
     }
+
+    // }
 
     return $output;
   }

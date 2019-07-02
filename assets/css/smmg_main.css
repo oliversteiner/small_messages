@@ -5,7 +5,8 @@
   padding: 10px;
   border: solid 1px #2eb741;
   background-color: #daffd4;
-  color: #185746; }
+  color: #185746;
+}
 
 .ajax-message-warning {
   margin: 20px 0;
@@ -14,7 +15,8 @@
   padding: 10px;
   border: solid 1px #ffd29b;
   background-color: #fff8cf;
-  color: #7f5930; }
+  color: #7f5930;
+}
 
 .ajax-message-error {
   margin: 20px 0;
@@ -24,63 +26,80 @@
   padding: 10px;
   border: solid 1px #ffb4aa;
   background-color: #ffe6e5;
-  color: #7f2013; }
+  color: #7f2013;
+}
 
 .smmg-tab-container {
-  margin-bottom: 20px; }
-  .smmg-tab-container .smmg-tab {
-    color: grey; }
-  .smmg-tab-container .smmg-tab:hover {
-    color: #19201e; }
-  .smmg-tab-container .active {
-    color: #982b20; }
+  margin-bottom: 20px;
+}
+.smmg-tab-container .smmg-tab {
+  color: grey;
+}
+.smmg-tab-container .smmg-tab:hover {
+  color: #19201e;
+}
+.smmg-tab-container .active {
+  color: #982b20;
+}
 
 .smmg-toolbox-action {
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+}
 
-*[id^='edit-submit-smmg-'] {
+*[id^=edit-submit-smmg-] {
   background-color: white;
   color: grey;
-  border: solid 1px #ccc; }
+  border: solid 1px #ccc;
+}
 
-*[id^='edit-field-newsletter-mailto-groups'] .form-item {
+*[id^=edit-field-newsletter-mailto-groups] .form-item {
   display: inline-block;
-  margin-right: 25px; }
+  margin-right: 25px;
+}
 
-*[id^='edit-delete--'] {
-  margin-left: 40px; }
+*[id^=edit-delete--] {
+  margin-left: 40px;
+}
 
 a.vat-button-send {
   opacity: 1;
   border: solid 1px #d5d5d5;
-  color: green; }
+  color: green;
+}
 
 a.vat-button-send.message-is-send {
   opacity: 0.5;
-  color: grey; }
+  color: grey;
+}
 
-*[id^='views-exposed-form-smmg'] {
+*[id^=views-exposed-form-smmg] {
   border-bottom: solid 1px #d5d5d5;
   border-top: solid 1px #d5d5d5;
   margin: 10px 0;
-  padding: 10px 0; }
-  *[id^='views-exposed-form-smmg'] label {
-    display: inline-block;
-    font-size: small;
-    font-weight: 400;
-    margin: 5px; }
-  *[id^='views-exposed-form-smmg'] .form-type-select {
-    margin-right: 20px; }
-  *[id^='views-exposed-form-smmg'] select {
-    font-size: small;
-    -webkit-appearance: none;
-    border: solid 1px #ccc;
-    color: #982b20; }
-  *[id^='views-exposed-form-smmg'] .select-wrapper {
-    display: inline-block; }
+  padding: 10px 0;
+}
+*[id^=views-exposed-form-smmg] label {
+  display: inline-block;
+  font-size: small;
+  font-weight: 400;
+  margin: 5px;
+}
+*[id^=views-exposed-form-smmg] .form-type-select {
+  margin-right: 20px;
+}
+*[id^=views-exposed-form-smmg] select {
+  font-size: small;
+  -webkit-appearance: none;
+  border: solid 1px #ccc;
+  color: #982b20;
+}
+*[id^=views-exposed-form-smmg] .select-wrapper {
+  display: inline-block;
+}
 
 .smmg-tab-messages a {
-  color: grey; }
+  color: grey;
+}
 
 .btn-tag {
   display: inline-block;
@@ -102,39 +121,86 @@ a.vat-button-send.message-is-send {
   background: #e6e6e6;
   border: 1px solid #cbe4d6;
   border-radius: 4px;
-  margin-left: 5px; }
+  margin-left: 5px;
+}
 
 .btn-tag:hover {
   text-decoration: none;
   background-color: #8bb5a9;
-  color: #f4fff6; }
+  color: #f4fff6;
+}
 
 .btn-tag.active {
   background-color: #8bb5a9;
   color: #f4fff6;
-  border: 1px solid #d5d5d5; }
+  border: 1px solid #d5d5d5;
+}
 
 .btn-tag.active:hover {
   background-color: #4d645d;
   color: #f4fff6;
-  border: 1px solid #2e3e38; }
+  border: 1px solid #2e3e38;
+}
 
 .table-striped > tbody > tr:hover td {
-  background-color: #d7ebc3; }
+  background-color: #d7ebc3;
+}
 
 .table-striped > tbody > tr:hover .btn-tag {
-  background-color: white; }
+  background-color: white;
+}
 .table-striped > tbody > tr:hover .btn-tag:hover {
   text-decoration: none;
   background-color: #8bb5a9;
-  color: #f4fff6; }
+  color: #f4fff6;
+}
 .table-striped > tbody > tr:hover .btn-tag.active {
   background-color: #8bb5a9;
   color: #f4fff6;
-  border: 1px solid #d5d5d5; }
+  border: 1px solid #d5d5d5;
+}
 .table-striped > tbody > tr:hover .btn-tag.active:hover {
   background-color: #4d645d;
   color: #f4fff6;
-  border: 1px solid #2e3e38; }
+  border: 1px solid #2e3e38;
+}
+
+/*
+
+h1.page-title {
+  background: url('/libraries/fontawesome/svgs/solid/envelope.svg');
+  display: inline-block;
+  text-indent: 30px;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: left center ;
+}
+
+*/
+.tabs__tab a::before {
+  content: "";
+  width: 25px;
+  height: 15px;
+  top: -10px;
+  display: inline-block;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list"]::before {
+  background: url("/libraries/fontawesome/svgs/solid/envelope.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list/templates"]::before {
+  background: url("/libraries/fontawesome/svgs/solid/sticky-note.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list/subscriber"]::before {
+  background: url("/libraries/fontawesome/svgs/solid/list.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+}
 
 /*# sourceMappingURL=smmg_main.css.map */

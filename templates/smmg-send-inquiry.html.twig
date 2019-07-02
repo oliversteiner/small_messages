@@ -1,96 +1,117 @@
 {{ attach_library('small_messages/small_messages.main') }}
 
+<div id="smmg-inquiry">
 
-{% if message.is_send %}
-  <div class="smmg-message-status-warning">Diese Nachricht wurde am {{ message.send_date|date }} schon einmal
-    verschickt.
-  </div>
-{% endif %}
-
-{{ dd(message.id) }}
-{{ dd(message) }}
-
-<h2>Nachricht:</h2>
-<div class="well">
-  <h3>{{ message.title }}</h3>
-  <div class="smmg-body">
-
-    {% set body = {
-      '#type':   'processed_text',
-      '#text':    message.text.value,
-      '#format':  message.text.format,
-    } %}
-
-    {{ body }}
-  </div>
-
-  <div><a role="button" class="smmg-body-toggle-trigger">Komplette Nachricht anzeigen</a></div>
-</div>
-
-
-<h2>Empfänger Gruppen:</h2>
-<div class="well">
-
-  <div>
-
-    {% for group_tag in subscriber %}
-
-      <div role="button" class="btn btn-tag active smmg-subscriber-group-tag smmg-subscriber-list-trigger"
-           data-subscriber-group-id="{{ group_tag.id }}">
-        {{ group_tag.title }} <span class="badge">{{ group_tag.number }}</span></div>
-
-    {% endfor %}
-
-    <div>
-      <a role="button" class="smmg-subscriber-list-trigger smmg-subscriber-list-description"
-         data-subscriber-group-id="0">Alle Empfänger-Emails auflisten
-      </a>
+  {% if message.is_send %}
+    <div class="smmg-message-status-warning">Diese Nachricht wurde am {{ message.send_date|date }} schon einmal
+      verschickt.
     </div>
+  {% endif %}
+
+
+  <div class="well">
+    <div>
+      <a role="button" class="btn btn-default btn-sm smmg-body-toggle-trigger">
+        Komplette Nachricht anzeigen</a>
+    </div>
+
+    <div class="smmg-body">
+
+      <h3 class="smmg-message-title">{{ message.title }}</h3>
+
+      {% autoescape 'html' %}
+        {{ message.message_plain|raw }} {# won't be double-escaped #}
+      {% endautoescape %}
+
+    </div>
+
   </div>
 
+  <div class="well well-html">
+    <div>
+      <a role="button" class="btn btn-default btn-sm smmg-body-html-toggle-trigger">
+        HTML-Version anzeigen</a>
+    </div>
 
-  <div class="ajax-container"></div>
-  <div class="smmg-subscriber-list">
-    {% for group in subscriber %}
-      <div class="smmg-subscriber-list-block-{{ group.id }}" style="display:none">
-        <h4 class="smmg-subscriber-list-title">{{ group.title }}</h4>
-        <ul class="smmg-subscriber-list-column">
-          {% for item in group.list %}
+    <div class="smmg-body-html" style="display: none">
 
-            <li class="smmg-subscriber-member-{{ item.id }}">
-              <div class="smmg-subscriber-list-edit">
+      <h3 class="smmg-message-title">{{ message.title }}</h3>
 
-                {{ item.name }}
+      {% autoescape 'html' %}
+        {{ message.message_html|raw }} {# won't be double-escaped #}
+      {% endautoescape %}
 
-                <span class="smmg-subscriber-list-remove"
-                      data-subscriber-id="{{ item.id }}"
-                      data-subscriber-group-id="{{ group.id }}"
-                      data-toggle="tooltip"
-                      data-delay="1000"
-                      data-placement="right"
-                      title="aus der Empfängerliste entfernen">
+    </div>
+
+  </div>
+
+  <div class="smmg-message-subscriber-list-container">
+    <h3 class="smmg-message-subscriber-list-title">Empfänger Gruppen</h3>
+    <div class="" style="display: none"><a role="button"
+                                           class="btn btn-default btn-sm  smmg-subscriber-list-trigger smmg-subscriber-list-description"
+                                           data-subscriber-group-id="0">Alle Empfänger-Emails auflisten
+      </a></div>
+    <div class="well">
+
+      <div>
+
+        {% for group_tag in subscriber %}
+
+          <div role="button" class="btn btn-tag active smmg-subscriber-group-tag smmg-subscriber-list-trigger"
+               data-subscriber-group-id="{{ group_tag.id }}">
+            {{ group_tag.title }} <span class="badge">{{ group_tag.number }}</span></div>
+
+        {% endfor %}
+
+        <div>
+
+        </div>
+      </div>
+
+
+      <div class="ajax-container"></div>
+      <div class="smmg-subscriber-list">
+        {% for group in subscriber %}
+          <div class="smmg-subscriber-list-block-{{ group.id }}" style="display:none">
+            <h4 class="smmg-subscriber-list-title">{{ group.title }}</h4>
+            <ul class="smmg-subscriber-list-column">
+              {% for item in group.list %}
+
+                <li class="smmg-subscriber-member-{{ item.id }}">
+                  <div class="smmg-subscriber-list-edit">
+
+                    {{ item.name }}
+
+                    <span class="smmg-subscriber-list-remove"
+                          data-subscriber-id="{{ item.id }}"
+                          data-subscriber-group-id="{{ group.id }}"
+                          data-toggle="tooltip"
+                          data-delay="1000"
+                          data-placement="right"
+                          title="aus der Empfängerliste entfernen">
                                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                                     </span>
-              </div>
-            </li>
+                  </div>
+                </li>
 
-          {% endfor %}
+              {% endfor %}
 
-        </ul>
+            </ul>
+          </div>
+        {% endfor %}
+
+        <div class="smmg-subscriber-list-footer">
+          <p>Pro Person wird die Nachricht nur einmal verschickt, auch wenn sie doppelt aufgeführt ist. Z. B. in
+            verschiedenen Gruppen</p>
+        </div>
       </div>
-    {% endfor %}
-
-    <div class="smmg-subscriber-list-footer">
-      <p>Pro Person wird die Nachricht nur einmal verschickt, auch wenn sie doppelt aufgeführt ist. Z. B. in
-        verschiedenen Gruppen</p>
     </div>
   </div>
-</div>
-0
-
-<div class="smmg-subscriber-foot">
-  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-  <a role="button" class="btn btn-primary" href="/smmg/send/{{ message.id }}"><i class="fas fa-paper-plane" aria-hidden="true"></i>
-    Nachricht Senden
-  </a>
+  <div class="smmg-subscriber-foot">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+    <a role="button" class="btn btn-primary" href="/smmg/send/{{ message.id }}"><i class="fas fa-paper-plane"
+                                                                                   aria-hidden="true"></i>
+      Nachricht Senden
+    </a>
+  </div>
 </div>

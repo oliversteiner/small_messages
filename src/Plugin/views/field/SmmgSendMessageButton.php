@@ -69,9 +69,9 @@ class SmmgSendMessageButton extends FieldPluginBase
 
     $elements = [];
 
-    $link = 'smmg/ajax/prepare_send/' . $nid . '?destination=' . $destination;
+    $link = 'smmg/prepare_send/' . $nid . '?destination=' . $destination;
     $class = [
-      'use-ajax',
+     // 'use-ajax',
       'vat-button',
       'vat-button-send',
       'btn',
@@ -90,11 +90,11 @@ class SmmgSendMessageButton extends FieldPluginBase
       '#url' => Url::fromUri('internal:/' . $link),
       '#attributes' => [
         'class' => $class,
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode([
-          'height' => $modal_info['height'],
-          'width' => $modal_info['width'],
-        ]),
+      // 'data-dialog-type' => 'modal',
+      //  'data-dialog-options' => Json::encode([
+      //    'height' => $modal_info['height'],
+      //    'width' => $modal_info['width'],
+      //  ]),
         'type' => 'button',
       ],
     ];

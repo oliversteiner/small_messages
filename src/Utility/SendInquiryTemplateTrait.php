@@ -102,14 +102,20 @@ trait SendInquiryTemplateTrait
     // Title
     $title = $entity->label();
 
+// Template
+    $template_nid = Helper::getFieldValue(
+      $entity,
+      'smmg_design_template'
+    );
 
     // Text
-    $message_text = [];
-    if (!empty($entity->field_smmg_message_text)) {
-      // Load
-      $message_text = $entity->get('field_smmg_message_text')->getValue();
-      $message_text = $message_text[0];
-    }
+    // Plaintext and HTML Text
+    $text = Helper::getFieldValue(
+      $entity,
+      'smmg_message_text'
+    );
+
+    $message_html = Email::generateMessageHtml($text, $template_nid, true);
 
 
     // Send Date
@@ -147,7 +153,8 @@ trait SendInquiryTemplateTrait
     $output['subscriber'] = $subscriber;
     $output['send_date'] = $send_date;
     $output['is_send'] = $is_send;
-    $output['text'] = $message_text;
+    $output['message_plain'] = $text;
+    $output['message_html'] = $message_html;
 
 
     return $output;

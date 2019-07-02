@@ -53,8 +53,8 @@ small_messages.test.send_message_test:
 #
 # AJAX toggleSubscriberGroup
 #
-small_messages.ajax.toggle_subsciber_group:
-  path: '/smmg/ajax/toggle_subsciber_group/{target_nid}/{subscriber_group_tid}'
+small_messages.ajax.toggle_subscriber_group:
+  path: '/smmg/ajax/toggle_subscriber_group/{target_nid}/{subscriber_group_tid}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\SubscriberController::toggleSubscriberGroup'
     target_nid: null
@@ -67,7 +67,7 @@ small_messages.ajax.toggle_subsciber_group:
 # AJAX toggleSubscriberGroup
 #
 small_messages.ajax.prepare_send:
-  path: '/smmg/ajax/prepare_send/{nid}'
+  path: '/smmg/prepare_send/{nid}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::prepareSend'
     _title: 'Nachricht bereit zum senden'

@@ -5,6 +5,7 @@
   use Drupal\Core\Ajax\AjaxResponse;
   use Drupal\Core\Ajax\InvokeCommand;
   use Drupal\Core\Ajax\ReplaceCommand;
+  use Drupal\Core\Ajax\SettingsCommand;
   use Drupal\Core\Controller\ControllerBase;
   use Drupal\small_messages\Utility\SubscriberTrait;
 
@@ -22,11 +23,13 @@
     }
 
 
-
     /**
-     * @return \Drupal\Core\Ajax\AjaxResponse
+     * @param $target_nid
+     * @param $subscriber_group_tid
+     * @return AjaxResponse
      */
-    public function toggleSubscriberGroup($target_nid, $subscriber_group_tid) {
+    public function toggleSubscriberGroup($target_nid, $subscriber_group_tid): AjaxResponse
+    {
 
 
       $result = SubscriberTrait::toggleSubscriberGroup($target_nid, $subscriber_group_tid);
@@ -48,6 +51,9 @@
       else {
         $message = 'Es ist ein Fehler aufgetreten beim ändern der Empfängergruppe';
         $response->addCommand(new ReplaceCommand('.ajax-container', '<div class="ajax-container">' . $message . '</div>'));
+        $response->addCommand(new SettingsCommand([
+          'toggleSubscriberGroup' => $result,
+        ], TRUE));
 
       }
 

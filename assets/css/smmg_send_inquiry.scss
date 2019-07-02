@@ -6,10 +6,11 @@ div.smmg-subscriber-group-tag {
   font-size: 15px;
   padding: 5px 7px;
 }
+
 .smmg-subscriber-group-tag span.badge {
   margin-left: 10px;
-  background-color: $color-smmg-tag-button-active-hover;
 }
+
 // Messages
 
 .smmg-message-status {
@@ -30,16 +31,39 @@ div.smmg-subscriber-group-tag {
   }
 
 }
+
 // Nachricht Details
 
 .smmg-body {
   height: 60px;
   overflow: hidden;
   margin-bottom: 10px;
+  border: 1px solid silver;
+  padding: 11px;
 }
+
 .smmg-body-komplete {
   height: auto;
 }
+
+h3.smmg-message-title{
+  font-weight: bold;
+}
+
+.smmg-message-subscriber-list-container {
+  border: 1px silver solid;
+  padding: 10px;
+  margin-top: 30px;
+}
+
+h3.smmg-message-subscriber-list-title {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+
 // Empfänger Liste einblenden
 
 .smmg-subscriber-list {
@@ -62,6 +86,7 @@ div.smmg-subscriber-group-tag {
   }
 
 }
+
 .smmg-subscriber-list-edit {
   margin-bottom: 5px;
   font-size: 0.9em;
@@ -70,29 +95,36 @@ div.smmg-subscriber-group-tag {
   display: inline-block;
   border-radius: 10px;
 }
+
 .smmg-subscriber-list-edit:hover {
   background-color: $color-smmg-tag-button;
 }
+
 .smmg-subscriber-list-remove:hover,
 .smmg-subscriber-list-edit:hover .smmg-subscriber-list-remove {
-  visibility: visible }
+  visibility: visible
+}
+
 .smmg-subscriber-list-remove {
   margin-left: 10px;
   font-size: 16px;
   cursor: pointer;
   visibility: hidden;
 }
+
 .smmg-subscriber-list-remove:hover {
   margin-left: 10px;
   font-size: 16px;
   color: red;
 }
+
 // Test
 div.row > div {
   // border: solid 1px green;
 }
+
 .smmg-subscriber-list {
-  margin:10px;
+  margin: 10px;
 }
 
 .smmg-subscriber-list-footer {
@@ -103,24 +135,24 @@ div.row > div {
   font-size: 0.9em;
 }
 
-.ajax-container.active{
-    @include box-ok;
+.ajax-container.active {
+  @include box-ok;
 }
 
-.smmg-subscriber-list-column{
-    column-width: 200px;
-    column-gap: 10px;
-    column-rule: none;
+.smmg-subscriber-list-column {
+  column-width: 200px;
+  column-gap: 10px;
+  column-rule: none;
 
 }
 
 
-.smmg-subscriber-foot{
+.smmg-subscriber-foot {
   padding: 10px;
   display: flex;
   justify-content: flex-end;
 
-  button.btn.btn-default{
+  button.btn.btn-default {
     display: inline-flex;
     margin-right: 10px;
   }
