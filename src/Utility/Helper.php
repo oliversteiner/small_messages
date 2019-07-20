@@ -13,11 +13,12 @@ use http\Message;
 
 class Helper
 {
-
   public static function getTermsByID($vid)
   {
     $term_list = [];
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadTree($vid);
     foreach ($terms as $term) {
       $term_list[$term->tid] = $term->name;
     }
@@ -36,7 +37,9 @@ class Helper
   {
     $tid = 0;
 
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadTree($vid);
     foreach ($terms as $term) {
       if ($term->name == $term_name) {
         $tid = $term->tid;
@@ -49,13 +52,14 @@ class Helper
   public static function getTermsByName($vid)
   {
     $term_list = [];
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadTree($vid);
     foreach ($terms as $term) {
       $term_list[$term->name] = $term->tid;
     }
     return $term_list;
   }
-
 
   /**
    * @param $name
@@ -65,7 +69,6 @@ class Helper
    */
   public static function getOrigin($name)
   {
-
     $vid = 'smmg_origin';
     $tid = false;
 
@@ -73,12 +76,13 @@ class Helper
     $term_names = [];
 
     // Load Origin Terms
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadTree($vid);
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadTree($vid);
     foreach ($terms as $term) {
       $term_list[$term->name] = $term->tid;
       $term_names[] = $term->name;
     }
-
 
     // add Term $name if not in list
     if (in_array($name, $term_names)) {
@@ -91,7 +95,6 @@ class Helper
         ])->save();
 
         $tid = $new_tid;
-
       } catch (EntityStorageException $e) {
       }
     }
@@ -108,29 +111,57 @@ class Helper
    * @return boolean | string | array
    * @throws Exception
    */
-  public static function getFieldValue($node, $field_name, $term_list = null, $force_array = false)
+  public static function getFieldValue(
+    $node,
+    $field_name,
+    $term_list = null,
+    $force_array = false
+  )
   {
     $result = false;
 
 
     try {
 
-      // check for 'field_field_NAME'
-      $pos = strpos($field_name, 'field_');
-
-      if ($pos === 0) {
-
-        throw new Exception('Use $field_name without "field_" in HELPER:getFieldValue(' . $field_name . ')');
+      if (!is_object($node)) {
+        throw new \RuntimeException(
+          'The $node Parameter is not a valid drupal entity.' .
+          ' (Field: ' . $field_name . ' Node:' . $node . ')'
+        );
       }
 
-      $field_name = 'field_' . $field_name;
+      if (!is_string($field_name)) {
 
+        // check for 'field_field_NAME'
+        $pos = strpos($field_name, 'field_');
+
+        if ($pos === 0) {
+          throw new \RuntimeException(
+            'Use $field_name without "field_" in HELPER:getFieldValue(' .
+            $field_name .
+            ')'
+          );
+        }
+
+      }
+
+    } catch (Exception $e) {
+      throw new \RuntimeException(
+        '$field_name must be a string.'.
+        ' (Field: ' . $field_name . ' Node:' . $node . ') '.$e
+
+      );
+    }
+
+
+    $field_name = 'field_' . $field_name;
+
+    try {
       if ($node->get($field_name)) {
         $value = $node->get($field_name)->getValue();
 
         // single
         if (count($value) === 1) {
-
           // Default Field
           if ($value && $value[0] && isset($value[0]['value'])) {
             $result = $value[0]['value'];
@@ -151,9 +182,13 @@ class Helper
               $result = $term_list[$result];
             } else {
               $result = false;
-              throw new Exception('No Term found with id ' . $result . ' in Taxonomy ' . $term_list);
+              throw new Exception(
+                'No Term found with id ' .
+                $result .
+                ' in Taxonomy ' .
+                $term_list
+              );
             }
-
           }
 
           if ($force_array) {
@@ -164,9 +199,7 @@ class Helper
 
         $i = 0;
         if (count($value) > 1) {
-
           foreach ($value as $item) {
-
             // Standart Field
             if (isset($item['value'])) {
               $result[$i] = $item['value'];
@@ -178,14 +211,12 @@ class Helper
             }
             $i++;
           }
-
         }
       }
-    } catch
-    (Exception $e) {
-
-      throw $e;
-
+    } catch (Exception $e) {
+      throw new \RuntimeException(
+        'field_name (' . $field_name . ') Error \r' . $e
+      );
     }
 
     return $result;
@@ -209,7 +240,6 @@ class Helper
       if ($value && $value[0] && isset($value[0]['value'])) {
         $result = $value[0]['value'];
       }
-
     }
     return $result;
   }
@@ -223,19 +253,20 @@ class Helper
     return $token;
   }
 
-  public static function getTemplates($module = "small_messages", $template_names = [])
+  public static function getTemplates(
+    $module = 'small_messages',
+    $template_names = []
+  )
   {
     $templates = [];
 
-
     // Default Names
-    $default_directory = "templates";
-    $default_root_type = "module";
+    $default_directory = 'templates';
+    $default_root_type = 'module';
     $default_module_name = $module;
     $module_name_url = str_replace('_', '-', $module);
-    $default_template_prefix = $module_name_url . "-";
-    $default_template_suffix = ".html.twig";
-
+    $default_template_prefix = $module_name_url . '-';
+    $default_template_suffix = '.html.twig';
 
     // Get Config
     $config = \Drupal::config($module . '.settings');
@@ -245,14 +276,19 @@ class Helper
     $config_module_name = $config->get('get_path_name');
 
     foreach ($template_names as $template_name) {
-
       // change "_" with "-"
       $template_name_url = str_replace('_', '-', $template_name);
 
       // Default
       $root_type = $default_root_type;
       $module_name = $default_module_name;
-      $template_full_name = '/' . $default_directory . '/' . $default_template_prefix . $template_name_url . $default_template_suffix;
+      $template_full_name =
+        '/' .
+        $default_directory .
+        '/' .
+        $default_template_prefix .
+        $template_name_url .
+        $default_template_suffix;
 
       // If Path Module is set
       if ($config_root_type && $config_module_name) {
@@ -264,15 +300,14 @@ class Helper
         if ($config_template_name) {
           $template_full_name = $config_template_name;
         }
-
       }
 
-      $template_path = drupal_get_path($root_type, $module_name) . $template_full_name;
+      $template_path =
+        drupal_get_path($root_type, $module_name) . $template_full_name;
 
       // output
       $templates[$template_name] = $template_path;
     }
-
 
     return $templates;
   }
