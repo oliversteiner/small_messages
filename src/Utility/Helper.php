@@ -129,9 +129,9 @@ class Helper
         $value = $node->get($field_name)->getValue();
 
         // single
-        if (count($value) == 1) {
+        if (count($value) === 1) {
 
-          // Standart Field
+          // Default Field
           if ($value && $value[0] && isset($value[0]['value'])) {
             $result = $value[0]['value'];
           }
