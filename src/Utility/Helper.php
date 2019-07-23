@@ -4,6 +4,8 @@ namespace Drupal\small_messages\Utility;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\small_messages\Exceptions\SmmgHelperException;
@@ -120,18 +122,19 @@ class Helper
   {
     $result = false;
 
-
     try {
-
       if (!is_object($node)) {
         throw new \RuntimeException(
           'The $node Parameter is not a valid drupal entity.' .
-          ' (Field: ' . $field_name . ' Node:' . $node . ')'
+          ' (Field: ' .
+          $field_name .
+          ' Node:' .
+          $node .
+          ')'
         );
       }
 
       if (!is_string($field_name)) {
-
         // check for 'field_field_NAME'
         $pos = strpos($field_name, 'field_');
 
@@ -142,17 +145,18 @@ class Helper
             ')'
           );
         }
-
       }
-
     } catch (Exception $e) {
       throw new \RuntimeException(
-        '$field_name must be a string.'.
-        ' (Field: ' . $field_name . ' Node:' . $node . ') '.$e
-
+        '$field_name must be a string.' .
+        ' (Field: ' .
+        $field_name .
+        ' Node:' .
+        $node .
+        ') ' .
+        $e
       );
     }
-
 
     $field_name = 'field_' . $field_name;
 
@@ -310,5 +314,61 @@ class Helper
     }
 
     return $templates;
+  }
+
+  /**
+   * @param NodeInterface | Node $node
+   * @param string $field_name
+   * @return boolean | string | array
+   */
+  public static function getAudioFieldValue($node, $field_name)
+  {
+    $result = [];
+
+    $field_name = 'field_' . $field_name;
+
+    $mid = 0; // Media ID
+    $tid = 0; // Audio Term ID
+    $url = ''; // url to audiofile
+    $name = ''; // Name / Title of Audiofile
+    $file_name = '';
+    $mime_type = '';
+
+    if (!$node->get($field_name)->isEmpty()) {
+      // Media
+      $media_entity = $node->get($field_name)->entity;
+      $name = $media_entity->label();
+      $mid = $media_entity->id();
+
+      // Media -> Audio
+      $media_field = $media_entity
+        ->get('field_media_audio_file')
+        ->first()
+        ->getValue();
+      $tid = $media_field['target_id'];
+
+
+      // Media -> Audio -> File
+      if ($tid) {
+        $file = File::load($tid);
+        if ($file) {
+          $file_name = $file->getFilename();
+          $uri = $file->getFileUri();
+          $url = file_create_url($uri);
+          $mime_type = $file->getMimeType();
+        }
+
+        $result = [
+          'mid' => $mid,
+          'tid' => $tid,
+          'media_link' => $url,
+          'mime_type' => $mime_type,
+          'name' => $name,
+          'file_name' => $file_name,
+        ];
+      }
+    }
+
+    return $result;
   }
 }
