@@ -5,6 +5,8 @@ namespace Drupal\small_messages\Utility;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\media\Entity\Media;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
@@ -371,4 +373,51 @@ class Helper
 
     return $result;
   }
+
+  public
+  static function createImageStyle(
+    $img_id_or_file,
+    $image_style_id,
+    $dont_create = false
+  )
+  {
+    $image = [];
+    $image_style = ImageStyle::load($image_style_id);
+
+
+    if ($img_id_or_file && $img_id_or_file instanceof FileInterface) {
+      $file = $img_id_or_file;
+    } else {
+      $file = File::load($img_id_or_file);
+    }
+
+    if ($file && $image_style) {
+      $file_image = \Drupal::service('image.factory')->get($file->getFileUri());
+      /** @var \Drupal\Core\Image\Image $image */
+
+      if ($file_image->isValid()) {
+        $image_uri = $file->getFileUri();
+        $destination = $image_style->buildUrl($image_uri);
+
+        if (!file_exists($destination)) {
+          if (!$dont_create) {
+            $image_style->createDerivative($image_uri, $destination);
+          }
+        }
+
+        $file_size = filesize($image_uri);
+        $file_size_formatted = format_size($file_size);
+        list($width, $height) = getimagesize($image_uri);
+
+        $image['url'] = $destination;
+        $image['uri'] = $image_uri;
+        $image['file_size'] = $file_size;
+        $image['file_size_formatted'] = $file_size_formatted;
+        $image['width'] = $width;
+        $image['height'] = $height;
+      }
+    }
+    return $image;
+  }
+
 }
