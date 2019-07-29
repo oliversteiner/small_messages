@@ -1,0 +1,14 @@
+uuid: 1106ca73-4ba4-4e81-af35-213f2e927abd
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.smmg_editor
+  module:
+    - user
+id: user_add_role_action.smmg_editor
+label: 'Add the SMMG Editor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: smmg_editor

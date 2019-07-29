@@ -1,0 +1,11 @@
+uuid: 636d20e8-e1da-47ec-968b-a29576fc90bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_donation
+id: node.smmg_donation
+target_entity_type_id: node
+target_bundle: smmg_donation
+default_langcode: site_default
+language_alterable: false

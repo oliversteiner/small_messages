@@ -1,0 +1,220 @@
+uuid: 0ea7dbf0-5d07-4871-8a69-071f339c48b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.smmg_member.body
+    - field.field.node.smmg_member.field_birthday
+    - field.field.node.smmg_member.field_city
+    - field.field.node.smmg_member.field_email
+    - field.field.node.smmg_member.field_first_name
+    - field.field.node.smmg_member.field_gender
+    - field.field.node.smmg_member.field_image
+    - field.field.node.smmg_member.field_last_name
+    - field.field.node.smmg_member.field_member_is_public
+    - field.field.node.smmg_member.field_member_type
+    - field.field.node.smmg_member.field_mobile
+    - field.field.node.smmg_member.field_phone
+    - field.field.node.smmg_member.field_smmg_accept_newsletter
+    - field.field.node.smmg_member.field_smmg_donates_annually
+    - field.field.node.smmg_member.field_smmg_is_active
+    - field.field.node.smmg_member.field_smmg_origin
+    - field.field.node.smmg_member.field_smmg_subscriber_group
+    - field.field.node.smmg_member.field_smmg_token
+    - field.field.node.smmg_member.field_smmg_user
+    - field.field.node.smmg_member.field_street_and_number
+    - field.field.node.smmg_member.field_zip_code
+    - node.type.smmg_member
+  module:
+    - datetime
+    - image
+    - text
+    - user
+id: node.smmg_member.default
+targetEntityType: node
+bundle: smmg_member
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_birthday:
+    weight: 107
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_city:
+    weight: 112
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_email:
+    weight: 121
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_first_name:
+    weight: 113
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_gender:
+    weight: 102
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_image:
+    weight: 111
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_last_name:
+    weight: 114
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_member_is_public:
+    weight: 104
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_member_type:
+    weight: 108
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_mobile:
+    weight: 116
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_phone:
+    weight: 115
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_accept_newsletter:
+    weight: 103
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_smmg_donates_annually:
+    weight: 106
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_smmg_is_active:
+    weight: 105
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_smmg_origin:
+    weight: 110
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_subscriber_group:
+    weight: 109
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_token:
+    weight: 118
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_user:
+    weight: 120
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_street_and_number:
+    weight: 117
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_zip_code:
+    weight: 119
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true

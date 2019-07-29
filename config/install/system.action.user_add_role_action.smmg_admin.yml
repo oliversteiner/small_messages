@@ -1,0 +1,14 @@
+uuid: c06b91a5-9434-4933-a059-e3e161c2b1ed
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.smmg_admin
+  module:
+    - user
+id: user_add_role_action.smmg_admin
+label: 'Add the SMMG Admin role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: smmg_admin

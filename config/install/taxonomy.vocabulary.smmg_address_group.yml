@@ -1,0 +1,8 @@
+uuid: 44d7873f-8c0b-4ec8-9892-02161df7eee9
+langcode: und
+status: true
+dependencies: {  }
+name: 'SMMG Address Group'
+vid: smmg_address_group
+description: ''
+weight: 0

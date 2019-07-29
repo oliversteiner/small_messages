@@ -1,0 +1,29 @@
+uuid: f5301371-96fa-4c16-b041-50a26cf7749d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_subscriber_group
+    - node.type.smmg_member
+    - taxonomy.vocabulary.smmg_subscriber_group
+id: node.smmg_member.field_smmg_subscriber_group
+field_name: field_smmg_subscriber_group
+entity_type: node
+bundle: smmg_member
+label: 'Subscriber Group'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_subscriber_group: smmg_subscriber_group
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

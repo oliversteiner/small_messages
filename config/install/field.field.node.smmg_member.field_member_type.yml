@@ -1,0 +1,29 @@
+uuid: 0caad96c-e4be-4116-b358-420a28887bda
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_member_type
+    - node.type.smmg_member
+    - taxonomy.vocabulary.smmg_member_type
+id: node.smmg_member.field_member_type
+field_name: field_member_type
+entity_type: node
+bundle: smmg_member
+label: 'Member Type'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_member_type: smmg_member_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

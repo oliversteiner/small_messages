@@ -1,0 +1,27 @@
+uuid: 98c2a499-2858-4b86-bc94-33d77e3d4a82
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_template_html_body
+    - node.type.smmg_template
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    full_html: full_html
+    html_email: '0'
+    plain_text: '0'
+id: node.smmg_template.field_smmg_template_html_body
+field_name: field_smmg_template_html_body
+entity_type: node
+bundle: smmg_template
+label: 'Template HTML Body'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

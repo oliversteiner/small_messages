@@ -1,0 +1,14 @@
+uuid: 3f52890c-4730-4bb1-a5c4-b22e1add9c2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.smmg_editor
+  module:
+    - user
+id: user_remove_role_action.smmg_editor
+label: 'Remove the SMMG Editor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: smmg_editor

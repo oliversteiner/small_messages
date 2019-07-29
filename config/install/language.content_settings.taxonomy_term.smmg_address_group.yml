@@ -1,0 +1,11 @@
+uuid: 8122836b-97df-4c0a-9c35-563007e12a1c
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_address_group
+id: taxonomy_term.smmg_address_group
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_address_group
+default_langcode: site_default
+language_alterable: false

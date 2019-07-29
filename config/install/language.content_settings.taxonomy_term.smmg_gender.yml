@@ -1,0 +1,11 @@
+uuid: 0f1ef830-9113-489c-8b42-7867147f71d0
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_gender
+id: taxonomy_term.smmg_gender
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_gender
+default_langcode: site_default
+language_alterable: false

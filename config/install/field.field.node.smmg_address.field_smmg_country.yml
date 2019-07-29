@@ -1,0 +1,29 @@
+uuid: 39435a5e-6c51-4831-bede-e8551aac4ea5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_country
+    - node.type.smmg_address
+    - taxonomy.vocabulary.smmg_country
+id: node.smmg_address.field_smmg_country
+field_name: field_smmg_country
+entity_type: node
+bundle: smmg_address
+label: Country
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_country: smmg_country
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: gender
+field_type: entity_reference

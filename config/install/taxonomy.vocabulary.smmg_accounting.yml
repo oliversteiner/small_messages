@@ -1,0 +1,8 @@
+uuid: 92473b34-f07a-4a02-8497-f5d5bae783ea
+langcode: und
+status: true
+dependencies: {  }
+name: 'SMMG Accounting'
+vid: smmg_accounting
+description: ''
+weight: 0

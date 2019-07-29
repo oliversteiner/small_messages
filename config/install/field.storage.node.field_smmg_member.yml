@@ -1,0 +1,19 @@
+uuid: a5b33f92-e18a-4df5-97ab-d356bc4151dd
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_smmg_member
+field_name: field_smmg_member
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

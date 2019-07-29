@@ -1,0 +1,18 @@
+uuid: 61ea6f2c-3296-4d01-8b3c-04f718afbf9e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_smmg_send_date
+field_name: field_smmg_send_date
+entity_type: node
+type: timestamp
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

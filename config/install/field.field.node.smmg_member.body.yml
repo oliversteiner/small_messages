@@ -1,0 +1,22 @@
+uuid: e0a3b99e-2b94-4f36-a5a9-52c6548cf08c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.smmg_member
+  module:
+    - text
+id: node.smmg_member.body
+field_name: body
+entity_type: node
+bundle: smmg_member
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

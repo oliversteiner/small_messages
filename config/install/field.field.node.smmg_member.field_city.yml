@@ -1,0 +1,19 @@
+uuid: 78c735c5-e2f7-43ba-af86-578a75aeab53
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_city
+    - node.type.smmg_member
+id: node.smmg_member.field_city
+field_name: field_city
+entity_type: node
+bundle: smmg_member
+label: City
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

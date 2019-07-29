@@ -1,0 +1,9 @@
+uuid: bd74e501-aa4e-498b-a0ae-1ab2afd5d3a4
+langcode: en
+status: true
+dependencies: {  }
+id: smmg_member
+label: 'SMMG Member'
+weight: 3
+is_admin: null
+permissions: {  }

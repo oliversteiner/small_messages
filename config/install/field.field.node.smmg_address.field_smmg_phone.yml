@@ -1,0 +1,21 @@
+uuid: 75d71924-46b3-4382-8b5d-1beb5ef9d369
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_phone
+    - node.type.smmg_address
+  module:
+    - telephone
+id: node.smmg_address.field_smmg_phone
+field_name: field_smmg_phone
+entity_type: node
+bundle: smmg_address
+label: Phone
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone

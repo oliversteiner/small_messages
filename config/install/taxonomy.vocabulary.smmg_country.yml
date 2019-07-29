@@ -1,0 +1,8 @@
+uuid: 00894751-76e5-4a1a-ae71-0703653d373e
+langcode: en
+status: true
+dependencies: {  }
+name: 'SMMG Country'
+vid: smmg_country
+description: ''
+weight: 0

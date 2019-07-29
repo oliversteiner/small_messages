@@ -1,0 +1,28 @@
+uuid: 3b02ad89-012f-4832-8cf0-e8732b75843d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.smmg_template
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    html_email: html_email
+    full_html: '0'
+    plain_text: '0'
+id: node.smmg_template.body
+field_name: body
+entity_type: node
+bundle: smmg_template
+label: 'Message Text'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+field_type: text_with_summary

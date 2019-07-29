@@ -1,0 +1,41 @@
+uuid: 9e31e56b-e68a-4bb5-a2d5-b7f467e97fa1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.smmg_template.body
+    - field.field.node.smmg_template.field_smmg_description
+    - field.field.node.smmg_template.field_smmg_template_cover
+    - field.field.node.smmg_template.field_smmg_template_html_body
+    - field.field.node.smmg_template.field_smmg_template_html_head
+    - field.field.node.smmg_template.field_smmg_template_plain_text
+    - node.type.smmg_template
+  module:
+    - text
+    - user
+id: node.smmg_template.teaser
+targetEntityType: node
+bundle: smmg_template
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_smmg_description: true
+  field_smmg_template_cover: true
+  field_smmg_template_html_body: true
+  field_smmg_template_html_head: true
+  field_smmg_template_plain_text: true
+  langcode: true

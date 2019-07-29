@@ -1,0 +1,28 @@
+uuid: d019769a-9ee2-4c64-94e0-d0757e8044f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_member
+    - node.type.smmg_donation
+    - node.type.smmg_member
+id: node.smmg_donation.field_smmg_member
+field_name: field_smmg_member
+entity_type: node
+bundle: smmg_donation
+label: 'SMMG Member'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      smmg_member: smmg_member
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

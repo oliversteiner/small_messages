@@ -1,0 +1,8 @@
+uuid: f0d8d3a2-70dc-4c2a-b663-46b07f181fa3
+langcode: und
+status: true
+dependencies: {  }
+name: 'SMMG Origin'
+vid: smmg_origin
+description: ''
+weight: 0

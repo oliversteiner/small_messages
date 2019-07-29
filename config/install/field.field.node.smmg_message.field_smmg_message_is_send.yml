@@ -1,0 +1,23 @@
+uuid: 8174ce59-7808-44e2-8ebe-7a4a41a7ee94
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_message_is_send
+    - node.type.smmg_message
+id: node.smmg_message.field_smmg_message_is_send
+field_name: field_smmg_message_is_send
+entity_type: node
+bundle: smmg_message
+label: 'is send'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

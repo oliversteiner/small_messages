@@ -1,0 +1,89 @@
+uuid: 2d31bbce-7485-41df-9181-91f5ebf6ce39
+langcode: de
+status: true
+dependencies:
+  config:
+    - field.field.node.smmg_message.body
+    - field.field.node.smmg_message.field_smmg_design_template
+    - field.field.node.smmg_message.field_smmg_message_group
+    - field.field.node.smmg_message.field_smmg_message_is_send
+    - field.field.node.smmg_message.field_smmg_message_is_template
+    - field.field.node.smmg_message.field_smmg_message_text
+    - field.field.node.smmg_message.field_smmg_send_date
+    - field.field.node.smmg_message.field_smmg_subscriber_group
+    - field.field.node.smmg_message.field_test
+    - node.type.smmg_message
+  module:
+    - text
+_core:
+  default_config_hash: 4pGOL0Umno76pCjb9z5crKcfXReUldaSOs2xGbjJSMs
+id: node.smmg_message.default
+targetEntityType: node
+bundle: smmg_message
+mode: default
+content:
+  field_smmg_design_template:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_smmg_message_group:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_smmg_message_is_send:
+    weight: 6
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_smmg_message_is_template:
+    weight: 5
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_smmg_message_text:
+    weight: 2
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_smmg_send_date:
+    type: datetime_timestamp
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_smmg_subscriber_group:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  body: true
+  created: true
+  field_test: true
+  langcode: true
+  moderation_state: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

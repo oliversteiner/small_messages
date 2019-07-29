@@ -1,0 +1,23 @@
+uuid: 4fa8eb0c-13a6-400a-8a2c-b9d55d8e3ef0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_zip_code
+    - node.type.smmg_address
+id: node.smmg_address.field_smmg_zip_code
+field_name: field_smmg_zip_code
+entity_type: node
+bundle: smmg_address
+label: 'ZIP Code'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

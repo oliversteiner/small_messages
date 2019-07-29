@@ -1,0 +1,8 @@
+uuid: 1ef88b84-2058-4e56-a01d-3d571c0c9f96
+langcode: und
+status: true
+dependencies: {  }
+name: 'SMMG Order Status'
+vid: smmg_order_status
+description: ''
+weight: 0

@@ -1,0 +1,14 @@
+currency: SFR
+coupon_name_singular: Gutschein
+coupon_name_plural: Gutscheine
+coupon_group_default: '428'
+coupon_group_hide: 1
+email_from: oliver@mollo.ch
+email_to: oliver@mollo.ch
+email_test: 0
+get_path_type: included
+get_path_name: ''
+template_thank_you: ''
+template_email_html: ''
+template_email_plain: ''
+suffix: SFR

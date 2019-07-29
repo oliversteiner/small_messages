@@ -1,0 +1,11 @@
+uuid: 62145ac0-9115-471b-8340-dee224a623d7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_template
+id: node.smmg_template
+target_entity_type_id: node
+target_bundle: smmg_template
+default_langcode: site_default
+language_alterable: false

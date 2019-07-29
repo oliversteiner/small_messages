@@ -1,0 +1,28 @@
+uuid: c2b6f86e-751a-47a2-9892-74b1fee5f6ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_user
+    - node.type.smmg_member
+id: node.smmg_member.field_smmg_user
+field_name: field_smmg_user
+entity_type: node
+bundle: smmg_member
+label: User
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: false
+    filter:
+      type: _none
+    target_bundles: null
+    sort:
+      field: _none
+    auto_create: true
+field_type: entity_reference

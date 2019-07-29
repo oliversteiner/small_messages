@@ -1,0 +1,21 @@
+uuid: bd6862b1-afd3-4b2f-8308-fddc5690de8f
+langcode: de
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: KIFzH1U06DRqGZv0bhi2Go5T679Qa-dFPMqBtRX4msQ
+id: node.field_smmg_template_html_head
+field_name: field_smmg_template_html_head
+entity_type: node
+type: string_long
+settings:
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

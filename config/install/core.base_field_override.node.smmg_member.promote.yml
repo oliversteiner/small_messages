@@ -1,0 +1,22 @@
+uuid: 3f00b6b7-14a5-42d2-9e98-9a59df400464
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_member
+id: node.smmg_member.promote
+field_name: promote
+entity_type: node
+bundle: smmg_member
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

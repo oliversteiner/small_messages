@@ -1,0 +1,59 @@
+uuid: e555b944-af94-48fb-9aba-eb9e31df1726
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.smmg_address.body
+    - field.field.node.smmg_address.field_smmg_city
+    - field.field.node.smmg_address.field_smmg_country
+    - field.field.node.smmg_address.field_smmg_description
+    - field.field.node.smmg_address.field_smmg_email
+    - field.field.node.smmg_address.field_smmg_first_name
+    - field.field.node.smmg_address.field_smmg_gender
+    - field.field.node.smmg_address.field_smmg_group
+    - field.field.node.smmg_address.field_smmg_last_name
+    - field.field.node.smmg_address.field_smmg_member
+    - field.field.node.smmg_address.field_smmg_mobile
+    - field.field.node.smmg_address.field_smmg_phone
+    - field.field.node.smmg_address.field_smmg_street_and_number
+    - field.field.node.smmg_address.field_smmg_user
+    - field.field.node.smmg_address.field_smmg_zip_code
+    - node.type.smmg_address
+  module:
+    - text
+    - user
+id: node.smmg_address.teaser
+targetEntityType: node
+bundle: smmg_address
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_smmg_city: true
+  field_smmg_country: true
+  field_smmg_description: true
+  field_smmg_email: true
+  field_smmg_first_name: true
+  field_smmg_gender: true
+  field_smmg_group: true
+  field_smmg_last_name: true
+  field_smmg_member: true
+  field_smmg_mobile: true
+  field_smmg_phone: true
+  field_smmg_street_and_number: true
+  field_smmg_user: true
+  field_smmg_zip_code: true
+  langcode: true

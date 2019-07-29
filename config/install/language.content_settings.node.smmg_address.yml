@@ -1,0 +1,11 @@
+uuid: 6ae97daa-fb6e-4322-a41e-bd9750ae52cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_address
+id: node.smmg_address
+target_entity_type_id: node
+target_bundle: smmg_address
+default_langcode: site_default
+language_alterable: false

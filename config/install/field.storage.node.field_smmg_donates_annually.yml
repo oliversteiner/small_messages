@@ -1,0 +1,18 @@
+uuid: 43b42cea-f450-446a-afd1-a19c10292dbb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_smmg_donates_annually
+field_name: field_smmg_donates_annually
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

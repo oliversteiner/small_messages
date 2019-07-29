@@ -1,0 +1,22 @@
+uuid: bd5de73b-31aa-483e-b631-8bb9dd58e2de
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.smmg_address
+  module:
+    - text
+id: node.smmg_address.body
+field_name: body
+entity_type: node
+bundle: smmg_address
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

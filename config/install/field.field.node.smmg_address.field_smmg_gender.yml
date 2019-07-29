@@ -1,0 +1,33 @@
+uuid: 1dff3afe-1300-4133-a853-bd177519231e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_gender
+    - node.type.smmg_address
+    - taxonomy.vocabulary.smmg_gender
+  content:
+    - 'taxonomy_term:gender:087faae2-23b4-4353-a91c-04590a8a56d6'
+id: node.smmg_address.field_smmg_gender
+field_name: field_smmg_gender
+entity_type: node
+bundle: smmg_address
+label: Gender
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 087faae2-23b4-4353-a91c-04590a8a56d6
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_gender: smmg_gender
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: gender
+field_type: entity_reference

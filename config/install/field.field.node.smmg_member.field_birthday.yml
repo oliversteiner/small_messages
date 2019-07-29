@@ -1,0 +1,21 @@
+uuid: e2f79930-cadd-40a2-a54c-fb03b77d5fc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_birthday
+    - node.type.smmg_member
+  module:
+    - datetime
+id: node.smmg_member.field_birthday
+field_name: field_birthday
+entity_type: node
+bundle: smmg_member
+label: Birthday
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

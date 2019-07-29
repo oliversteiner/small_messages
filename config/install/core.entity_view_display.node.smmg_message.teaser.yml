@@ -1,0 +1,49 @@
+uuid: 8248f62d-198e-4247-b4bd-3542625859ff
+langcode: de
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.smmg_message.body
+    - field.field.node.smmg_message.field_smmg_design_template
+    - field.field.node.smmg_message.field_smmg_message_group
+    - field.field.node.smmg_message.field_smmg_message_is_send
+    - field.field.node.smmg_message.field_smmg_message_is_template
+    - field.field.node.smmg_message.field_smmg_message_text
+    - field.field.node.smmg_message.field_smmg_send_date
+    - field.field.node.smmg_message.field_smmg_subscriber_group
+    - field.field.node.smmg_message.field_test
+    - node.type.smmg_message
+  module:
+    - text
+    - user
+_core:
+  default_config_hash: CIYDZmaF2_FjeudzhHF5f2Whafld2uxqLA8j6WwS3kY
+id: node.smmg_message.teaser
+targetEntityType: node
+bundle: smmg_message
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_smmg_design_template: true
+  field_smmg_message_group: true
+  field_smmg_message_is_send: true
+  field_smmg_message_is_template: true
+  field_smmg_message_text: true
+  field_smmg_send_date: true
+  field_smmg_subscriber_group: true
+  field_test: true
+  langcode: true

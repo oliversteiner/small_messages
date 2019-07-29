@@ -1,0 +1,17 @@
+uuid: 070f7c3c-2b35-4589-8ea1-970299e3c4aa
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'SMMG Address'
+type: smmg_address
+description: ''
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false

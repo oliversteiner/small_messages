@@ -1,0 +1,10 @@
+uuid: 29a9ec01-2b47-49a4-ad46-4d9d49d7a071
+langcode: en
+status: true
+dependencies: {  }
+id: smmg_admin
+label: 'SMMG Admin'
+weight: 5
+is_admin: null
+permissions:
+  - 'use text format full_html'

@@ -1,0 +1,10 @@
+uuid: 58a7ac4b-6896-4d83-9f50-b26a92036b32
+langcode: en
+status: true
+dependencies: {  }
+id: smmg_editor
+label: 'SMMG Editor'
+weight: 4
+is_admin: null
+permissions:
+  - 'use text format full_html'

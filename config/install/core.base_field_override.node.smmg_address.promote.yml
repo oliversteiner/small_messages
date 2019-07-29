@@ -1,0 +1,22 @@
+uuid: 24f78316-f083-417c-8511-f0e2af03770d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_address
+id: node.smmg_address.promote
+field_name: promote
+entity_type: node
+bundle: smmg_address
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,22 @@
+uuid: 1536fb94-7b59-4441-9054-63b51b923952
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.smmg_template
+id: node.smmg_template.promote
+field_name: promote
+entity_type: node
+bundle: smmg_template
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

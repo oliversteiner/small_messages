@@ -1,0 +1,19 @@
+uuid: 9a9fa21d-e07f-41e4-a1e0-4df696f75c5c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_email
+    - node.type.smmg_address
+id: node.smmg_address.field_smmg_email
+field_name: field_smmg_email
+entity_type: node
+bundle: smmg_address
+label: Email
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

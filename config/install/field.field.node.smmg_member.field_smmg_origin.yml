@@ -1,0 +1,29 @@
+uuid: 0728431e-177a-4a57-bcb6-a14bb5226521
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_origin
+    - node.type.smmg_member
+    - taxonomy.vocabulary.smmg_origin
+id: node.smmg_member.field_smmg_origin
+field_name: field_smmg_origin
+entity_type: node
+bundle: smmg_member
+label: Origin
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_origin: smmg_origin
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

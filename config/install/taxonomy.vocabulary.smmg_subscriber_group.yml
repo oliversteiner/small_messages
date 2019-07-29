@@ -1,0 +1,8 @@
+uuid: 10fc8720-059e-478a-b402-23925e4d1b19
+langcode: en
+status: true
+dependencies: {  }
+name: 'SMMG Subscriber Group'
+vid: smmg_subscriber_group
+description: ''
+weight: 0

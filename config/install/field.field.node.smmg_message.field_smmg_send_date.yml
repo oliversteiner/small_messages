@@ -1,0 +1,21 @@
+uuid: a27a296c-f2e6-47e1-af14-83ee09bc4d30
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_send_date
+    - node.type.smmg_message
+id: node.smmg_message.field_smmg_send_date
+field_name: field_smmg_send_date
+entity_type: node
+bundle: smmg_message
+label: 'Send Date'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1562074430
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

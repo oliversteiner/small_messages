@@ -1,0 +1,26 @@
+uuid: 5c5ee2d4-d89d-4fc5-8ce3-e11a110fc94a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_message_text
+    - node.type.smmg_message
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    html_email: html_email
+    plain_text: plain_text
+id: node.smmg_message.field_smmg_message_text
+field_name: field_smmg_message_text
+entity_type: node
+bundle: smmg_message
+label: 'Message Text'
+description: 'Placeholders: @_first_name, @_last_name, @_email'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

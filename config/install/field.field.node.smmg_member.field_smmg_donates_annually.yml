@@ -1,0 +1,23 @@
+uuid: bc16b251-0902-43ef-901e-f715b48ac8ff
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_donates_annually
+    - node.type.smmg_member
+id: node.smmg_member.field_smmg_donates_annually
+field_name: field_smmg_donates_annually
+entity_type: node
+bundle: smmg_member
+label: 'Donates Annually'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

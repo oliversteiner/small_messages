@@ -1,0 +1,23 @@
+uuid: acf0c23e-1a52-4e10-a645-5dab28b03c2d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_accept_newsletter
+    - node.type.smmg_member
+id: node.smmg_member.field_smmg_accept_newsletter
+field_name: field_smmg_accept_newsletter
+entity_type: node
+bundle: smmg_member
+label: 'Accept Newsletter'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

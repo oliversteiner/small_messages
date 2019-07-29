@@ -1,0 +1,26 @@
+uuid: 69732e35-31ae-41cd-aac7-3c2d40cd6429
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_description
+    - node.type.smmg_template
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    html_email: html_email
+    plain_text: plain_text
+id: node.smmg_template.field_smmg_description
+field_name: field_smmg_description
+entity_type: node
+bundle: smmg_template
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

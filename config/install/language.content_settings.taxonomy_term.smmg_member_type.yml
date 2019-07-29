@@ -1,0 +1,11 @@
+uuid: cdfce794-472c-45b7-95f7-60c855f6b4b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_member_type
+id: taxonomy_term.smmg_member_type
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_member_type
+default_langcode: site_default
+language_alterable: false

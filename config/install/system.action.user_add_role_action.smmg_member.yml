@@ -1,0 +1,14 @@
+uuid: 81e857fd-5320-45f9-8b22-5f2ddafb6a6c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.smmg_member
+  module:
+    - user
+id: user_add_role_action.smmg_member
+label: 'Add the SMMG Member role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: smmg_member

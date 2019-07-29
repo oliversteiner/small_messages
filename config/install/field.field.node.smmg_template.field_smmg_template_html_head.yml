@@ -1,0 +1,19 @@
+uuid: 84e581b2-751c-46c1-8c02-d181a4c4b542
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_template_html_head
+    - node.type.smmg_template
+id: node.smmg_template.field_smmg_template_html_head
+field_name: field_smmg_template_html_head
+entity_type: node
+bundle: smmg_template
+label: 'Template HTML Head'
+description: 'HTML Head Template for emails'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

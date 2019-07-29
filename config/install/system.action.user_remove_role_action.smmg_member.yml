@@ -1,0 +1,14 @@
+uuid: f7f46b8a-0874-46d0-991a-34344ddfa293
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.smmg_member
+  module:
+    - user
+id: user_remove_role_action.smmg_member
+label: 'Remove the SMMG Member role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: smmg_member

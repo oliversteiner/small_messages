@@ -1,0 +1,23 @@
+uuid: b298b396-f781-4909-bd3e-2757a745ac0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_member_is_public
+    - node.type.smmg_member
+id: node.smmg_member.field_member_is_public
+field_name: field_member_is_public
+entity_type: node
+bundle: smmg_member
+label: 'is Public'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

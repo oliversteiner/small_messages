@@ -1,0 +1,17 @@
+uuid: 27becb8d-9680-475f-8538-ad4865f7c8d8
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'SMMG Template'
+type: smmg_template
+description: ''
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false

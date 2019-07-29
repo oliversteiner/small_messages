@@ -1,0 +1,33 @@
+uuid: 7414de26-2346-4334-9a74-13d508702087
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_smmg_group
+    - node.type.smmg_address
+    - taxonomy.vocabulary.smmg_address_group
+  content:
+    - 'taxonomy_term:smmg_address_group:06e9707a-c1a4-4ace-b3e2-19c754f15936'
+id: node.smmg_address.field_smmg_group
+field_name: field_smmg_group
+entity_type: node
+bundle: smmg_address
+label: Group
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_uuid: 06e9707a-c1a4-4ace-b3e2-19c754f15936
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      smmg_address_group: smmg_address_group
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

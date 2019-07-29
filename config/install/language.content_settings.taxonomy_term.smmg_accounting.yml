@@ -1,0 +1,11 @@
+uuid: b8ce12f4-b7f2-4c04-a509-0f0ede7c4a74
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_accounting
+id: taxonomy_term.smmg_accounting
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_accounting
+default_langcode: site_default
+language_alterable: false

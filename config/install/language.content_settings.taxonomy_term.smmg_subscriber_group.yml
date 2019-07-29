@@ -1,0 +1,11 @@
+uuid: a091a3e5-66f6-4895-93e0-271df84c2ae7
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.smmg_subscriber_group
+id: taxonomy_term.smmg_subscriber_group
+target_entity_type_id: taxonomy_term
+target_bundle: smmg_subscriber_group
+default_langcode: site_default
+language_alterable: false

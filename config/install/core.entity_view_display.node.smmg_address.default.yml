@@ -1,0 +1,152 @@
+uuid: 53f34277-d25f-4cca-8332-2115f795d811
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.smmg_address.body
+    - field.field.node.smmg_address.field_smmg_city
+    - field.field.node.smmg_address.field_smmg_country
+    - field.field.node.smmg_address.field_smmg_description
+    - field.field.node.smmg_address.field_smmg_email
+    - field.field.node.smmg_address.field_smmg_first_name
+    - field.field.node.smmg_address.field_smmg_gender
+    - field.field.node.smmg_address.field_smmg_group
+    - field.field.node.smmg_address.field_smmg_last_name
+    - field.field.node.smmg_address.field_smmg_member
+    - field.field.node.smmg_address.field_smmg_mobile
+    - field.field.node.smmg_address.field_smmg_phone
+    - field.field.node.smmg_address.field_smmg_street_and_number
+    - field.field.node.smmg_address.field_smmg_user
+    - field.field.node.smmg_address.field_smmg_zip_code
+    - node.type.smmg_address
+  module:
+    - text
+    - user
+id: node.smmg_address.default
+targetEntityType: node
+bundle: smmg_address
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_smmg_city:
+    weight: 106
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_country:
+    weight: 110
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_description:
+    weight: 105
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_smmg_email:
+    weight: 115
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_smmg_first_name:
+    weight: 107
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_gender:
+    weight: 111
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_group:
+    weight: 104
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_last_name:
+    weight: 108
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_member:
+    weight: 103
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_mobile:
+    weight: 114
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_smmg_phone:
+    weight: 113
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_smmg_street_and_number:
+    weight: 109
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_smmg_user:
+    weight: 102
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_smmg_zip_code:
+    weight: 112
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true

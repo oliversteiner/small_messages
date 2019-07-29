@@ -1,0 +1,22 @@
+uuid: f279f6ae-8ce2-4cce-9ccf-21aefc87b5a1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.smmg_donation
+  module:
+    - text
+id: node.smmg_donation.body
+field_name: body
+entity_type: node
+bundle: smmg_donation
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

@@ -1,0 +1,20 @@
+uuid: 700a50dd-d0e0-40e7-bf3f-1a5ee8ba723b
+langcode: de
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: 0O-Fcb0CRONZvFu1fCjxccWIskizCAhsKV5Ryt74FaQ
+id: node.field_smmg_accept_newsletter
+field_name: field_smmg_accept_newsletter
+entity_type: node
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

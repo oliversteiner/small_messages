@@ -1,0 +1,8 @@
+uuid: 7438676f-3eeb-4822-9751-baea8f75fc00
+langcode: en
+status: true
+dependencies: {  }
+name: 'SMMG Member Type'
+vid: smmg_member_type
+description: ''
+weight: 0
