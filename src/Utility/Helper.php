@@ -178,6 +178,11 @@ class Helper
             $result = $value[0]['target_id'];
           }
 
+          // Duration Field
+          if ($value && $value[0] && isset($value[0]['duration'])) {
+            $result = $value[0]['duration'];
+          }
+
           // Value is Taxonomy Term
           if ($term_list) {
             if (is_string($term_list)) {
