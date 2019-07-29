@@ -2,6 +2,7 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\file\Entity\File;
@@ -187,12 +188,12 @@ class Helper
               $result = $term_list[$result];
             } else {
               $result = false;
-              throw new Exception(
-                'No Term found with id ' .
+              $message =                 'No Term found with id ' .
                   $result .
                   ' in Taxonomy ' .
-                  $term_list
-              );
+                  $term_list;
+              Drupal::logger('small_messages')->notice($message);
+
             }
           }
 
