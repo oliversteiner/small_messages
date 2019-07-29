@@ -120,19 +120,18 @@ class Helper
     $field_name,
     $term_list = null,
     $force_array = false
-  )
-  {
+  ) {
     $result = false;
 
     try {
       if (!is_object($node)) {
         throw new \RuntimeException(
           'The $node Parameter is not a valid drupal entity.' .
-          ' (Field: ' .
-          $field_name .
-          ' Node:' .
-          $node .
-          ')'
+            ' (Field: ' .
+            $field_name .
+            ' Node:' .
+            $node .
+            ')'
         );
       }
 
@@ -143,20 +142,20 @@ class Helper
         if ($pos === 0) {
           throw new \RuntimeException(
             'Use $field_name without "field_" in HELPER:getFieldValue(' .
-            $field_name .
-            ')'
+              $field_name .
+              ')'
           );
         }
       }
     } catch (Exception $e) {
       throw new \RuntimeException(
         '$field_name must be a string.' .
-        ' (Field: ' .
-        $field_name .
-        ' Node:' .
-        $node .
-        ') ' .
-        $e
+          ' (Field: ' .
+          $field_name .
+          ' Node:' .
+          $node .
+          ') ' .
+          $e
       );
     }
 
@@ -166,7 +165,7 @@ class Helper
       if ($node->get($field_name)) {
         $value = $node->get($field_name)->getValue();
 
-        // single
+        // single Item
         if (count($value) === 1) {
           // Default Field
           if ($value && $value[0] && isset($value[0]['value'])) {
@@ -190,9 +189,9 @@ class Helper
               $result = false;
               throw new Exception(
                 'No Term found with id ' .
-                $result .
-                ' in Taxonomy ' .
-                $term_list
+                  $result .
+                  ' in Taxonomy ' .
+                  $term_list
               );
             }
           }
@@ -203,6 +202,7 @@ class Helper
           }
         }
 
+        // Multiple Items
         $i = 0;
         if (count($value) > 1) {
           foreach ($value as $item) {
@@ -217,6 +217,11 @@ class Helper
             }
             $i++;
           }
+        }
+
+        // No Items
+        if ($force_array && count($value) === 0) {
+          $result = [];
         }
       }
     } catch (Exception $e) {
@@ -262,8 +267,7 @@ class Helper
   public static function getTemplates(
     $module = 'small_messages',
     $template_names = []
-  )
-  {
+  ) {
     $templates = [];
 
     // Default Names
@@ -349,7 +353,6 @@ class Helper
         ->getValue();
       $tid = $media_field['target_id'];
 
-
       // Media -> Audio -> File
       if ($tid) {
         $file = File::load($tid);
@@ -374,16 +377,13 @@ class Helper
     return $result;
   }
 
-  public
-  static function createImageStyle(
+  public static function createImageStyle(
     $img_id_or_file,
     $image_style_id,
     $dont_create = false
-  )
-  {
+  ) {
     $image = [];
     $image_style = ImageStyle::load($image_style_id);
-
 
     if ($img_id_or_file && $img_id_or_file instanceof FileInterface) {
       $file = $img_id_or_file;
@@ -419,5 +419,4 @@ class Helper
     }
     return $image;
   }
-
 }
