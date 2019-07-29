@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.smmg_message.field_smmg_message_text
     - field.field.node.smmg_message.field_smmg_send_date
     - field.field.node.smmg_message.field_smmg_subscriber_group
-    - field.field.node.smmg_message.field_test
     - node.type.smmg_message
   module:
     - text
