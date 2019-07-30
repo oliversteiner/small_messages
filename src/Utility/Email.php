@@ -60,7 +60,7 @@ class Email
         '@email' => $to,
         '@module' => $module,
       ]);
-      Drupal::messenger()->addMessage($message);
+     // Drupal::messenger()->addMessage($message);
       Drupal::logger('mail-log')->notice($message);
     }
   }
