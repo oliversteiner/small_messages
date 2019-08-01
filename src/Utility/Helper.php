@@ -111,28 +111,33 @@ class Helper
   /**
    * @param NodeInterface | Node $node
    * @param string $field_name
-   * @param null $term_list
+   * @param null $term_list_name
    * @param bool $force_array
    * @return boolean | string | array
-   * @throws Exception
    */
   public static function getFieldValue(
     $node,
     $field_name,
-    $term_list = null,
+    $term_list_name = null,
     $force_array = false
-  ) {
+  )
+  {
     $result = false;
+    $term_list = [];
+
+    if ($term_list_name && is_string($term_list_name)) {
+      $term_list = self::getTermsByID($term_list_name);
+    }
 
     try {
       if (!is_object($node)) {
         throw new \RuntimeException(
           'The $node Parameter is not a valid drupal entity.' .
-            ' (Field: ' .
-            $field_name .
-            ' Node:' .
-            $node .
-            ')'
+          ' (Field: ' .
+          $field_name .
+          ' Node:' .
+          $node .
+          ')'
         );
       }
 
@@ -143,20 +148,20 @@ class Helper
         if ($pos === 0) {
           throw new \RuntimeException(
             'Use $field_name without "field_" in HELPER:getFieldValue(' .
-              $field_name .
-              ')'
+            $field_name .
+            ')'
           );
         }
       }
     } catch (Exception $e) {
       throw new \RuntimeException(
         '$field_name must be a string.' .
-          ' (Field: ' .
-          $field_name .
-          ' Node:' .
-          $node .
-          ') ' .
-          $e
+        ' (Field: ' .
+        $field_name .
+        ' Node:' .
+        $node .
+        ') ' .
+        $e
       );
     }
 
@@ -185,20 +190,13 @@ class Helper
 
           // Value is Taxonomy Term
           if ($term_list) {
-            if (is_string($term_list)) {
-              $term_list = self::getTermsByID($term_list);
-            }
 
             if ($term_list && $term_list[$result]) {
               $result = $term_list[$result];
             } else {
-              $result = false;
-              $message =                 'No Term found with id ' .
-                  $result .
-                  ' in Taxonomy ' .
-                  $term_list;
+              $message =
+                "No Term found with id {$result} in Taxonomy {$term_list}";
               Drupal::logger('small_messages')->notice($message);
-
             }
           }
 
@@ -217,8 +215,18 @@ class Helper
               $result[$i] = $item['value'];
             }
 
-            // Target Field
-            if (isset($item['target_id'])) {
+            // target Field and Termlist
+            // Value is Taxonomy Term
+            if ($term_list_name) {
+              if ($term_list_name && $term_list[$item['target_id']]) {
+                $result[$i] = $term_list[$item['target_id']];
+              } else {
+                $result[$i] = false;
+                $message =
+                  "No Term found with id {$result} in Taxonomy {$term_list_name}";
+                Drupal::logger('small_messages')->notice($message);
+              }
+            } else if (isset($item['target_id'])) {
               $result[$i] = $item['target_id'];
             }
             $i++;
@@ -273,7 +281,8 @@ class Helper
   public static function getTemplates(
     $module = 'small_messages',
     $template_names = []
-  ) {
+  )
+  {
     $templates = [];
 
     // Default Names
@@ -387,7 +396,8 @@ class Helper
     $img_id_or_file,
     $image_style_id,
     $dont_create = false
-  ) {
+  )
+  {
     $image = [];
     $image_style = ImageStyle::load($image_style_id);
 
