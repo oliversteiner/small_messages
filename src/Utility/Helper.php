@@ -3,6 +3,8 @@
 namespace Drupal\small_messages\Utility;
 
 use Drupal;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\file\Entity\File;
@@ -69,13 +71,13 @@ class Helper
   /**
    * @param $name
    * @return bool|number
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
    */
   public static function getOrigin($name)
   {
     $vid = 'smmg_origin';
-    $tid = false;
+    $tid = 0;
 
     $term_list = [];
     $term_names = [];
@@ -90,7 +92,7 @@ class Helper
     }
 
     // add Term $name if not in list
-    if (in_array($name, $term_names)) {
+    if (in_array($name, $term_names, true)) {
       $tid = $term_list[$name];
     } else {
       try {
