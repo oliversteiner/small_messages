@@ -9,6 +9,9 @@ use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
+use Exception;
+use http\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class MessageController.
@@ -71,11 +74,103 @@ class MessageController extends ControllerBase
 
   /**
    * @param null $message_nid
+   */
+  public function addToTasks($message_nid = null): JsonResponse
+  {
+    $max = 200;
+    $result = [];
+    /*
+    // Check Message ID
+    if (empty($message_nid)) {
+      throw new \RuntimeException(' Message_nid is empty.');
+    }
+
+    // get Number of Subscribers
+    $node = NODE::load($message_nid);
+    $field_name = 'smmg_subscriber_group';
+    $subscribers = Helper::getFieldValue($node, $field_name, false, true);
+
+    $number_of_subscribers = count($subscribers);
+
+    if ($number_of_subscribers === 0) {
+      throw new \RuntimeException(
+        sprintf('No subscribers for Message with Message ID: %s', $message_nid)
+      );
+    }*/
+
+    // Testvalue
+    $number_of_subscribers = 4685;
+
+    // split subscriber to 200 groups
+    $number_of_tasks = $number_of_subscribers / $max;
+
+    // round up
+    $number_of_tasks = ceil($number_of_tasks);
+
+    // for each 200 make one task
+    for ($i = 0; $i < $number_of_tasks; $i++) {
+
+      $task_number = $i + 1;
+
+      // add for every Task 200 more subscriber addresses
+      $from = $i * $max + 1;
+
+      // add 199 more.
+      $to = $from + ($max - 1);
+
+      // fist
+      if ($i === 0) {
+        $from = 1;
+        $to = $max;
+      }
+
+      // last
+      if ($task_number === (int)$number_of_tasks) {
+        // on the last Task add actual number of Subscribers
+        $to = $number_of_subscribers;
+      }
+
+      // generate Data
+      $data = [
+        'task_number' => $task_number,
+        'task' => 'send emails',
+        'message_nid' => $message_nid,
+        'from' => $from,
+        'to' => $to,
+      ];
+
+      try {
+        $task = TaskController::newTask($data);
+
+        if ($task) {
+          $result[] = $task;
+        }
+      } catch (Exception $e) {
+        // Generic exception handling if something else gets thrown.
+        \Drupal::logger('Small Messages: addToTasks')->error($e->getMessage());
+      }
+    }
+
+    // Get number of generated Tasks
+    $number_of_results = count($result);
+
+    $response = [
+      'Number of Tasks' => $number_of_tasks,
+      'Generated Tasks' => $number_of_results,
+      'Number of Subscribers' => $number_of_subscribers,
+      'Tasks' => $result,
+    ];
+
+    return new JsonResponse($response);
+  }
+
+  /**
+   * @param null $message_nid
    * @return array
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function startRun($message_nid = null)
+  public function startRun($message_nid = null, $from, $to)
   {
     $output = [];
     $message = [];
