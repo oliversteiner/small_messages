@@ -20,3 +20,13 @@ small_messages.send_inquiry:
     - core/drupalSettings
     - core/jquery
     - core/jquery.once
+
+small_messages.json_field_formatter:
+  css:
+    theme:
+      assets/css/json_field_formatter.css: {}
+  js:
+    assets/js/jsonFieldFormatter.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

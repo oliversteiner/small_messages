@@ -1,0 +1,42 @@
+ul.smmg-json-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.smmg-json-list li {
+}
+
+.smmg-json-key {
+  color: dimgray;
+}
+
+.smmg-json-seperator {
+  margin-right: 5px;
+}
+
+.smmg-json-value {
+  color: darkgreen
+}
+
+.smmg-json-data-toggle data {
+  margin-left: 5px;
+}
+
+.smmg-json-list-wrapper {
+  border-left: 1px silver solid;
+  padding-left: 9px;
+  margin-left: 1px;
+}
+
+.is_open,
+.is_closed {
+}
+
+.smmg-json-data-toggle {
+  cursor: pointer;
+}
+
+.smmg-json-list.smmg-json-list-inner {
+  margin-left: 20px;
+}

@@ -73,33 +73,55 @@ class MessageController extends ControllerBase
   }
 
   /**
-   * @param null $message_nid
+   * @param null $nid // Message NID
+   * @return JsonResponse
    */
-  public function addToTasks($message_nid = null): JsonResponse
+  public function addToTasks($nid = null): JsonResponse
   {
     $max = 200;
     $result = [];
-    /*
+    $all_subscripters = [];
+
+    // Testvalue
+    //  $number_of_subscribers = 4685;
+    // $message_nid = 719;
+
     // Check Message ID
-    if (empty($message_nid)) {
+    if (empty($nid)) {
       throw new \RuntimeException(' Message_nid is empty.');
     }
 
-    // get Number of Subscribers
-    $node = NODE::load($message_nid);
+    // get Number of Subscribers from Message
+    $node_message = NODE::load($nid);
     $field_name = 'smmg_subscriber_group';
-    $subscribers = Helper::getFieldValue($node, $field_name, false, true);
+    $subscriber_groups = Helper::getFieldValue($node_message, $field_name, false, true);
+    $message_title = $node_message->label();
 
-    $number_of_subscribers = count($subscribers);
+    // Proceed Groups
+    foreach ($subscriber_groups as $group_id) {
+
+      // get all Subscriber whith this tag
+      $node_subscripters = \Drupal::entityTypeManager()
+        ->getStorage('node')
+        ->loadByProperties([
+          'type' => 'smmg_member',
+          'field_smmg_subscriber_group' => $group_id,
+        ]);
+
+      foreach ($node_subscripters as $node_message) {
+        $all_subscripters[] = $node_message->id();
+      }
+    }
+
+
+    $number_of_subscribers = count($all_subscripters);
 
     if ($number_of_subscribers === 0) {
       throw new \RuntimeException(
-        sprintf('No subscribers for Message with Message ID: %s', $message_nid)
+        sprintf('No subscribers for Message with Message ID: %s', $nid)
       );
-    }*/
+    }
 
-    // Testvalue
-    $number_of_subscribers = 4685;
 
     // split subscriber to 200 groups
     $number_of_tasks = $number_of_subscribers / $max;
@@ -133,8 +155,9 @@ class MessageController extends ControllerBase
       // generate Data
       $data = [
         'task_number' => $task_number,
-        'task' => 'send emails',
-        'message_nid' => $message_nid,
+        'task' => 'Send emails',
+        'message_id' => $nid,
+        'message_title' => $message_title,
         'from' => $from,
         'to' => $to,
       ];
