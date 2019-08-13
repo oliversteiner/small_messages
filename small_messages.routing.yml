@@ -32,11 +32,12 @@ small_messages.main:
 
 
 small_messages.test.send_messages:
-  path: 'smmg/send/{message_nid}'
+  path: 'smmg/send/{message_nid}/{range_from}/{range_to}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::startRun'
     _title: 'Send Message'
-    _message_nid: NULL
+    range_from: NULL
+    range_to: NULL
   requirements:
     _permission: 'administer content'
 
@@ -97,16 +98,17 @@ small_messages.cron_test:
     _controller: '\Drupal\small_messages\Controller\TaskController::cron_test'
     _title: 'Cron Test'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 
 small_messages.test_add_to_tasks:
-  path: '/smmg/test/add_to_tasks'
+  path: '/smmg/test/add_to_tasks/{nid}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::addToTasks'
     _title: 'addToTasks'
+    _nid: 719
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
 
 small_messages.add_to_tasks:
   path: '/smmg/tasks/add/{nid}'
@@ -115,4 +117,13 @@ small_messages.add_to_tasks:
     _title: 'Add To Tasks'
     _nid: NULL
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
+
+
+small_messages.delete_imported_nodes:
+  path: '/smmg/delete_import'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::deleteImportedNodes'
+    _title: 'Delete imported Nodes'
+  requirements:
+    _permission: 'administer content'

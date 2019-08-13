@@ -20,13 +20,13 @@ class Email
 
     // remove Comments from HTML
     $message_html = self::removeCommentsFromHTML($data['message_html']); // remove Comments
-    $message_html = (string) $message_html;
+    $message_html = (string)$message_html;
     $mail_from = $data['from'];
     $mail_to = $data['to'];
 
     // Text
     $params['title'] = $data['title'];
-    $params['message_plain'] = (string) $data['message_plain'];
+    $params['message_plain'] = (string)$data['message_plain'];
     $params['message_html'] = $message_html;
 
 
@@ -147,7 +147,7 @@ class Email
       Drupal::messenger()->addWarning(
         t(
           $email_addresses_to[0] .
-            ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -195,12 +195,12 @@ class Email
       Drupal::messenger()->addWarning(
         t(
           $data['to'] .
-            ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
     } else {
-      self::sendmail($module, $data);
+      //  self::sendmail($module, $data);
     }
 
     return true;
@@ -236,7 +236,7 @@ class Email
       Drupal::messenger()->addWarning(
         t(
           $data['to'] .
-            ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -288,7 +288,8 @@ class Email
     $text,
     $template_id,
     $body_only = false
-  ): string {
+  ): string
+  {
     // load Design Template
     $entity = Drupal::entityTypeManager()
       ->getStorage('node')
@@ -395,4 +396,23 @@ class Email
   {
     return preg_replace('/<!--(.*)-->/Uis', '', $html);
   }
+
+  /**
+   * @param $email
+   * @return string
+   *
+   * https://stackoverflow.com/questions/20545301/partially-hide-email-address-in-php/20545505
+   */
+  public static function obfuscate_email($email): string
+  {
+    $em = explode("@", $email);
+    $name = implode('@', array_slice($em, 0, count($em) - 1));
+    $len = floor(strlen($name) / 2);
+
+    return substr($name, 0, $len) . str_repeat('*', $len) . "@" . end($em);
+  }
+
+
 }
+
+

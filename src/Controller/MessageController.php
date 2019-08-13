@@ -3,7 +3,10 @@
 namespace Drupal\small_messages\Controller;
 
 use Drupal;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Link;
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
@@ -23,8 +26,6 @@ class MessageController extends ControllerBase
   /**
    * @param $target_nid
    * @return array
-   * @throws Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   private static function setSendDate($target_nid): array
   {
@@ -38,14 +39,14 @@ class MessageController extends ControllerBase
     // Load Node
     $node = Node::load($target_nid);
 
-    if ($target_nid) {
+    if ($target_nid && !empty($node)) {
       $node->get('field_smmg_send_date')->value = time();
       $node->get('field_smmg_message_is_send')->value = 1;
     }
 
     try {
       $node->save();
-    } catch (Drupal\Core\Entity\EntityStorageException $e) {
+    } catch (EntityStorageException $e) {
     }
 
     return $output;
@@ -54,7 +55,7 @@ class MessageController extends ControllerBase
   /**
    * {@inheritdoc}
    */
-  protected function getModuleName()
+  protected function getModuleName(): string
   {
     return 'small_messages';
   }
@@ -65,7 +66,7 @@ class MessageController extends ControllerBase
     $module_settings_route = $this->getModuleName() . '.settings';
 
     // Load Settings
-    $config = \Drupal::config($module_settings_route);
+    $config = Drupal::config($module_settings_route);
     $config_email_test = $config->get('email_test');
 
     // Return true if "Test mode" checked in settings
@@ -75,54 +76,34 @@ class MessageController extends ControllerBase
   /**
    * @param null $nid // Message NID
    * @return JsonResponse
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   * @throws Exception
    */
   public function addToTasks($nid = null): JsonResponse
   {
     $max = 200;
     $result = [];
-    $all_subscripters = [];
 
-    // Testvalue
-    //  $number_of_subscribers = 4685;
+    // Test values
+    // $number_of_subscribers = 4685;
     // $message_nid = 719;
 
     // Check Message ID
     if (empty($nid)) {
-      throw new \RuntimeException(' Message_nid is empty.');
+      throw new \RuntimeException('No Message Nid given.');
     }
 
-    // get Number of Subscribers from Message
-    $node_message = NODE::load($nid);
-    $field_name = 'smmg_subscriber_group';
-    $subscriber_groups = Helper::getFieldValue($node_message, $field_name, false, true);
-    $message_title = $node_message->label();
+    $node = NODE::load($nid);
 
-    // Proceed Groups
-    foreach ($subscriber_groups as $group_id) {
-
-      // get all Subscriber whith this tag
-      $node_subscripters = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->loadByProperties([
-          'type' => 'smmg_member',
-          'field_smmg_subscriber_group' => $group_id,
-        ]);
-
-      foreach ($node_subscripters as $node_message) {
-        $all_subscripters[] = $node_message->id();
-      }
+    // Message Title
+    if (!empty($node)) {
+      $message_title = $node->label();
     }
 
 
-    $number_of_subscribers = count($all_subscripters);
-
-    if ($number_of_subscribers === 0) {
-      throw new \RuntimeException(
-        sprintf('No subscribers for Message with Message ID: %s', $nid)
-      );
-    }
-
-
+    $all_subscribers = $this->getSubscribersFromMessage($nid, $node);
+    $number_of_subscribers = count($all_subscribers);
     // split subscriber to 200 groups
     $number_of_tasks = $number_of_subscribers / $max;
 
@@ -131,7 +112,6 @@ class MessageController extends ControllerBase
 
     // for each 200 make one task
     for ($i = 0; $i < $number_of_tasks; $i++) {
-
       $task_number = $i + 1;
 
       // add for every Task 200 more subscriber addresses
@@ -170,7 +150,7 @@ class MessageController extends ControllerBase
         }
       } catch (Exception $e) {
         // Generic exception handling if something else gets thrown.
-        \Drupal::logger('Small Messages: addToTasks')->error($e->getMessage());
+        Drupal::logger('Small Messages: addToTasks')->error($e->getMessage());
       }
     }
 
@@ -182,6 +162,7 @@ class MessageController extends ControllerBase
       'Generated Tasks' => $number_of_results,
       'Number of Subscribers' => $number_of_subscribers,
       'Tasks' => $result,
+      'test' => $all_subscribers,
     ];
 
     return new JsonResponse($response);
@@ -189,194 +170,145 @@ class MessageController extends ControllerBase
 
   /**
    * @param null $message_nid
+   * @param int $range_from
+   * @param int $range_to
    * @return array
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
    */
-  public function startRun($message_nid = null, $from, $to)
+  public function startRun($message_nid, $range_from = null, $range_to = null): array
   {
-    $output = [];
+    $test_send_email_addresses = [];
     $message = [];
-    $template_nid = false;
-    $text = '';
+    $test_data = [];
     $module = $this->getModuleName();
     $settings_link = Link::createFromRoute(
       t('Config Page'),
       $module . '.settings'
     )->toString();
 
-    if (!empty($message_nid) || null != $message_nid) {
-      // Message
+    // Check Message ID
+    if (empty($message_nid)) {
+      throw new \RuntimeException('No Message Nid given.');
+    }
 
-      // load Message
-      $entity = \Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->load($message_nid);
+    // load Message
+    $node = NODE::load($message_nid);
 
-      // Title
-      if ($entity !== null) {
-        $message['id'] = $entity->id();
+    // Error if no Node
+    if (empty($node)) {
+      throw new \RuntimeException('No Message found with Nid %s', $message_nid);
+    }
 
-        $message['title'] = $entity->label();
+    // id
+    $message['id'] = $node->id();
 
-        // Template
-        $template_nid = Helper::getFieldValue($entity, 'smmg_design_template');
-        $message['template_nid'] = $template_nid;
+    // title
+    $message['title'] = $node->label();
 
-        // Plaintext and HTML Text
-        $text = Helper::getFieldValue($entity, 'smmg_message_text');
+    // Template
+    $template_nid = Helper::getFieldValue($node, 'smmg_design_template');
+    $message['template_nid'] = $template_nid;
+
+    // Plaintext and HTML Text
+    $text = Helper::getFieldValue($node, 'smmg_message_text');
+
+    // subscribers
+    $all_subscribers = $this->getSubscribersFromMessage($message_nid, $node);
+    $number_of_subscribers = count($all_subscribers);
+
+    // process only range of subscribers
+
+    $range_length = $range_to - $range_from;
+    $range_subscribers = array_slice($all_subscribers, $range_from, $range_length,true);
+    $number_of_range_subscribers = count($range_subscribers);
+
+
+    foreach ($range_subscribers as $id => $email) {
+      $data = [];
+      $node_subscriber = Node::load($id);
+
+      $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
+      $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
+      $title = $node->label();
+
+      $address['first_name'] = $first_name;
+      $address['last_name'] = $last_name;
+      $address['email'] = $email;
+      $address['title'] = $title;
+      $address['id'] = $id;
+
+      // Combine Message with HTML Design Template
+      if ($this->emailTest()) {
+        $message_html = Email::generateMessageHtml($text, $template_nid, true); // render only body
+      } else {
+        $message_html = Email::generateMessageHtml($text, $template_nid, false); // render with HTML-HEAD
       }
 
-      // subscribers
-      $subscriber = [];
-      if (!empty($entity->field_smmg_subscriber_group)) {
-        // Load all items
-        $subscriber_groups_items = $entity
-          ->get('field_smmg_subscriber_group')
-          ->getValue();
+      // replace Placeholders
+      $message_plain = Email::replacePlaceholderInText($text, $address);
 
-        // save only tid
-        foreach ($subscriber_groups_items as $item) {
-          $subscriber[] = $item['target_id'];
-        }
-      }
-
-      $group_index = 0;
-      $output['message'] = $message;
-
-      // Addresses
-
-      // load Groups
-      $entity_groups = \Drupal::entityTypeManager()
-        ->getStorage('taxonomy_term')
-        ->loadMultiple($subscriber);
-
-      $list = [];
-      $unique_list = [];
-
-      $list_index = 0;
-
-      // Proceed Groups
-      foreach ($entity_groups as $group) {
-        $term_id = $group->id();
-
-        // get all
-        $node_subscripters = \Drupal::entityTypeManager()
-          ->getStorage('node')
-          ->loadByProperties([
-            'type' => 'smmg_member',
-            'field_smmg_subscriber_group' => $term_id,
-          ]);
-
-        foreach ($node_subscripters as $entity) {
-          $id = $entity->id();
-
-          if (in_array($id, $unique_list)) {
-            // skip this id
-          } else {
-            $unique_list[] = $id;
-
-            // email
-            $email = [];
-            if (!empty($entity->field_email)) {
-              $email = $entity->get('field_email')->getValue();
-              $email = $email[0]['value'];
-            }
-
-            // first_name
-            $first_name = [];
-            if (!empty($entity->field_first_name)) {
-              $first_name = $entity->get('field_first_name')->getValue();
-              $first_name = $first_name[0]['value'];
-            }
-
-            // last_name
-            $last_name = [];
-            if (!empty($entity->field_last_name)) {
-              $last_name = $entity->get('field_last_name')->getValue();
-              $last_name = $last_name[0]['value'];
-            }
-
-            $list[$list_index]['id'] = $id;
-            $list[$list_index]['title'] = $entity->label();
-            $list[$list_index]['last_name'] = $last_name;
-            $list[$list_index]['first_name'] = $first_name;
-            $list[$list_index]['email'] = $email;
-
-            $list_index++;
-          } // else
-        } // foreach
-      }
-
-      // Email Content
-      $data['title'] = $output['message']['title'];
-      $data['from'] = Email::getEmailAddressesFromConfig(
-        $this->getModuleName()
+      // replace Placeholders
+      $message_html_proceeded = Email::replacePlaceholderInText(
+        $message_html,
+        $address
       );
 
-      // Send email for every email-address
-      foreach ($list as $address) {
-        // To
-        $data['to'] = $address['email'];
+      // Add to Data
+      $data['title'] = $message['title'];
+      $data['from'] = Email::getEmailAddressesFromConfig($module);
+      $data['to'] = $email;
+      $data['message_plain'] = $message_plain;
+      $data['message_html'] = $message_html_proceeded;
 
-        // replace Placeholders
-        $message_plain = Email::replacePlaceholderInText($text, $address);
+      $test_send_email_addresses[] = EMAIL::obfuscate_email($email);
 
-        // Combine Message with HTML Design Template
-        if ($this->emailTest()) {
-          $message_html = Email::generateMessageHtml(
-            $text,
-            $template_nid,
-            true
-          ); // render only body
-        } else {
-          $message_html = Email::generateMessageHtml(
-            $text,
-            $template_nid,
-            false
-          ); // render with HTML-HEAD
-        }
-
-        // replace Placeholders
-        $message_html_proceeded = Email::replacePlaceholderInText(
-          $message_html,
-          $address
-        );
-
-        // Add to Data
-        $data['message_plain'] = $message_plain;
-        $data['message_html'] = $message_html_proceeded;
-        $module = $this->getModuleName();
-
-        // Test without send
-        if ($this->emailTest()) {
-          // Show Warning
-          Drupal::messenger()->addWarning(
-            t(
-              $data['to'] .
-              ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
-              array('@link' => $settings_link)
-            )
-          );
-          $build = Email::showEmail($module, $data);
-          self::setSendDate($message_nid);
-
-          break; // stop after first proceed
-        } else {
-          // continue to send email
-
-          Email::sendNewsletterMail($module, $data);
-          self::setSendDate($message_nid);
-
-          $build = $output;
-        }
+      if (!$this->emailTest()) {
+        // continue to send email
+        Email::sendNewsletterMail($module, $data);
+      } else {
+        $test_data = $data;
       }
+    }
+
+    // Test without send
+    if ($this->emailTest()) {
+
+      Drupal::messenger()->addMessage(
+        t(
+          "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
+        )
+      );
+
+      // Show Email Test Warning
+      Drupal::messenger()->addWarning(
+        t(
+          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          array('@link' => $settings_link)
+        )
+      );
+
+      // Show all email-adresses
+      Drupal::messenger()->addWarning(
+        implode(', ', $test_send_email_addresses)
+      );
+
+      // Prepare Twig Template for Browser output
+      $build = Email::showEmail($module, $test_data);
     } else {
-      // Error
+
+      // Show all email-adresses
+      Drupal::messenger()->addMessage(
+        implode(', ', $test_send_email_addresses)
+      );
+
       $build = [
-        '#markup' => $this->t('Error - Message ID: ' . $message_nid),
+        '#markup' => "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>",
       ];
     }
+
+
+    self::setSendDate($message_nid);
 
     return $build;
   }
@@ -433,10 +365,10 @@ class MessageController extends ControllerBase
     $to = $data['to'];
 
     // System
-    $mailManager = \Drupal::service('plugin.manager.mail');
+    $mailManager = Drupal::service('plugin.manager.mail');
     $module = 'small_messages';
     $key = 'EMAIL_SMTP'; // Replace with Your key
-    $langcode = \Drupal::currentUser()->getPreferredLangcode();
+    $langcode = Drupal::currentUser()->getPreferredLangcode();
     $send = true;
 
     // Send
@@ -455,18 +387,133 @@ class MessageController extends ControllerBase
         ['@email' => $to]
       );
       drupal_set_message($message, 'error');
-      \Drupal::logger('mail-log')->error($message);
+      Drupal::logger('mail-log')->error($message);
       return;
     } else {
       $message = t('An email notification has been sent to @email.', [
         '@email' => $to,
       ]);
       drupal_set_message($message);
-      \Drupal::logger('mail-log')->notice($message);
+      Drupal::logger('mail-log')->notice($message);
     }
   }
 
-  public function adminTemplateAction()
+  /**
+   *
+   */
+  public function adminTemplateAction(): void
   {
+  }
+
+  /**
+   * @param bool $date
+   * @return JsonResponse
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   * @throws Exception
+   */
+  public function deleteImportedNodes($date = false): JsonResponse
+  {
+    // TODO: Add Date-Filter
+
+    $bundle = 'smmg_member';
+    $vid = 'smmg_member_type';
+    $term_name = 'import';
+    $number_of_deleted = 0;
+    $number_of_proceeded_nodes = 0;
+    $max = 200; // Prepend Server from Memory out
+    $step = 1;
+
+    $import_tid = Helper::getTermIDByName($term_name, $vid);
+
+    $nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties(array('type' => $bundle));
+
+    $number_of_nodes = count($nodes);
+
+    foreach ($nodes as $node) {
+      if ($step < $max) {
+        $number_of_proceeded_nodes++;
+        $subscriber_groups = Helper::getFieldValue(
+          $node,
+          'member_type',
+          null,
+          true
+        );
+        if (in_array($import_tid, $subscriber_groups, false)) {
+          try {
+            $node->delete();
+            $number_of_deleted++;
+          } catch (EntityStorageException $e) {
+          }
+        }
+        $step++;
+      }
+    }
+
+    $response = [
+      'Bundle' => $bundle,
+      'Vid' => $vid,
+      'Tid of Term import' => $import_tid,
+      'Number of Nodes' => $number_of_nodes,
+      'Number of proceeded Nodes' => $number_of_proceeded_nodes,
+      'Number of deleted Nodes' => $number_of_deleted,
+    ];
+
+    return new JsonResponse($response);
+  }
+
+  /**
+   * @param $nid
+   * @param bool $node
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public function getSubscribersFromMessage($nid, $node = false): array
+  {
+    $_all_subscribers = [];
+
+    // Load Message
+    if (!$node) {
+      $node = NODE::load($nid);
+    }
+
+    // get subscriber tags
+    $field_name = 'smmg_subscriber_group';
+    $subscriber_groups = Helper::getFieldValue($node, $field_name, false, true);
+
+    // all members with the subscriber tags of message
+    foreach ($subscriber_groups as $group_id) {
+      // get all Subscriber with this tag
+      $node_subscribers = Drupal::entityTypeManager()
+        ->getStorage('node')
+        ->loadByProperties([
+          'type' => 'smmg_member',
+          'field_smmg_subscriber_group' => $group_id,
+        ]);
+
+      // get id and email from members
+      // put in array: id => email
+      foreach ($node_subscribers as $node_subscriber) {
+        $email = Helper::getFieldValue($node_subscriber, 'email');
+
+        $_all_subscribers[$node_subscriber->id()] = $email;
+      }
+    }
+
+    // error if nothing found
+    if (count($_all_subscribers) === 0) {
+      throw new \RuntimeException(
+        sprintf('No subscribers for Message with Message ID: %s', $nid)
+      );
+    }
+
+    // remove duplicates
+    $all_subscribers = array_unique($_all_subscribers);
+
+    // return
+    return $all_subscribers;
   }
 }
