@@ -92,6 +92,14 @@ small_messages.task_controller_remove:
   requirements:
     _permission: 'access content'
 
+small_messages.task_test:
+  path: '/smmg/task/test'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTask'
+    _title: 'Task Test'
+  requirements:
+    _permission: 'administer content'
+
 small_messages.cron_test:
   path: '/smmg/task/cron_test'
   defaults:
@@ -99,7 +107,6 @@ small_messages.cron_test:
     _title: 'Cron Test'
   requirements:
     _permission: 'administer content'
-
 
 small_messages.test_add_to_tasks:
   path: '/smmg/test/add_to_tasks/{nid}'

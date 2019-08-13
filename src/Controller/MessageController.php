@@ -13,7 +13,6 @@ use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Exception;
-use http\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -55,15 +54,15 @@ class MessageController extends ControllerBase
   /**
    * {@inheritdoc}
    */
-  protected function getModuleName(): string
+  protected static function getModuleName(): string
   {
     return 'small_messages';
   }
 
-  protected function emailTest(): bool
+  protected static function emailTest(): bool
   {
     // Build Settings Name
-    $module_settings_route = $this->getModuleName() . '.settings';
+    $module_settings_route = self::getModuleName() . '.settings';
 
     // Load Settings
     $config = Drupal::config($module_settings_route);
@@ -100,7 +99,6 @@ class MessageController extends ControllerBase
     if (!empty($node)) {
       $message_title = $node->label();
     }
-
 
     $all_subscribers = $this->getSubscribersFromMessage($nid, $node);
     $number_of_subscribers = count($all_subscribers);
@@ -172,16 +170,22 @@ class MessageController extends ControllerBase
    * @param null $message_nid
    * @param int $range_from
    * @param int $range_to
-   * @return array
+   * @param bool $json
+   * @return array|JsonResponse
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
    */
-  public function startRun($message_nid, $range_from = null, $range_to = null): array
+  public static function startRun(
+    $message_nid,
+    $range_from = null,
+    $range_to = null,
+    $output_mode = 'html'
+  )
   {
     $test_send_email_addresses = [];
     $message = [];
     $test_data = [];
-    $module = $this->getModuleName();
+    $module = self::getModuleName();
     $settings_link = Link::createFromRoute(
       t('Config Page'),
       $module . '.settings'
@@ -214,15 +218,19 @@ class MessageController extends ControllerBase
     $text = Helper::getFieldValue($node, 'smmg_message_text');
 
     // subscribers
-    $all_subscribers = $this->getSubscribersFromMessage($message_nid, $node);
+    $all_subscribers = self::getSubscribersFromMessage($message_nid, $node);
     $number_of_subscribers = count($all_subscribers);
 
     // process only range of subscribers
 
     $range_length = $range_to - $range_from;
-    $range_subscribers = array_slice($all_subscribers, $range_from, $range_length,true);
+    $range_subscribers = array_slice(
+      $all_subscribers,
+      $range_from,
+      $range_length,
+      true
+    );
     $number_of_range_subscribers = count($range_subscribers);
-
 
     foreach ($range_subscribers as $id => $email) {
       $data = [];
@@ -239,7 +247,7 @@ class MessageController extends ControllerBase
       $address['id'] = $id;
 
       // Combine Message with HTML Design Template
-      if ($this->emailTest()) {
+      if (self::emailTest()) {
         $message_html = Email::generateMessageHtml($text, $template_nid, true); // render only body
       } else {
         $message_html = Email::generateMessageHtml($text, $template_nid, false); // render with HTML-HEAD
@@ -263,7 +271,7 @@ class MessageController extends ControllerBase
 
       $test_send_email_addresses[] = EMAIL::obfuscate_email($email);
 
-      if (!$this->emailTest()) {
+      if (!self::emailTest()) {
         // continue to send email
         Email::sendNewsletterMail($module, $data);
       } else {
@@ -271,9 +279,15 @@ class MessageController extends ControllerBase
       }
     }
 
-    // Test without send
-    if ($this->emailTest()) {
+    $result = [
+      'number_of_range_subscribers' => $number_of_range_subscribers,
+      'number_of_subscribers' => $number_of_subscribers,
+      'range_from' => $range_from,
+      'range_to' => $range_to,
+    ];
 
+    // Test without send
+    if (self::emailTest()) {
       Drupal::messenger()->addMessage(
         t(
           "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
@@ -296,19 +310,68 @@ class MessageController extends ControllerBase
       // Prepare Twig Template for Browser output
       $build = Email::showEmail($module, $test_data);
     } else {
-
       // Show all email-adresses
       Drupal::messenger()->addMessage(
         implode(', ', $test_send_email_addresses)
       );
+    }
+    self::setSendDate($message_nid);
 
-      $build = [
-        '#markup' => "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>",
-      ];
+    switch ($output_mode) {
+      case 'row':
+        return self::returnRow($result);
+        break;
+
+      case 'html':
+        return self::returnHTML($result, $build);
+        break;
+
+      case 'json':
+        return self::returnJSON($result);
+        break;
+
+      default:
+        return self::returnHTML($result, $build);
+        break;
     }
 
+  }
 
-    self::setSendDate($message_nid);
+  /**
+   * @param $result
+   * @return array
+   */
+  public function returnRow($result): array
+  {
+    return $result;
+  }
+
+  /**
+   * @param $result
+   * @return JsonResponse
+   */
+  public function returnJSON($result): JsonResponse
+  {
+    return new JsonResponse($result);
+  }
+
+  /**
+   * @param $result
+   * @return array
+   */
+  public function returnHTML($result): array
+  {
+
+    $number_of_range_subscribers = $result['number_of_range_subscribers'];
+    $number_of_subscribers = $result['number_of_subscribers'];
+    $range_from = $result['range_from'];
+    $range_to = $result['range_to'];
+
+    $build[] = $result;
+    $build = [
+      '#markup' => "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>",
+    ];
+
 
     return $build;
   }
@@ -471,7 +534,7 @@ class MessageController extends ControllerBase
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
    */
-  public function getSubscribersFromMessage($nid, $node = false): array
+  public static function getSubscribersFromMessage($nid, $node = false): array
   {
     $_all_subscribers = [];
 
