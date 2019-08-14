@@ -482,7 +482,7 @@ class MessageController extends ControllerBase
 
     $bundle = 'smmg_member';
     $vid = 'smmg_member_type';
-    $term_name = 'import';
+    $term_name = 'Import';
     $number_of_deleted = 0;
     $number_of_proceeded_nodes = 0;
     $range_max = 200; // Prepend Server from Memory out
@@ -491,7 +491,7 @@ class MessageController extends ControllerBase
     $import_tid = Helper::getTermIDByName($term_name, $vid);
 
 
-    // Query with entity_type.manager (The way to go)
+    // Count all Member Nodes
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $count_result = $query->getQuery()
       ->condition('type', $bundle)
@@ -499,26 +499,13 @@ class MessageController extends ControllerBase
       ->execute();
     $number_of_nodes = $count_result;
 
+    // get all Nids of Imported Members
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query->getQuery()
       ->condition('type', $bundle)
       ->condition('field_member_type', $import_tid)
       ->range(0, $range_max)
       ->execute();
-
-    /*
-        $storage = \Drupal::entityTypeManager()->getStorage('node');
-        foreach (array_chunk($query_result, 10) as $chunk) {
-          $number_of_proceeded_nodes++;
-
-          $nodes = $storage->loadMultiple($chunk);
-
-          try {
-            $storage->delete($nodes);
-            $number_of_deleted++;
-          } catch (EntityStorageException $e) {
-          }
-        }*/
 
 
     foreach ($query_result as $id) {
