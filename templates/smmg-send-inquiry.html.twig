@@ -9,6 +9,65 @@
   {% endif %}
 
 
+  <div class="smmg-task-box smmg-message-status-default" style="display: none">
+
+    {# Staus #}
+    <div class="smmg-status-icon">
+      {# spinner #}
+      <div class="smmg-icon-spinner">
+        <i class="fas fa-cog fa-spin fa-2x"></i>
+      </div>
+      {# ok #}
+      <div class="smmg-icon-ok" style="display: none">
+        <i class="fas fa-check-circle fa-2x"></i>
+      </div>
+
+      {# error #}
+      <div class="smmg-icon-error" style="display: none">
+        <i class="fas fa-exclamation-triangle fa-2x"></i>
+      </div>
+    </div>
+
+    {# Messages #}
+    <div class="smmg-messages-wrapper">
+
+      <div>
+        <div class="smmg-server-status">
+          Verbindung zum Server wird hergestellt...
+        </div>
+
+        <div class="smmg-task-status">
+
+          <table>
+            <tr>
+              <th>Anzahl Email-Adressen:</th>
+              <td class="number_of_subscribers">0</td>
+            </tr>
+            <tr>
+              <th>Erstellte Tasks à 200:</th>
+              <td class="number_of_tasks">0</td>
+            </tr>
+          </table>
+
+          <div class="info">
+            <p>Die Adressen wurden in 200er Blöcke aufgeteilt und jede Stunde wird automatisch ein Block gesendet.
+            </p>
+            <p>Das Fenster darf nun geschlossen werden.</p>
+            <p><a role="button" href="/admin/smmg/list" class="btn btn-sm">Zurück zur Newsletter-Liste</a></p>
+          </div>
+
+        </div>
+      </div>
+      {# list of tasks #}
+      <div class="smmg-task-list-container">
+        <ul class="smmg-task-list swing">
+        </ul>
+
+
+      </div>
+    </div>
+  </div>
+
   <div class="well">
     <div>
       <a role="button" class="btn btn-default btn-sm smmg-body-toggle-trigger">
@@ -108,10 +167,12 @@
     </div>
   </div>
   <div class="smmg-subscriber-foot">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-    <a role="button" class="btn btn-primary" href="/smmg/send/{{ message.id }}"><i class="fas fa-paper-plane"
-                                                                                   aria-hidden="true"></i>
+    <button role="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+
+    <button role="button" class="btn btn-primary" id="smmg-send-message-trigger" data-message-id="{{ message.id }}"><i
+        class="fas fa-paper-plane"
+        aria-hidden="true"></i>
       Nachricht Senden
-    </a>
+    </button>
   </div>
 </div>

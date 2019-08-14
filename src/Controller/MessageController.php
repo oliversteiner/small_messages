@@ -113,31 +113,32 @@ class MessageController extends ControllerBase
       $task_number = $i + 1;
 
       // add for every Task 200 more subscriber addresses
-      $from = $i * $max + 1;
+      $range_from = $i * $max + 1;
 
       // add 199 more.
-      $to = $from + ($max - 1);
+      $range_to = $range_from + ($max - 1);
 
       // fist
       if ($i === 0) {
-        $from = 1;
-        $to = $max;
+        $range_from = 1;
+        $range_to = $max;
       }
 
       // last
       if ($task_number === (int)$number_of_tasks) {
         // on the last Task add actual number of Subscribers
-        $to = $number_of_subscribers;
+        $range_to = $number_of_subscribers;
       }
 
       // generate Data
       $data = [
-        'task_number' => $task_number,
-        'task' => 'Send emails',
-        'message_id' => $nid,
+        'number' => $task_number,
+        'part_of' => $number_of_tasks,
+        'group' => 'Newsletter',
+        'message_id' => (int)$nid,
         'message_title' => $message_title,
-        'from' => $from,
-        'to' => $to,
+        'range_from' => $range_from,
+        'range_to' => $range_to,
       ];
 
       try {
@@ -156,11 +157,11 @@ class MessageController extends ControllerBase
     $number_of_results = count($result);
 
     $response = [
-      'Number of Tasks' => $number_of_tasks,
-      'Generated Tasks' => $number_of_results,
-      'Number of Subscribers' => $number_of_subscribers,
-      'Tasks' => $result,
-      'test' => $all_subscribers,
+      'number_of_tasks' => $number_of_tasks,
+      'generated_tasks' => $number_of_results,
+      'number_of_subscribers' => $number_of_subscribers,
+      'tasks' => $result,
+     // 'test' => $all_subscribers,
     ];
 
     return new JsonResponse($response);
@@ -341,7 +342,7 @@ class MessageController extends ControllerBase
    * @param $result
    * @return array
    */
-  public function returnRow($result): array
+  public static function returnRow($result): array
   {
     return $result;
   }
@@ -350,7 +351,7 @@ class MessageController extends ControllerBase
    * @param $result
    * @return JsonResponse
    */
-  public function returnJSON($result): JsonResponse
+  public static function returnJSON($result): JsonResponse
   {
     return new JsonResponse($result);
   }
@@ -359,7 +360,7 @@ class MessageController extends ControllerBase
    * @param $result
    * @return array
    */
-  public function returnHTML($result): array
+  public static function returnHTML($result): array
   {
 
     $number_of_range_subscribers = $result['number_of_range_subscribers'];
@@ -579,4 +580,64 @@ class MessageController extends ControllerBase
     // return
     return $all_subscribers;
   }
+
+  /**
+   * @param bool $date
+   * @return JsonResponse
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   *
+   * @route
+   */
+  public function processImports($date = false): JsonResponse
+  {
+
+    $bundle = 'smmg_member';
+    $vid = 'smmg_member_type';
+    $term_name = 'import';
+    $number_of_proceeded_nodes = 0;
+    $max = 500; // Prepend Server from Memory out
+    $step = 1;
+
+    $import_tid = Helper::getTermIDByName($term_name, $vid);
+
+
+    // Query with entity_type.manager (The way to go)
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_result = $query->getQuery()
+      ->condition('type', $bundle)
+      ->condition('field_smmg_token', '')
+      ->sort('created', 'ASC')
+      ->execute();
+
+
+    $number_of_nodes = count($query_result);
+
+    $nodes = Node::loadMultiple($query_result);
+
+    foreach ($nodes as $node) {
+      if ($step < $max) {
+        $number_of_proceeded_nodes++;
+
+
+          try {
+            $node->set('field_smmg_accept_newsletter',0);
+            $node->set('field_smmg_token', Helper::generateToken());
+            $node->save();
+          } catch (EntityStorageException $e) {
+
+        }
+        $step++;
+      }
+    }
+
+    $response = [
+      'Bundle' => $bundle,
+      'Number of Nodes' => $number_of_nodes,
+      'Number of proceeded Nodes' => $number_of_proceeded_nodes,
+    ];
+
+    return new JsonResponse($response);
+  }
+
 }

@@ -95,16 +95,24 @@ small_messages.task_controller_remove:
 small_messages.task_test:
   path: '/smmg/task/test'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\TaskController::runTask'
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTasks'
     _title: 'Task Test'
   requirements:
     _permission: 'administer content'
 
-small_messages.cron_test:
-  path: '/smmg/task/cron_test'
+small_messages.cron:
+  path: '/smmg/task/cron'
   defaults:
-    _controller: '\Drupal\small_messages\Controller\TaskController::cron_test'
-    _title: 'Cron Test'
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTasks'
+    _title: 'Cron'
+  requirements:
+    _permission: 'access content'
+
+small_messages.remove_all_tasks:
+  path: '/smmg/task/remove_all'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::removeAllTasks'
+    _title: 'Remove All Tasks'
   requirements:
     _permission: 'administer content'
 
@@ -118,19 +126,37 @@ small_messages.test_add_to_tasks:
     _permission: 'administer content'
 
 small_messages.add_to_tasks:
-  path: '/smmg/tasks/add/{nid}'
+  path: '/smmg/task/add/{nid}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::addToTasks'
     _title: 'Add To Tasks'
     _nid: NULL
+    _output_mode: null
   requirements:
     _permission: 'administer content'
 
 
+small_messages.run_task:
+  path: '/smmg/task/run/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTask'
+    _title: 'Run Task'
+    _nid: NULL
+  requirements:
+    _permission: 'administer content'
+
 small_messages.delete_imported_nodes:
-  path: '/smmg/delete_import'
+  path: '/smmg/import/delete'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::deleteImportedNodes'
     _title: 'Delete imported Nodes'
+  requirements:
+    _permission: 'administer content'
+
+small_messages.process_imports:
+  path: '/smmg/import/process'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::processImports'
+    _title: 'Process last Imports'
   requirements:
     _permission: 'administer content'

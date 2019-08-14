@@ -2,6 +2,8 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\file\Entity\File;
@@ -37,7 +39,15 @@ class Helper
     return $name;
   }
 
-  public static function getTermIDByName($term_name, $vid)
+  /**
+   * @param $term_name
+   * @param $vid
+   * @param bool $create
+   * @return int
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public static function getTermIDByName($term_name, $vid, $create = true): int
   {
     $tid = 0;
 
@@ -45,15 +55,35 @@ class Helper
       ->getStorage('taxonomy_term')
       ->loadTree($vid);
     foreach ($terms as $term) {
-      if ($term->name == $term_name) {
+      if ($term->name === $term_name) {
         $tid = $term->tid;
         break;
       }
     }
+
+    // Create new Term
+    if($tid === 0 && $create === true){
+      try {
+        $term = Term::create([
+          'name' => $term_name,
+          'vid' => $vid,
+        ])->save();
+        $tid = $term->id();
+
+      } catch (EntityStorageException $e) {
+      }
+    }
+
     return $tid;
   }
 
-  public static function getTermsByName($vid)
+  /**
+   * @param $vid
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public static function getTermsByName($vid): array
   {
     $term_list = [];
     $terms = \Drupal::entityTypeManager()
@@ -68,8 +98,8 @@ class Helper
   /**
    * @param $name
    * @return bool|number
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
    */
   public static function getOrigin($name)
   {
