@@ -161,7 +161,7 @@ class MessageController extends ControllerBase
       'generated_tasks' => $number_of_results,
       'number_of_subscribers' => $number_of_subscribers,
       'tasks' => $result,
-     // 'test' => $all_subscribers,
+      // 'test' => $all_subscribers,
     ];
 
     return new JsonResponse($response);
@@ -485,34 +485,49 @@ class MessageController extends ControllerBase
     $term_name = 'import';
     $number_of_deleted = 0;
     $number_of_proceeded_nodes = 0;
-    $max = 200; // Prepend Server from Memory out
+    $range_max = 200; // Prepend Server from Memory out
     $step = 1;
 
     $import_tid = Helper::getTermIDByName($term_name, $vid);
 
-    $nodes = \Drupal::entityTypeManager()
-      ->getStorage('node')
-      ->loadByProperties(array('type' => $bundle));
 
-    $number_of_nodes = count($nodes);
+    // Query with entity_type.manager (The way to go)
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $count_result = $query->getQuery()
+      ->condition('type', $bundle)
+      ->count()
+      ->execute();
+    $number_of_nodes = $count_result;
 
-    foreach ($nodes as $node) {
-      if ($step < $max) {
-        $number_of_proceeded_nodes++;
-        $subscriber_groups = Helper::getFieldValue(
-          $node,
-          'member_type',
-          null,
-          true
-        );
-        if (in_array($import_tid, $subscriber_groups, false)) {
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_result = $query->getQuery()
+      ->condition('type', $bundle)
+      ->condition('field_member_type', $import_tid)
+      ->range(0, $range_max)
+      ->execute();
+
+    /*
+        $storage = \Drupal::entityTypeManager()->getStorage('node');
+        foreach (array_chunk($query_result, 10) as $chunk) {
+          $number_of_proceeded_nodes++;
+
+          $nodes = $storage->loadMultiple($chunk);
+
           try {
-            $node->delete();
+            $storage->delete($nodes);
             $number_of_deleted++;
           } catch (EntityStorageException $e) {
           }
-        }
-        $step++;
+        }*/
+
+
+    foreach ($query_result as $id) {
+      $number_of_proceeded_nodes++;
+      $node = node::load($id);
+
+      if (!empty($node)) {
+        $node->delete();
+        $number_of_deleted++;
       }
     }
 
@@ -616,11 +631,11 @@ class MessageController extends ControllerBase
         $number_of_proceeded_nodes++;
 
 
-          try {
-            $node->set('field_smmg_accept_newsletter',0);
-            $node->set('field_smmg_token', Helper::generateToken());
-            $node->save();
-          } catch (EntityStorageException $e) {
+        try {
+          $node->set('field_smmg_accept_newsletter', 0);
+          $node->set('field_smmg_token', Helper::generateToken());
+          $node->save();
+        } catch (EntityStorageException $e) {
 
         }
         $step++;
