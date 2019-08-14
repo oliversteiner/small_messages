@@ -593,13 +593,9 @@ class MessageController extends ControllerBase
   {
 
     $bundle = 'smmg_member';
-    $vid = 'smmg_member_type';
-    $term_name = 'import';
     $number_of_proceeded_nodes = 0;
     $max = 500; // Prepend Server from Memory out
     $step = 1;
-
-    $import_tid = Helper::getTermIDByName($term_name, $vid);
 
 
     // Query with entity_type.manager (The way to go)
