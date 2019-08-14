@@ -130,6 +130,12 @@ a.vat-button-send.message-is-send {
   color: #f4fff6;
 }
 
+.btn-tag:active {
+  background-color: #3d534c;
+  color: #f4fff6;
+  border: 1px solid #1d2d27;
+}
+
 .btn-tag.active {
   background-color: #8bb5a9;
   color: #f4fff6;
@@ -177,30 +183,54 @@ h1.page-title {
 }
 
 */
+.is-horizontal .tabs.primary .tabs__tab a {
+  padding-left: 3em;
+}
+
 .tabs__tab a::before {
+  padding-right: 1.3333em;
+  padding-left: 2.75em;
+  text-indent: 0;
+  left: 0.6667em;
+  position: absolute;
+  top: 0;
+  display: block;
+  width: 20px;
+  height: 100%;
   content: "";
-  width: 25px;
-  height: 15px;
-  top: -10px;
-  display: inline-block;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: 100% auto;
 }
 
 a[data-drupal-link-system-path="admin/smmg/list"]::before {
-  background: url("/libraries/fontawesome/svgs/solid/envelope.svg");
+  background-image: url("/libraries/fontawesome/svgs/solid/envelope.svg");
   background-repeat: no-repeat;
   background-position: left center;
+  background-size: 20px;
 }
 
 a[data-drupal-link-system-path="admin/smmg/list/templates"]::before {
-  background: url("/libraries/fontawesome/svgs/solid/sticky-note.svg");
+  background-image: url("/libraries/fontawesome/svgs/solid/sticky-note.svg");
   background-repeat: no-repeat;
   background-position: left center;
+  background-size: 20px;
 }
 
 a[data-drupal-link-system-path="admin/smmg/list/subscriber"]::before {
   background: url("/libraries/fontawesome/svgs/solid/list.svg");
   background-repeat: no-repeat;
   background-position: left center;
+  background-size: 20px;
+}
+
+a[data-drupal-link-system-path="admin/smmg/list/tasks"]::before {
+  background: url("/libraries/fontawesome/svgs/solid/tasks.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px;
 }
 
 /*# sourceMappingURL=smmg_main.css.map */

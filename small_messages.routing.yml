@@ -32,11 +32,12 @@ small_messages.main:
 
 
 small_messages.test.send_messages:
-  path: 'smmg/send/{message_nid}'
+  path: 'smmg/send/{message_nid}/{range_from}/{range_to}'
   defaults:
     _controller: '\Drupal\small_messages\Controller\MessageController::startRun'
     _title: 'Send Message'
-    _message_nid: NULL
+    range_from: NULL
+    range_to: NULL
   requirements:
     _permission: 'administer content'
 
@@ -74,3 +75,88 @@ small_messages.ajax.prepare_send:
   requirements:
     _permission: 'administer content'
 
+
+small_messages.task_controller_add:
+  path: '/smmg/task/add'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::add'
+    _title: 'Add Task'
+  requirements:
+    _permission: 'access content'
+
+small_messages.task_controller_remove:
+  path: '/smmg/task/remove'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::remove'
+    _title: 'Remove Task'
+  requirements:
+    _permission: 'access content'
+
+small_messages.task_test:
+  path: '/smmg/task/test'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTasks'
+    _title: 'Task Test'
+  requirements:
+    _permission: 'administer content'
+
+small_messages.cron:
+  path: '/smmg/task/cron'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTasks'
+    _title: 'Cron'
+  requirements:
+    _permission: 'access content'
+
+small_messages.remove_all_tasks:
+  path: '/smmg/task/remove_all'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::removeAllTasks'
+    _title: 'Remove All Tasks'
+  requirements:
+    _permission: 'administer content'
+
+small_messages.test_add_to_tasks:
+  path: '/smmg/test/add_to_tasks/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::addToTasks'
+    _title: 'addToTasks'
+    _nid: 719
+  requirements:
+    _permission: 'administer content'
+
+small_messages.add_to_tasks:
+  path: '/smmg/task/add/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::addToTasks'
+    _title: 'Add To Tasks'
+    _nid: NULL
+    _output_mode: null
+  requirements:
+    _permission: 'administer content'
+
+
+small_messages.run_task:
+  path: '/smmg/task/run/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTask'
+    _title: 'Run Task'
+    _nid: NULL
+  requirements:
+    _permission: 'administer content'
+
+small_messages.delete_imported_nodes:
+  path: '/smmg/import/delete'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::deleteImportedNodes'
+    _title: 'Delete imported Nodes'
+  requirements:
+    _permission: 'administer content'
+
+small_messages.process_imports:
+  path: '/smmg/import/process'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::processImports'
+    _title: 'Process last Imports'
+  requirements:
+    _permission: 'administer content'

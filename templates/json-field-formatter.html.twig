@@ -1,0 +1,88 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a JSON Field.
+ *
+ * Available variables:
+ *   data:
+ *
+ * @see template_preprocess()
+ * @see template_preprocess_json_field_formatter()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div class="smmg-json-widget">
+
+
+  <a class="smmg-json-data-toggle" role="button" data-id="{{ id }}">
+    <span class="is_open"><i class="fas fa-caret-right "></i></span>
+    <span class="is_closed" style="display: none"> <i class="fas fa-caret-down"></i></span>
+    <span class="label">Data</span>
+  </a>
+
+  <div class="smmg-json-list-wrapper {{ id }}" style="display: none">
+
+    <ul class="smmg-json-list">
+
+      {% for key,value in data %}
+
+        <li>
+          <span class="smmg-json-key">{{ key }}</span>
+          <span class="smmg-json-seperator">:</span>
+          <span class="smmg-json-value">
+
+            {# 1. inner #}
+            {# ================================== #}
+            {% if value is iterable %}
+              <ul class="smmg-json-list smmg-json-list-inner">
+
+                {% for key,value in value %}
+                  <li>
+                <span class="smmg-json-key">{{ key }}</span>
+                <span class="smmg-json-seperator">:</span>
+                <span class="smmg-json-value">
+
+                  {# 2. inner #}
+                  {# ================================== #}
+
+                  {% if value is iterable %}
+                    <ul class="smmg-json-list smmg-json-list-inner">
+
+                {% for key,value in value %}
+                  <li>
+                <span class="smmg-json-key">{{ key }}</span>
+                <span class="smmg-json-seperator">:</span>
+                <span class="smmg-json-value">{{ value }}</span>
+              </li>
+                {% endfor %}
+            </ul>
+
+                  {% else %}
+
+                    {{ value }}
+
+                  {% endif %}
+                  {# ================================== #}
+
+                </span>
+              </li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+
+              {{ value }}
+
+            {% endif %}
+            {# ================================== #}
+
+          </span>
+        </li>
+
+      {% endfor %}
+
+    </ul>
+  </div>
+</div>

@@ -40,7 +40,15 @@ class Helper
     return $name;
   }
 
-  public static function getTermIDByName($term_name, $vid)
+  /**
+   * @param $term_name
+   * @param $vid
+   * @param bool $create
+   * @return int
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public static function getTermIDByName($term_name, $vid, $create = true): int
   {
     $tid = 0;
 
@@ -48,15 +56,35 @@ class Helper
       ->getStorage('taxonomy_term')
       ->loadTree($vid);
     foreach ($terms as $term) {
-      if ($term->name == $term_name) {
+      if ($term->name === $term_name) {
         $tid = $term->tid;
         break;
       }
     }
+
+    // Create new Term
+    if($tid === 0 && $create === true){
+      try {
+        $new_term = Term::create([
+          'name' => $term_name,
+          'vid' => $vid,
+        ])->save();
+        $tid = $new_term;
+
+      } catch (EntityStorageException $e) {
+      }
+    }
+
     return $tid;
   }
 
-  public static function getTermsByName($vid)
+  /**
+   * @param $vid
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
+  public static function getTermsByName($vid): array
   {
     $term_list = [];
     $terms = \Drupal::entityTypeManager()
@@ -283,8 +311,7 @@ class Helper
   public static function getTemplates(
     $module = 'small_messages',
     $template_names = []
-  )
-  {
+  ) {
     $templates = [];
 
     // Default Names

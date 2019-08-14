@@ -14,6 +14,15 @@ function small_messages_views_data_alter(array &$data) {
       'id' => 'smmg_send_message_button'
     ],
   ];
+  $data['node']['smmg_run_task_button'] = [
+    'title' => t('Run Task Button'),
+    'group' => t('Small Messages'),
+    'field' => [
+      'title' => t('Button for Running Tasks'),
+      'help' => t('Button for Running Tasks'),
+      'id' => 'smmg_run_task_button'
+    ],
+  ];
   $data['node']['smmg_subscribe_group'] = [
     'title' => t('Subscribe Group'),
     'group' => t('Small Messages'),

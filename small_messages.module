@@ -136,6 +136,7 @@ function small_messages_views_pre_render(ViewExecutable $view)
 
     $view_id = "messages";
     $display_id_messages = 'page_1';
+    $display_id_members = 'page_2';
 
     if (isset($view) && ($view->storage->id() == $view_id)) {
 
