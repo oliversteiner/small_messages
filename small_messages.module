@@ -19,16 +19,16 @@ use Drupal\views\ViewExecutable;
  */
 function small_messages_help($route_name, RouteMatchInterface $route_match)
 {
-    switch ($route_name) {
-        // Main module help for the small_messages module.
-        case 'help.page.small_messages':
-            $output = '';
-            $output .= '<h3>' . t('About') . '</h3>';
-            $output .= '<p>' . t('Some little Messages System') . '</p>';
-            return $output;
+  switch ($route_name) {
+    // Main module help for the small_messages module.
+    case 'help.page.small_messages':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Some little Messages System') . '</p>';
+      return $output;
 
-        default:
-    }
+    default:
+  }
 }
 
 
@@ -37,11 +37,17 @@ function small_messages_help($route_name, RouteMatchInterface $route_match)
  */
 function small_messages_theme($existing, $type, $theme, $path)
 {
-    return [
-        'small_messages' => [
-            'render element' => 'children',
-        ],
-    ];
+  return [
+    'small_messages' => [
+      'render element' => 'children',
+    ],
+    'json_field_formatter' => [
+      'render element' => 'view',
+
+      'variables' => ['data' => NULL, 'id' => NULL],
+    ],
+  ];
+
 }
 
 
@@ -51,36 +57,36 @@ function small_messages_theme($existing, $type, $theme, $path)
 function small_messages_mail($key, &$message, $params)
 {
 
-    switch ($key) {
+  switch ($key) {
 
 
-        case 'EMAIL_PLAIN':
+    case 'EMAIL_PLAIN':
 
-            $message['from'] = $params['from'];
-            $message['subject'] = $params['title'];
-            $message['body'][] = $params['message_plain'];
-            break;
+      $message['from'] = $params['from'];
+      $message['subject'] = $params['title'];
+      $message['body'][] = $params['message_plain'];
+      break;
 
 
-        case 'EMAIL_SMTP' :
+    case 'EMAIL_SMTP' :
 
-            $message['from'] = $params['from'];
-            $message['subject'] = $params['title'];
-            $message['headers'] = [
-                'MIME-Version' => '1.0',
-                'Content-Type' => "multipart/alternative",
-                'Content-Transfer-Encoding' => '8Bit',
-                'X-Mailer' => 'Drupal',
-            ];
-            $message['body'][] = "\r\n--\r\n";
-            $message['body'][] = 'Content-Type: text/plain; charset=utf-8;';
-            $message['body'][] = $params['message_plain'];
-            $message['body'][] = "\r\n--\r\n";
-            $message['body'][] = "Content-Type: text/html; charset=utf-8;";
-            $message['body'][] = $params['message_html'];
-            $message['body'][] = "\r\n-- --\r\n";
-            break;
-    }
+      $message['from'] = $params['from'];
+      $message['subject'] = $params['title'];
+      $message['headers'] = [
+        'MIME-Version' => '1.0',
+        'Content-Type' => "multipart/alternative",
+        'Content-Transfer-Encoding' => '8Bit',
+        'X-Mailer' => 'Drupal',
+      ];
+      $message['body'][] = "\r\n--\r\n";
+      $message['body'][] = 'Content-Type: text/plain; charset=utf-8;';
+      $message['body'][] = $params['message_plain'];
+      $message['body'][] = "\r\n--\r\n";
+      $message['body'][] = "Content-Type: text/html; charset=utf-8;";
+      $message['body'][] = $params['message_html'];
+      $message['body'][] = "\r\n-- --\r\n";
+      break;
+  }
 
 }
 
@@ -96,54 +102,54 @@ function small_messages_mail($key, &$message, $params)
  */
 function small_messages_node_access(NodeInterface $node, $op, AccountInterface $account)
 {
-    $restricted_bundles = ['member'];
-    $role_id = 'small_messages';
+  $restricted_bundles = ['member'];
+  $role_id = 'small_messages';
 
-    $bundle_id = $node->bundle();
-    $roles = $account->getRoles();
+  $bundle_id = $node->bundle();
+  $roles = $account->getRoles();
 
-    // Default checks
-    if (!is_object($node)) {
-        return AccessResult::neutral();
-    } else {
-
-        // block http://example.com/node/123
-        $parameter_node = \Drupal::routeMatch()->getRawParameter('node');
-
-        if ($op == 'view' && $parameter_node == $node->id() && in_array($bundle_id, $restricted_bundles)) {
-
-            // Allow for admin roles
-            if (in_array($bundle_id, $restricted_bundles) && in_array($role_id, $roles)) {
-                return AccessResult::neutral();
-
-            } else {
-                // Restrict access to full node for others
-                return AccessResult::forbidden();
-            }
-        }
-    }
-
-    // Default
+  // Default checks
+  if (!is_object($node)) {
     return AccessResult::neutral();
+  } else {
+
+    // block http://example.com/node/123
+    $parameter_node = \Drupal::routeMatch()->getRawParameter('node');
+
+    if ($op == 'view' && $parameter_node == $node->id() && in_array($bundle_id, $restricted_bundles)) {
+
+      // Allow for admin roles
+      if (in_array($bundle_id, $restricted_bundles) && in_array($role_id, $roles)) {
+        return AccessResult::neutral();
+
+      } else {
+        // Restrict access to full node for others
+        return AccessResult::forbidden();
+      }
+    }
+  }
+
+  // Default
+  return AccessResult::neutral();
 
 }
 
 function small_messages_views_pre_render(ViewExecutable $view)
 {
 
-    //   dpm($view->id());
-    //   dpm($view->current_display);
+  //   dpm($view->id());
+  //   dpm($view->current_display);
 
-    $view_id = "messages";
-    $display_id_messages = 'page_1';
-    $display_id_members = 'page_2';
+  $view_id = "messages";
+  $display_id_messages = 'page_1';
+  $display_id_members = 'page_2';
 
-    if (isset($view) && ($view->storage->id() == $view_id)) {
+  if (isset($view) && ($view->storage->id() == $view_id)) {
 
-        $view->element['#attached']['library'][] = 'small_messages/small_messages.main';
-    }
+    $view->element['#attached']['library'][] = 'small_messages/small_messages.main';
+  }
 
-    if (isset($view) && ($view->storage->id() == $view_id) && ($view->current_display == $display_id_messages)) {
-    }
+  if (isset($view) && ($view->storage->id() == $view_id) && ($view->current_display == $display_id_messages)) {
+  }
 
 }

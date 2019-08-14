@@ -15,9 +15,11 @@
     color: $color-smmg-link;
   }
 }
+
 .smmg-toolbox-action {
   margin-bottom: 20px;
 }
+
 // Button Anwenden ausblenden:
 
 *[id^='edit-submit-smmg-'] {
@@ -32,18 +34,22 @@
   display: inline-block;
   margin-right: 25px;
 }
+
 *[id^='edit-delete--'] {
   margin-left: 40px;
 }
+
 a.vat-button-send {
   opacity: 1;
   border: solid 1px $color-smmg-line;
   color: green;
 }
+
 a.vat-button-send.message-is-send {
   opacity: 0.5;
   color: grey;
 }
+
 *[id^='views-exposed-form-smmg'] {
   border-bottom: solid 1px $color-smmg-line;
   border-top: solid 1px $color-smmg-line;
@@ -56,6 +62,7 @@ a.vat-button-send.message-is-send {
     font-weight: 400;
     margin: 5px;
   }
+
   .form-type-select {
     margin-right: 20px;
   }
@@ -66,13 +73,16 @@ a.vat-button-send.message-is-send {
     border: solid 1px #ccc;
     color: $color-smmg-link;
   }
+
   .select-wrapper {
     display: inline-block;
   }
 }
+
 .smmg-tab-messages a {
   color: grey;
 }
+
 .btn-tag {
   display: inline-block;
   padding: 3px 6px;
@@ -95,40 +105,54 @@ a.vat-button-send.message-is-send {
   border-radius: 4px;
   margin-left: 5px;
 }
+
 .btn-tag:hover {
   text-decoration: none;
   background-color: $color-smmg-tag-button-hover;
   color: $color-smmg-tag-text-hover;
 }
+
+.btn-tag:active {
+  background-color: $color-smmg-tag-button-down;
+  color: $color-smmg-tag-text-active;
+  border: 1px solid $color-smmg-tag-border-down;
+}
+
 .btn-tag.active {
   background-color: $color-smmg-tag-button-active;
   color: $color-smmg-tag-text-active;
   border: 1px solid $color-smmg-tag-border-active;
 }
+
 .btn-tag.active:hover {
   background-color: $color-smmg-tag-button-active-hover;
   color: $color-smmg-tag-text-active-hover;
   border: 1px solid $color-smmg-tag-border-active-hover;
 }
+
 // Tabelle
 
 .table-striped > tbody > tr:hover td {
   background-color: #d7ebc3;
 }
+
 .table-striped > tbody > tr:hover {
   .btn-tag {
     background-color: white;
   }
+
   .btn-tag:hover {
     text-decoration: none;
     background-color: $color-smmg-tag-button-hover;
     color: $color-smmg-tag-text-hover;
   }
+
   .btn-tag.active {
     background-color: $color-smmg-tag-button-active;
     color: $color-smmg-tag-text-active;
     border: 1px solid $color-smmg-tag-border-active;
   }
+
   .btn-tag.active:hover {
     background-color: $color-smmg-tag-button-active-hover;
     color: $color-smmg-tag-text-active-hover;
@@ -148,30 +172,57 @@ h1.page-title {
 }
 
 */
+.is-horizontal .tabs.primary .tabs__tab a{
+  padding-left: 3em;
+}
 
-.tabs__tab a::before{
-  content: '';
-  width: 25px;
-  height: 15px;
-  top:-10px;
-  display: inline-block;
+.tabs__tab a::before {
+  padding-right: 1.3333em;
+  padding-left: 2.75em;
+  text-indent: 0;
+  left: 0.6667em;
+  position: absolute;
+  top: 0;
+  display: block;
+  width: 20px;
+  height: 100%;
+  content: "";
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: 100% auto;
 }
 
 a[data-drupal-link-system-path="admin/smmg/list"]::before {
-  background: url('/libraries/fontawesome/svgs/solid/envelope.svg');
+  background-image: url('/libraries/fontawesome/svgs/solid/envelope.svg');
   background-repeat: no-repeat;
-  background-position: left center ;
+  background-position: left center;
+  background-size: 20px;
 }
 
 
 a[data-drupal-link-system-path="admin/smmg/list/templates"]::before {
-  background: url('/libraries/fontawesome/svgs/solid/sticky-note.svg');
+  background-image: url('/libraries/fontawesome/svgs/solid/sticky-note.svg');
   background-repeat: no-repeat;
-  background-position: left center ;
+  background-position: left center;
+  background-size: 20px;
+
 }
 
 a[data-drupal-link-system-path="admin/smmg/list/subscriber"]::before {
   background: url('/libraries/fontawesome/svgs/solid/list.svg');
   background-repeat: no-repeat;
-  background-position: left center ;
+  background-position: left center;
+  background-size: 20px;
+
+}
+
+
+a[data-drupal-link-system-path="admin/smmg/list/tasks"]::before {
+  background: url('/libraries/fontawesome/svgs/solid/tasks.svg');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px;
+
 }
