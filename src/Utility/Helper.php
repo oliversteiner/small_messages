@@ -64,11 +64,11 @@ class Helper
     // Create new Term
     if($tid === 0 && $create === true){
       try {
-        $term = Term::create([
+        $new_term = Term::create([
           'name' => $term_name,
           'vid' => $vid,
         ])->save();
-        $tid = $term->id();
+        $tid = $new_term;
 
       } catch (EntityStorageException $e) {
       }
