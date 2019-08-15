@@ -69,7 +69,7 @@ class SmmgSendMessageButton extends FieldPluginBase
 
     $elements = [];
 
-    $link = 'smmg/prepare_send/' . $nid . '?destination=' . $destination;
+    $link = 'admin/smmg/prepare_send/' . $nid . '?destination=' . $destination;
     $class = [
      // 'use-ajax',
       'vat-button',
