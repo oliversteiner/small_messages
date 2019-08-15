@@ -151,8 +151,8 @@ small_messages.delete_imported_nodes:
     _controller: '\Drupal\small_messages\Controller\MessageController::deleteImportedNodes'
     _title: 'Delete imported Nodes'
   requirements:
-    _permission: 'access content'
-   # _permission: 'administer content'
+   # _permission: 'access content'
+    _permission: 'administer content'
 
 small_messages.process_imports:
   path: '/smmg/import/process'

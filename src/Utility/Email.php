@@ -20,16 +20,35 @@ class Email
 
     // remove Comments from HTML
     $message_html = self::removeCommentsFromHTML($data['message_html']); // remove Comments
-
+    $message_html = (string)$message_html;
+    $mail_from = $data['from'];
+    $mail_to = $data['to'];
 
     // Text
     $params['title'] = $data['title'];
-    $params['message_plain'] = $data['message_plain'];
+    $params['message_plain'] = (string)$data['message_plain'];
     $params['message_html'] = $message_html;
 
+    // 'From' Addresses
+    if (empty($mail_from)) {
+      $mail_from = \Drupal::config('system.site')->get('mail');
+    }
+
+    // Check 'to'-Address
+    if (is_array($mail_to)) {
+      $message = t(
+        '$data[\'to\'] cant be an array. Email is send only to first Item of the array.  Module:  @module.',
+        ['@module' => $module]
+      );
+      Drupal::messenger()->addMessage($message, 'error');
+      Drupal::logger('mail-log')->error($message);
+
+      $mail_to = $data['to'][0];
+    }
+
     // Addresses
-    $params['from'] = $data['from'];
-    $to = $data['to'];
+    $params['from'] = $mail_from;
+    $to = $mail_to;
 
     // System
     $mailManager = Drupal::service('plugin.manager.mail');
@@ -56,15 +75,18 @@ class Email
       Drupal::messenger()->addMessage($message, 'error');
       Drupal::logger('mail-log')->error($message);
     } else {
-      $message = t('An email notification has been sent to @email. Module was @module', [
-        '@email' => $to,
-        '@module' => $module,
-      ]);
-     // Drupal::messenger()->addMessage($message);
+      $message = t(
+        'An email notification has been sent to @email. Module was @module',
+        [
+          '@email' => $to,
+          '@module' => $module,
+        ]
+      );
+      // Drupal::messenger()->addMessage($message);
+      Drupal::messenger()->addMessage($message);
       Drupal::logger('mail-log')->notice($message);
     }
   }
-
 
   /**
    * @param $module
@@ -83,7 +105,6 @@ class Email
     $first_name = $data['address']['first_name'];
     $last_name = $data['address']['last_name'];
     $email_subscriber = $data['address']['email'];
-
 
     $email_title = empty($data['title'])
       ? "$module - $first_name $last_name"
@@ -120,11 +141,13 @@ class Email
     if ($config_email_test) {
       // test mode active
       $link = Link::createFromRoute(
-        t('Config Page'), $module . '.settings'
+        t('Config Page'),
+        $module . '.settings'
       )->toString();
       Drupal::messenger()->addWarning(
         t(
-          $email_addresses_to[0] . ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          $email_addresses_to[0] .
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
           array('@link' => $link)
         )
       );
@@ -145,13 +168,11 @@ class Email
       $data['from'] = $email_address_from;
       $data['to'] = $email_address_to;
 
-
       self::sendmail($module, $data);
     }
 
     return true;
   }
-
 
   /**
    * @param $module
@@ -179,12 +200,51 @@ class Email
         )
       );
     } else {
-      self::sendmail($module, $data);
+      //  self::sendmail($module, $data);
     }
 
     return true;
   }
 
+  /**
+   * @param $module
+   * @param $data
+   * @return bool
+   */
+  public static function sendAdminMail($module, $data): bool
+  {
+    // Build Settings Name
+    $config_email_test = self::getConfigEmailTest($module);
+    $config_email_addresses = self::getEmailAddressesFromConfig($module);
+
+    // Get Email Addresses
+    if (empty($data['from'])) {
+      $data['from'] = $config_email_addresses['from'];
+    }
+    if (empty($data['to'])) {
+      $data['to'] = $config_email_addresses['to'][0];
+    }
+
+    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
+    if ($config_email_test === 1) {
+      // test mode active
+      $link = Link::createFromRoute(
+        t('Config Page'),
+        $module . '.settings'
+      )->toString();
+      Drupal::messenger()->addWarning(
+        t(
+          $data['to'] .
+          ' - Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          array('@link' => $link)
+        )
+      );
+    } else {
+      self::sendmail($module, $data);
+    }
+
+    return true;
+  }
 
   /**
    * @param $modul
@@ -193,14 +253,12 @@ class Email
    */
   public static function showEmail($module, $data)
   {
-
     $build = [
       '#markup' =>
         $data['message_plain'] . '<br><hr><br>' . $data['message_html'],
     ];
     return $build;
   }
-
 
   /**
    * @param $message
@@ -216,7 +274,6 @@ class Email
     return $message;
   }
 
-
   /**
    * @param $text
    * @param $template_id
@@ -231,7 +288,6 @@ class Email
     $body_only = false
   ): string
   {
-
     // load Design Template
     $entity = Drupal::entityTypeManager()
       ->getStorage('node')
@@ -261,11 +317,7 @@ class Email
     $html_end = '</html>';
 
     // insert Message in to Design Template
-    $body_content = str_replace(
-      '@_text_@',
-      $text, $template_html_body
-
-    );
+    $body_content = str_replace('@_text_@', $text, $template_html_body);
 
     // return only HTML Body Content, No HEADER
     if ($body_only === true) {
@@ -284,7 +336,6 @@ class Email
     // Output
     return $html_file;
   }
-
 
   /**
    * @param string $module
@@ -321,14 +372,13 @@ class Email
     return $data;
   }
 
-
   /**
    * @param $module
    * @return string
    */
   public static function getConfigEmailTest($module): string
   {
-// Build Settings Name
+    // Build Settings Name
     $module_settings_route = $module . '.settings';
 
     // Load Settings
@@ -344,5 +394,19 @@ class Email
   {
     return preg_replace('/<!--(.*)-->/Uis', '', $html);
   }
-}
 
+  /**
+   * @param $email
+   * @return string
+   *
+   * https://stackoverflow.com/questions/20545301/partially-hide-email-address-in-php/20545505
+   */
+  public static function obfuscate_email($email): string
+  {
+    $em = explode('@', $email);
+    $name = implode('@', array_slice($em, 0, count($em) - 1));
+    $len = floor(strlen($name) / 2);
+
+    return substr($name, 0, $len) . str_repeat('*', $len) . '@' . end($em);
+  }
+}

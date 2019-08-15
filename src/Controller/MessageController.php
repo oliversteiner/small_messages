@@ -2,6 +2,7 @@
 
 namespace Drupal\small_messages\Controller;
 
+use DateTime;
 use Drupal;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
@@ -21,6 +22,63 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MessageController extends ControllerBase
 {
   use SendInquiryTemplateTrait;
+
+  /**
+   * @param $subscriber_node
+   * @param string $section
+   * @param int $message_id
+   * @throws Exception
+   */
+  private static function addNewsletterDataToSubscriber(
+    Node $subscriber_node,
+    string $section,
+    int $message_id
+  ): void
+  {
+
+    // load json Data,
+    // Add news Data
+    // save json Data
+
+    $json_data = Helper::getFieldValue($subscriber_node, 'data');
+    $send_date = new DateTime();
+    $send_date_timestamp = $send_date->getTimestamp();
+    $open = 0;
+
+    $data = json_decode($json_data, true);
+    $section_lower = mb_convert_case($section, MB_CASE_LOWER, 'UTF-8');
+    $new_item = [
+      'message_id' => $message_id,
+      'send_date' => $send_date_timestamp,
+      'open' => $open,
+    ];
+    $new_data = [];
+
+    // check for section
+    if (!in_array($section_lower, $data, true)) {
+      $data[$section_lower] = [];
+    }
+
+    // Add new entry
+    foreach ($data as $section_name => $items) {
+      // check each section
+      if ($section_name === $section_lower) {
+        // add new item
+        $items[] = $new_item;
+      }
+
+      $new_data[$section_name] = $items;
+    }
+
+
+    $update = json_encode($new_data);
+
+    $subscriber_node->set('field_data', $update);
+    try {
+      $subscriber_node->save();
+    } catch (EntityStorageException $e) {
+    }
+  }
 
   /**
    * @param $target_nid
@@ -175,6 +233,7 @@ class MessageController extends ControllerBase
    * @return array|JsonResponse
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
+   * @throws Exception
    */
   public static function startRun(
     $message_nid,
@@ -275,9 +334,18 @@ class MessageController extends ControllerBase
       if (!self::emailTest()) {
         // continue to send email
         Email::sendNewsletterMail($module, $data);
+        $section = 'newsletter';
+
       } else {
         $test_data = $data;
+        $section = 'test';
       }
+
+      self::addNewsletterDataToSubscriber(
+        $node_subscriber,
+        $section,
+        $message_nid
+      );
     }
 
     $result = [
@@ -335,7 +403,6 @@ class MessageController extends ControllerBase
         return self::returnHTML($result, $build);
         break;
     }
-
   }
 
   /**
@@ -362,7 +429,6 @@ class MessageController extends ControllerBase
    */
   public static function returnHTML($result): array
   {
-
     $number_of_range_subscribers = $result['number_of_range_subscribers'];
     $number_of_subscribers = $result['number_of_subscribers'];
     $range_from = $result['range_from'];
@@ -372,7 +438,6 @@ class MessageController extends ControllerBase
     $build = [
       '#markup' => "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>",
     ];
-
 
     return $build;
   }
@@ -490,10 +555,10 @@ class MessageController extends ControllerBase
 
     $import_tid = Helper::getTermIDByName($term_name, $vid);
 
-
     // Count all Member Nodes
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $count_result = $query->getQuery()
+    $count_result = $query
+      ->getQuery()
       ->condition('type', $bundle)
       ->count()
       ->execute();
@@ -501,12 +566,12 @@ class MessageController extends ControllerBase
 
     // get all Nids of Imported Members
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $query_result = $query->getQuery()
+    $query_result = $query
+      ->getQuery()
       ->condition('type', $bundle)
       ->condition('field_member_type', $import_tid)
       ->range(0, $range_max)
       ->execute();
-
 
     foreach ($query_result as $id) {
       $number_of_proceeded_nodes++;
@@ -593,21 +658,19 @@ class MessageController extends ControllerBase
    */
   public function processImports($date = false): JsonResponse
   {
-
     $bundle = 'smmg_member';
     $number_of_proceeded_nodes = 0;
     $max = 500; // Prepend Server from Memory out
     $step = 1;
 
-
     // Query with entity_type.manager (The way to go)
     $query = \Drupal::entityTypeManager()->getStorage('node');
-    $query_result = $query->getQuery()
+    $query_result = $query
+      ->getQuery()
       ->condition('type', $bundle)
       ->condition('field_smmg_token', '')
       ->sort('created', 'ASC')
       ->execute();
-
 
     $number_of_nodes = count($query_result);
 
@@ -617,13 +680,11 @@ class MessageController extends ControllerBase
       if ($step < $max) {
         $number_of_proceeded_nodes++;
 
-
         try {
           $node->set('field_smmg_accept_newsletter', 0);
           $node->set('field_smmg_token', Helper::generateToken());
           $node->save();
         } catch (EntityStorageException $e) {
-
         }
         $step++;
       }
@@ -637,5 +698,4 @@ class MessageController extends ControllerBase
 
     return new JsonResponse($response);
   }
-
 }
