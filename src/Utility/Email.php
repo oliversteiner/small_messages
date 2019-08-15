@@ -202,7 +202,7 @@ class Email
         )
       );
     } else {
-      //  self::sendmail($module, $data);
+        self::sendmail($module, $data);
     }
 
     return true;
@@ -270,7 +270,12 @@ class Email
   public static function replacePlaceholderInText($message, $data)
   {
     foreach ($data as $key => $value) {
+
       $placeholder = '@_' . $key . '_@';
+
+      if (empty($value)) {
+        $value = '';
+      }
       $message = str_replace($placeholder, $value, $message);
     }
     return $message;
