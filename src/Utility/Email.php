@@ -277,6 +277,8 @@ class Email
   }
 
   /**
+   * @param $message_nid
+   * @param $member_nid
    * @param $text
    * @param $template_id
    * @param bool $body_only
@@ -285,8 +287,8 @@ class Email
    * @throws PluginNotFoundException
    */
   public static function generateMessageHtml(
-    $message_nid = 0,
-    $member_nid = 0,
+    $message_nid,
+    $member_nid,
     $text,
     $template_id,
     $body_only = false
