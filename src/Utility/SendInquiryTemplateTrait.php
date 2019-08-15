@@ -114,8 +114,10 @@ trait SendInquiryTemplateTrait
       $entity,
       'smmg_message_text'
     );
+    $message_nid = $nid;
+    $member_nid = 0;
 
-    $message_html = Email::generateMessageHtml($text, $template_nid, true);
+    $message_html = Email::generateMessageHtml($message_nid, $member_nid, $text, $template_nid, true);
 
 
     // Send Date

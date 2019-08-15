@@ -335,6 +335,7 @@ class MessageController extends ControllerBase
       $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
       $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
       $title = $node->label();
+      $member_nid = $node->id();
 
       $address['first_name'] = $first_name;
       $address['last_name'] = $last_name;
@@ -344,9 +345,9 @@ class MessageController extends ControllerBase
 
       // Combine Message with HTML Design Template
       if (self::emailTest()) {
-        $message_html = Email::generateMessageHtml($text, $template_nid, true); // render only body
+        $message_html = Email::generateMessageHtml($message_nid, 0,$text, $template_nid, true); // render only body
       } else {
-        $message_html = Email::generateMessageHtml($text, $template_nid, false); // render with HTML-HEAD
+        $message_html = Email::generateMessageHtml($message_nid, $member_nid, $text, $template_nid, false); // render with HTML-HEAD
       }
 
       // replace Placeholders

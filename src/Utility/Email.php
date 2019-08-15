@@ -6,6 +6,8 @@ use Drupal;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\small_messages\Controller\MessageController;
 
 class Email
 {
@@ -283,11 +285,22 @@ class Email
    * @throws PluginNotFoundException
    */
   public static function generateMessageHtml(
+    $message_nid = 0,
+    $member_nid = 0,
     $text,
     $template_id,
     $body_only = false
   ): string
   {
+    $base64 = MessageController::serializeTelemetry($message_nid, $member_nid);
+    $route_parameters= ['base64' => $base64];
+    $option = [
+      'absolute' => true,
+    ];
+    $telemetry_gif_url = Url::fromRoute('small_messages.telemetry',$route_parameters, $option);
+    $url = $telemetry_gif_url->toString();
+    $telemetry_img = "<div><img href='$url' width='3px' height='3px'></div>";
+
     // load Design Template
     $entity = Drupal::entityTypeManager()
       ->getStorage('node')
@@ -330,6 +343,7 @@ class Email
         $head .
         $body_start .
         $body_content .
+        $telemetry_img .
         $body_end .
         $html_end;
     }
