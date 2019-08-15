@@ -293,13 +293,13 @@ class Email
   ): string
   {
     $base64 = MessageController::serializeTelemetry($message_nid, $member_nid);
-    $route_parameters= ['base64' => $base64];
+    $route_parameters = ['base64' => $base64];
     $option = [
       'absolute' => true,
     ];
-    $telemetry_gif_url = Url::fromRoute('small_messages.telemetry',$route_parameters, $option);
+    $telemetry_gif_url = Url::fromRoute('small_messages.telemetry', $route_parameters, $option);
     $url = $telemetry_gif_url->toString();
-    $telemetry_img = "<div><img href='$url' width='3px' height='3px'></div>";
+    $telemetry_img = "<div><img src='$url' width='1px' height='1px' border='0' aria-label='zaehlpixel'></div>";
 
     // load Design Template
     $entity = Drupal::entityTypeManager()
