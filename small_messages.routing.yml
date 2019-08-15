@@ -161,3 +161,12 @@ small_messages.process_imports:
     _title: 'Process last Imports'
   requirements:
     _permission: 'administer content'
+
+small_messages.telemetry:
+  path: '/telemetry/{base64}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\MessageController::telemetry'
+    _title: 'Process last Imports'
+    _base64: null
+  requirements:
+    _permission: 'access content'

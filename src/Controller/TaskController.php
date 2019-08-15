@@ -151,6 +151,10 @@ class TaskController extends ControllerBase
     $range_from = $data['range_from'];
     $range_to = $data['range_to'];
 
+    if ($range_from === 1) {
+      $range_from = 0;
+    }
+
     $result = MessageController::startRun($message_nid, $range_from, $range_to, 'row');
 
     if (!empty($result['error'])) {
@@ -265,11 +269,11 @@ class TaskController extends ControllerBase
     foreach ($nodes as $node) {
       if ($step < $max) {
         $number_of_proceeded_nodes++;
-          try {
-            $node->delete();
-            $number_of_deleted++;
-          } catch (EntityStorageException $e) {
-          }
+        try {
+          $node->delete();
+          $number_of_deleted++;
+        } catch (EntityStorageException $e) {
+        }
         $step++;
       }
     }

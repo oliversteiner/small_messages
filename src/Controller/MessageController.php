@@ -14,7 +14,9 @@ use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Class MessageController.
@@ -22,6 +24,40 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class MessageController extends ControllerBase
 {
   use SendInquiryTemplateTrait;
+
+  private static function updateMemberNewsletterData($nid_message, $nid_member)
+  {
+    $node = Node::load($nid_member);
+
+    $json_data = Helper::getFieldValue($node, 'data');
+    $open_date = new DateTime();
+    $open_date_timestamp = $open_date->getTimestamp();
+    $open = [1, $open_date_timestamp];
+
+    $data = json_decode($json_data, true);
+
+    // Add new entry
+    foreach ($data as $section_name => $items) {
+
+      // check each section
+      $i = 0;
+      foreach ($items as $item) {
+        if ((int)$item['message_id'] === (int)$nid_message) {
+          $data[$section_name][$i]['open'] = $open;
+        }
+        $i++;
+      }
+    }
+
+    $update = json_encode($data);
+
+    $node->set('field_data', $update);
+    try {
+      $node->save();
+    } catch (EntityStorageException $e) {
+    }
+
+  }
 
   /**
    * @param $subscriber_node
@@ -697,5 +733,48 @@ class MessageController extends ControllerBase
     ];
 
     return new JsonResponse($response);
+  }
+
+  static function telemetry($base64): Response
+  {
+
+    [$nid_message, $nid_member] = self::unserializeTelemetry($base64);
+
+    self::updateMemberNewsletterData($nid_message, $nid_member);
+
+    $file = "\x47\x49\x46\x38\x37\x61\x1\x0\x1\x0\x80\x0\x0\xfc\x6a\x6c\x0\x0\x0\x2c\x0\x0\x0\x0\x1\x0\x1\x0\x0\x2\x2\x44\x1\x0\x3b";
+    $filename = 'telemetry.gif';
+    $response = new Response();
+    $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+    $response->headers->set('Content-Disposition', $disposition);
+    $response->headers->set('Content-Type', 'image/gif');
+    $response->setContent($file);
+
+    return $response;
+  }
+
+
+  /**
+   * @param $nid_message
+   * @param $nid_member
+   * @return string
+   */
+  static function serializeTelemetry($nid_message, $nid_member): string
+  {
+    $value = [$nid_message, $nid_member];
+    $data = implode(',', $value);
+
+    return base64_encode($data);
+  }
+
+  /**
+   * @param $base64
+   * @return array
+   */
+  static function unserializeTelemetry($base64): array
+  {
+
+    $data = base64_decode($base64);
+    return explode(',', $data);
   }
 }
