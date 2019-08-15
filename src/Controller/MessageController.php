@@ -328,20 +328,19 @@ class MessageController extends ControllerBase
     );
     $number_of_range_subscribers = count($range_subscribers);
 
-    foreach ($range_subscribers as $id => $email) {
+    foreach ($range_subscribers as $member_nid => $email) {
       $data = [];
-      $node_subscriber = Node::load($id);
+      $node_subscriber = Node::load($member_nid);
 
       $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
       $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
       $title = $node->label();
-      $member_nid = $node->id();
 
       $address['first_name'] = $first_name;
       $address['last_name'] = $last_name;
       $address['email'] = $email;
       $address['title'] = $title;
-      $address['id'] = $id;
+      $address['id'] = $member_nid;
 
       // Combine Message with HTML Design Template
       if (self::emailTest()) {
