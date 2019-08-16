@@ -582,11 +582,11 @@ class MessageController extends ControllerBase
     // TODO: Add Date-Filter
 
     $bundle = 'smmg_member';
-    $vid = 'smmg_member_type';
+    $vid = 'smmg_subscriber_group';
     $term_name = 'Import';
     $number_of_deleted = 0;
     $number_of_proceeded_nodes = 0;
-    $range_max = 200; // Prepend Server from Memory out
+    $range_max = 100; // Prepend Server from Memory out
     $step = 1;
 
     $import_tid = Helper::getTermIDByName($term_name, $vid);
@@ -605,7 +605,7 @@ class MessageController extends ControllerBase
     $query_result = $query
       ->getQuery()
       ->condition('type', $bundle)
-      ->condition('field_member_type', $import_tid)
+      ->condition('field_smmg_subscriber_group', $import_tid)
       ->range(0, $range_max)
       ->execute();
 
@@ -626,6 +626,7 @@ class MessageController extends ControllerBase
       'Number of Nodes' => $number_of_nodes,
       'Number of proceeded Nodes' => $number_of_proceeded_nodes,
       'Number of deleted Nodes' => $number_of_deleted,
+  //    'nids' => $query_result,
     ];
 
     return new JsonResponse($response);
