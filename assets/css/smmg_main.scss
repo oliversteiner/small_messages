@@ -1,5 +1,9 @@
 @import 'variables';
 
+table tr {
+  border: none;
+}
+
 .smmg-tab-container {
   margin-bottom: 20px;
 
@@ -172,7 +176,7 @@ h1.page-title {
 }
 
 */
-.is-horizontal .tabs.primary .tabs__tab a{
+.is-horizontal .tabs.primary .tabs__tab a {
   padding-left: 3em;
 }
 
@@ -226,3 +230,4 @@ a[data-drupal-link-system-path="admin/smmg/list/tasks"]::before {
   background-size: 20px;
 
 }
+

@@ -29,6 +29,10 @@
   color: #7f2013;
 }
 
+table tr {
+  border: none;
+}
+
 .smmg-tab-container {
   margin-bottom: 20px;
 }
