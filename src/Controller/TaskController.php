@@ -67,10 +67,9 @@ class TaskController extends ControllerBase
   /**
    * Cron Test.
    *
-   * @return JsonResponse Return Hello string.
-   *   Return Hello string.
+   * @return JsonResponse
    */
-  public function cron_test()
+  public function runTaskTest(): JsonResponse
   {
     $title = 'Cron Test';
     $build_plain = $title;
@@ -83,8 +82,9 @@ class TaskController extends ControllerBase
     ];
 
     $response[] = $title;
+    $module = 'smmg_newsletter';
 
-    Email::sendAdminMail($this->getModuleName(), $data);
+    Email::sendAdminMail($module, $data);
 
     return new JsonResponse($response);
   }
