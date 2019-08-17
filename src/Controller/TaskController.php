@@ -92,19 +92,13 @@ class TaskController extends ControllerBase
   /**
    *
    * @throws \Exception
+   *
+   * get unfinished Tasks from DB
+   * run next task, mark it "done"
+   *
    */
   public function runTasks(): JsonResponse
   {
-    $task_id = 0;
-    $task_title = '';
-    $task_data = '';
-
-    // get unfinished Tasks from DB
-    // run next task, mark it "done"
-    // return status
-    // end
-
-
     // Query with entity_type.manager (The way to go)
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query->getQuery()
@@ -118,8 +112,12 @@ class TaskController extends ControllerBase
     $number_of_active_tasks = count($query_result);
     $first_id = reset($query_result);
 
+    if ($number_of_active_tasks > 0) {
+      return $this->runTask($first_id );
+    }
 
-    return $this->runTask($first_id);
+    $response = ['message' => 'no open tasks found'];
+    return new JsonResponse($response);
   }
 
 
@@ -128,6 +126,7 @@ class TaskController extends ControllerBase
     $task_id = $nid;
     $task_title = '';
     $task_data = '';
+    $is_done = 0;
 
 
     $node = Node::load($nid);
@@ -136,7 +135,9 @@ class TaskController extends ControllerBase
       $task_id = $node->id();
       $task_title = $node->label();
       $task_data = Helper::getFieldValue($node, 'data');
+      $is_done = Helper::getFieldValue($node, 'smmg_is_done');
     }
+
 
     $response = [
       'task_id' => $task_id,
@@ -160,6 +161,7 @@ class TaskController extends ControllerBase
     if (!empty($result['error'])) {
       throw new RuntimeException($result['error']);
     }
+
 
     $response['result'] = $result;
 
