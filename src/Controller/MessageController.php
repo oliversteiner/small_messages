@@ -14,6 +14,7 @@ use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -344,7 +345,7 @@ class MessageController extends ControllerBase
 
       // Combine Message with HTML Design Template
       if (self::emailTest()) {
-        $message_html = Email::generateMessageHtml($message_nid, 0,$text, $template_nid, true); // render only body
+        $message_html = Email::generateMessageHtml($message_nid, 0, $text, $template_nid, true); // render only body
       } else {
         $message_html = Email::generateMessageHtml($message_nid, $member_nid, $text, $template_nid, false); // render with HTML-HEAD
       }
@@ -570,6 +571,8 @@ class MessageController extends ControllerBase
   {
   }
 
+
+
   /**
    * @param bool $date
    * @return JsonResponse
@@ -626,7 +629,7 @@ class MessageController extends ControllerBase
       'Number of Nodes' => $number_of_nodes,
       'Number of proceeded Nodes' => $number_of_proceeded_nodes,
       'Number of deleted Nodes' => $number_of_deleted,
-  //    'nids' => $query_result,
+      //    'nids' => $query_result,
     ];
 
     return new JsonResponse($response);

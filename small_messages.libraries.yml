@@ -7,6 +7,8 @@ small_messages.main:
   dependencies:
     - core/jquery
     - core/jquery.once
+    - fontawesome/fontawesome.svg
+
 #
 #  send_inquiry
 #

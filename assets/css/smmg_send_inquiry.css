@@ -122,13 +122,17 @@ h3.smmg-message-subscriber-list-title {
   list-style: none;
 }
 
+.smmg-subscriber-list-item-name {
+  font-weight: bold;
+}
+
 .smmg-subscriber-list-edit {
-  margin-bottom: 5px;
   font-size: 0.9em;
   border: 1px solid transparent;
   padding: 2px 7px;
-  display: inline-block;
+  display: flex;
   border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 .smmg-subscriber-list-edit:hover {
@@ -141,15 +145,13 @@ h3.smmg-message-subscriber-list-title {
 }
 
 .smmg-subscriber-list-remove {
-  margin-left: 10px;
   font-size: 16px;
   cursor: pointer;
   visibility: hidden;
+  margin-right: 10px;
 }
 
 .smmg-subscriber-list-remove:hover {
-  margin-left: 10px;
-  font-size: 16px;
   color: red;
 }
 
@@ -175,10 +177,15 @@ h3.smmg-message-subscriber-list-title {
   color: #185746;
 }
 
-.smmg-subscriber-list-column {
-  column-width: 200px;
-  column-gap: 10px;
-  column-rule: none;
+ul.smmg-subscriber-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+li.smmg-subscriber-list-item {
+  max-width: 300px;
+  overflow: hidden;
 }
 
 .smmg-subscriber-foot {
@@ -268,6 +275,18 @@ ul.smmg-task-list li .smmg-task-list-button.btn-tag {
 
 .task-done {
   background-color: #c9f3ce;
+}
+
+.smmg-body-toggle-trigger,
+.smmg-body-html-toggle-trigger {
+  cursor: pointer;
+}
+
+.smmg-body-html-wrapper {
+  min-height: 60px;
+  margin-bottom: 10px;
+  border: 1px solid silver;
+  padding: 11px;
 }
 
 /*# sourceMappingURL=smmg_send_inquiry.css.map */

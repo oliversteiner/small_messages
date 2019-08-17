@@ -2,6 +2,9 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+
 /**
  *
  * @see \Drupal\Core\Render\Element\InlineTemplate
@@ -162,6 +165,12 @@ trait SendInquiryTemplateTrait
     return $output;
   }
 
+  /**
+   * @param $nid
+   * @return array
+   * @throws InvalidPluginDefinitionException
+   * @throws PluginNotFoundException
+   */
   protected function getSubscriberData($nid)
   {
     // load Message
@@ -209,8 +218,12 @@ trait SendInquiryTemplateTrait
       $list = [];
       $list_index = 0;
       foreach ($node_subscripters as $item) {
+
+        $email = Helper::getFieldValue($item, 'email');
+
         $list[$list_index]['id'] = $item->id();
         $list[$list_index]['name'] = $item->label();
+        $list[$list_index]['email'] = $email;
         $list_index++;
       }
 

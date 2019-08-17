@@ -75,9 +75,7 @@
     </div>
 
     <div class="smmg-body">
-
       <h3 class="smmg-message-title">{{ message.title }}</h3>
-
       {% autoescape 'html' %}
         {{ message.message_plain|raw }} {# won't be double-escaped #}
       {% endautoescape %}
@@ -89,19 +87,17 @@
   <div class="well well-html">
     <div>
       <a role="button" class="btn btn-default btn-sm smmg-body-html-toggle-trigger">
-        HTML-Version anzeigen</a>
+        Komplette Nachricht anzeigen (HTML-Version)</a>
     </div>
+    <div class="smmg-body-html-wrapper">
 
-    <div class="smmg-body-html" style="display: none">
+      <div class="smmg-body-html" style="display: none">
+        {% autoescape 'html' %}
+          {{ message.message_html|raw }} {# won't be double-escaped #}
+        {% endautoescape %}
 
-      <h3 class="smmg-message-title">{{ message.title }}</h3>
-
-      {% autoescape 'html' %}
-        {{ message.message_html|raw }} {# won't be double-escaped #}
-      {% endautoescape %}
-
+      </div>
     </div>
-
   </div>
 
   <div class="smmg-message-subscriber-list-container">
@@ -131,25 +127,31 @@
       <div class="ajax-container"></div>
       <div class="smmg-subscriber-list">
         {% for group in subscriber %}
+
           <div class="smmg-subscriber-list-block-{{ group.id }}" style="display:none">
             <h4 class="smmg-subscriber-list-title">{{ group.title }}</h4>
-            <ul class="smmg-subscriber-list-column">
+            <ul class="smmg-subscriber-list">
               {% for item in group.list %}
 
-                <li class="smmg-subscriber-member-{{ item.id }}">
+                <li class="smmg-subscriber-list-item smmg-subscriber-member-{{ item.id }}">
+
+
                   <div class="smmg-subscriber-list-edit">
 
-                    {{ item.name }}
+                    <div class="smmg-subscriber-list-remove"
+                         data-subscriber-id="{{ item.id }}"
+                         data-subscriber-group-id="{{ group.id }}"
+                         data-toggle="tooltip"
+                         data-delay="1000"
+                         data-placement="right"
+                         title="aus der Empfängerliste entfernen">
+                      <i class="fa fa-times-circle" aria-hidden="true"></i>
+                    </div>
 
-                    <span class="smmg-subscriber-list-remove"
-                          data-subscriber-id="{{ item.id }}"
-                          data-subscriber-group-id="{{ group.id }}"
-                          data-toggle="tooltip"
-                          data-delay="1000"
-                          data-placement="right"
-                          title="aus der Empfängerliste entfernen">
-                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
-                                    </span>
+                    <div>
+                      <div class="smmg-subscriber-list-item-name">{{ item.name }}</div>
+                      <div class="smmg-subscriber-list-item-email">{{ item.email }}</div>
+                    </div>
                   </div>
                 </li>
 

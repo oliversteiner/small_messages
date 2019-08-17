@@ -19,17 +19,6 @@ system.admin_config_small_messages:
   requirements:
     _permission: 'access administration pages'
 
-#
-# Root
-#
-small_messages.main:
-  path: 'admin/smmg'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\AdminController:messagesTemplate'
-    _title: 'Small Messages'
-  requirements:
-    _permission: 'administer content'
-
 
 small_messages.test.send_messages:
   path: 'smmg/send/{message_nid}/{range_from}/{range_to}'
@@ -151,7 +140,7 @@ small_messages.delete_imported_nodes:
     _controller: '\Drupal\small_messages\Controller\MessageController::deleteImportedNodes'
     _title: 'Delete imported Nodes'
   requirements:
-   # _permission: 'access content'
+    # _permission: 'access content'
     _permission: 'administer content'
 
 small_messages.process_imports:
