@@ -14,8 +14,9 @@ class Email
   /**
    * @param $module
    * @param $data
+   * @param bool $notification
    */
-  public static function sendmail($module, $data): void
+  public static function sendmail($module, $data, $notification = true): void
   {
     // Debug
     $send = true;
@@ -84,7 +85,10 @@ class Email
           '@module' => $module,
         ]
       );
-      // Drupal::messenger()->addMessage($message);
+      // Show notification on Screen
+      if ($notification) {
+        Drupal::messenger()->addMessage($message);
+      }
       Drupal::logger('mail-log')->notice($message);
     }
   }
@@ -201,7 +205,7 @@ class Email
         )
       );
     } else {
-        self::sendmail($module, $data);
+      self::sendmail($module, $data, false);
     }
 
     return true;
