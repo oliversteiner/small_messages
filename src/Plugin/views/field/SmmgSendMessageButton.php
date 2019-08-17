@@ -63,15 +63,18 @@ class SmmgSendMessageButton extends FieldPluginBase
     $nid = $values->_entity->id();
     $field_name = 'smmg_message_is_send';
     $is_send = Helper::getFieldValue($node, $field_name);
-    $destination = 'smmg/messages';
     $modal_info['width'] = 700;
-    $modal_info['height'] ='90%';
+    $modal_info['height'] = '90%';
 
     $elements = [];
 
-    $link = 'admin/smmg/prepare_send/' . $nid . '?destination=' . $destination;
+
+
+
+    $url_obj = Url::fromRoute('small_messages.ajax.prepare_send', ['nid' => $nid]);
+    $url = $url_obj->toString();
+
     $class = [
-     // 'use-ajax',
       'vat-button',
       'vat-button-send',
       'btn',
@@ -82,22 +85,34 @@ class SmmgSendMessageButton extends FieldPluginBase
     // if message send
     if ($is_send) {
       $class[] = 'message-is-send';
+      $button_label = 'Nochmals...';
+    } else {
+      $button_label = 'Senden...';
     }
 
+    $class = implode(' ', $class);
+
+    $send_button = '<a class="' . $class . '" href="' . $url . '">' .
+      '<div class="vat-button-send-icon"><i class="fas fa-2x fa-paper-plane"></i></div>' .
+      '<div class="vat-button-send-label">' . $button_label . '</div>' .
+      '</a>';
+
+
+    /*
+        $elements['send'] = [
+          '#title' => $this->t('Send...'),
+          '#type' => 'link',
+          '#url' => Url::fromUri('internal:/' . $link),
+          '#attributes' => [
+            'class' => $class,
+            'type' => 'button',
+          ],
+        ];*/
+
     $elements['send'] = [
-      '#title' => $this->t('Send'),
-      '#type' => 'link',
-      '#url' => Url::fromUri('internal:/' . $link),
-      '#attributes' => [
-        'class' => $class,
-      // 'data-dialog-type' => 'modal',
-      //  'data-dialog-options' => Json::encode([
-      //    'height' => $modal_info['height'],
-      //    'width' => $modal_info['width'],
-      //  ]),
-        'type' => 'button',
-      ],
-    ];
+      '#markup' => $send_button,
+      '#allowed_tags' => ['div', 'a', 'i'],];
+
 
     return $elements;
   }

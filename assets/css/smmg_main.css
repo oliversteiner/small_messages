@@ -29,6 +29,12 @@
   color: #7f2013;
 }
 
+.smmg-icon {
+  min-width: 10px;
+  min-height: 10px;
+  margin-right: 5px;
+}
+
 .email-template table tr {
   border: none;
 }
@@ -68,7 +74,17 @@
 a.vat-button-send {
   opacity: 1;
   border: solid 1px #d5d5d5;
-  color: green;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.vat-button-send-icon {
+  padding: 5px;
+  display: block;
+  width: 25px;
+  height: 25px;
 }
 
 a.vat-button-send.message-is-send {
