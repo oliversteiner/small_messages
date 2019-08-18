@@ -77,7 +77,7 @@ class MessageController extends ControllerBase
     // Add news Data
     // save json Data
 
-    $json_data = Helper::getFieldValue($subscriber_node, 'data');
+    $json_data = Helper::getFieldValue($subscriber_node, 'data', false, true);
     $send_date = new DateTime();
     $send_date_timestamp = $send_date->getTimestamp();
     $open = 0;
