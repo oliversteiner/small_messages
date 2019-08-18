@@ -131,7 +131,7 @@
       const task_id = tasks[i].task_id;
       const date = new Date();
       const next_action = roundToHour(date);
-      next_action.setHours(next_action.getHours() + tasknumber);
+      next_action.setHours(next_action.getHours() + i);
 
       const li = $('<li/>').appendTo(list);
 

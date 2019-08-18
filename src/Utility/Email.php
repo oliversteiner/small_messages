@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Link;
+use Drupal\Core\Mail\MailFormatHelper;
 use Drupal\Core\Url;
 use Drupal\small_messages\Controller\MessageController;
 
@@ -302,6 +303,8 @@ class Email
     $body_only = false
   ): string
   {
+    $text = self::relativeToAbsoluteUrls($text);
+
     $base64 = MessageController::serializeTelemetry($message_nid, $member_nid);
     $route_parameters = ['base64' => $base64];
     $option = [
@@ -433,4 +436,17 @@ class Email
 
     return substr($name, 0, $len) . str_repeat('*', $len) . '@' . end($em);
   }
+
+
+  public static function relativeToAbsoluteUrls($subject)
+  {
+    $host = Drupal::request()->getSchemeAndHttpHost();
+
+    $pattern = '/(src=")(\\/sites\\/)/';
+    $replacement = '$1' . $host . '/sites/';
+
+    return preg_replace($pattern, $replacement, $subject);
+
+  }
+
 }

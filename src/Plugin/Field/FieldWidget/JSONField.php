@@ -20,22 +20,23 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
-class JSONField extends WidgetBase {
+class JSONField extends WidgetBase
+{
 
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
-    return [
-      'size' => 60,
-      'placeholder' => '',
-    ] + parent::defaultSettings();
+  public static function defaultSettings()
+  {
+    $config = \Drupal::config('ace_editor.settings')->get();
+    return $config + parent::defaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state)
+  {
     $elements = [];
 
     $elements['size'] = [
@@ -58,7 +59,8 @@ class JSONField extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary()
+  {
     $summary = [];
 
     $summary[] = t('Textfield size: @size', ['@size' => $this->getSetting('size')]);
@@ -72,32 +74,65 @@ class JSONField extends WidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-    $element['value'] = $element + [
-      '#type' => 'textarea',
-      '#default_value' => isset($items[$delta]->value) ? $items[$delta]->value : NULL,
-      '#size' => $this->getSetting('size'),
-      '#placeholder' => $this->getSetting('placeholder'),
-      '#maxlength' => $this->getFieldSetting('max_length'),
-        // Attach libraries as per the setting.
-        '#attached' => [
-          'library' => [
-            'ace_editor/formatter'
-          ],
-          'drupalSettings' => [
-            // Pass settings variable ace_formatter to javascript.
-            'ace_formatter' => ['syntax'=>'json']
-          ],
-        ],
-        '#attributes' => [
-          'class' => [ 'content' ],
-          'readonly' => 'readonly',
-        ],
-        '#prefix' => '<div class="ace_formatter">',
-        '#suffix' => '<div>',
-    ];
+  public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state)
+  {
 
-    return $element;
+    $settings = $this->getSettings();
+
+
+    /*   $element['value'] = $element + [
+           '#type' => 'textarea',
+           '#default_value' => isset($items[$delta]->value) ? $items[$delta]->value : NULL,
+           '#size' => $this->getSetting('size'),
+           '#placeholder' => $this->getSetting('placeholder'),
+           '#maxlength' => $this->getFieldSetting('max_length'),
+           // Attach libraries as per the setting.
+           '#attached' => [
+             'library' => [
+               'ace_editor/formatter'
+             ],
+             'drupalSettings' => [
+               // Pass settings variable ace_formatter to javascript.
+               'ace_formatter' => $settings
+             ],
+           ],
+           '#attributes' => [
+             'class' => ['content'],
+             'readonly' => 'readonly',
+           ],
+           '#prefix' => '<div class="ace_formatter">',
+           '#suffix' => '<div>',
+         ];*/
+
+
+    $value = isset($items[$delta]->value) ? $items[$delta]->value : '';
+    $element += [
+      '#type' => 'textarea',
+      '#default_value' => $value,
+      '#size' => 200,
+      '#maxlength' => 200,
+      '#element_validate' => [
+        [static::class, 'validate'],
+      ],
+      // Attach libraries as per the setting.
+      '#attached' => [
+        'library' => [
+          'ace_editor/primary',  'ace_editor/formatter'
+        ],
+        'drupalSettings' => [
+          // Pass settings variable ace_formatter to javascript.
+          'ace_formatter' => $settings
+        ],
+      ],
+      '#attributes' => [
+        'class' => ['content'],
+       // 'readonly' => 'readonly',
+      ],
+      '#prefix' => '<div class="ace_formatter">',
+      '#suffix' => '</div>',
+    ];
+    return ['value' => $element];
+
   }
 
 }

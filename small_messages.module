@@ -37,11 +37,17 @@ function small_messages_help($route_name, RouteMatchInterface $route_match)
  */
 function small_messages_theme($existing, $type, $theme, $path)
 {
-    return [
-        'small_messages' => [
-            'render element' => 'children',
-        ],
-    ];
+  return [
+    'small_messages' => [
+      'render element' => 'children',
+    ],
+    'json_field_formatter' => [
+      'render element' => 'view',
+
+      'variables' => ['data' => NULL, 'id' => NULL],
+    ],
+  ];
+
 }
 
 
