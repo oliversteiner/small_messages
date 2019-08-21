@@ -31,8 +31,8 @@ class Task
 
   /* Drupal fields */
   public const field_active = 'field_smmg_is_active';
-  public const field_json = 'field_smmg_is_active';
-  public const field_done = 'field_smmg_is_active';
+  public const field_json = 'field_data';
+  public const field_done = 'field_smmg_is_done';
 
 
   public function __construct($nid)

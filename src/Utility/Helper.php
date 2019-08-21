@@ -181,7 +181,7 @@ class Helper
         // check for 'field_field_NAME'
         $pos = strpos($field_name, 'field_');
 
-        if (!$pos) {
+        if ($pos === false) {
           $field_name = 'field_' . $field_name;
         }
       }
