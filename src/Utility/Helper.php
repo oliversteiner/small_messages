@@ -63,7 +63,7 @@ class Helper
     }
 
     // Create new Term
-    if($tid === 0 && $create === true){
+    if ($tid === 0 && $create === true) {
       try {
         $new_term = Term::create([
           'name' => $term_name,
@@ -172,13 +172,20 @@ class Helper
       }
 
       if (!is_string($field_name)) {
+        throw new \RuntimeException(
+          'field_name must be a string'
+        );
+      }
+
+      if (is_string($field_name)) {
         // check for 'field_field_NAME'
         $pos = strpos($field_name, 'field_');
 
-        if ($pos !== 0) {
+        if (!$pos) {
           $field_name = 'field_' . $field_name;
         }
       }
+
     } catch (Exception $e) {
       throw new \RuntimeException(
         '$field_name must be a string.' .
@@ -306,7 +313,8 @@ class Helper
   public static function getTemplates(
     $module = 'small_messages',
     $template_names = []
-  ) {
+  )
+  {
     $templates = [];
 
     // Default Names
