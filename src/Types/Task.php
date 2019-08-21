@@ -57,15 +57,60 @@ class Task
       $this->active = Helper::getFieldValue($node, self::field_active);
     }
 
-    $data = json_decode($data_json, true);
 
-// Message
-    $message['id'] = (int)$data['message_id'];
-    $message['title'] = $data['message_title'];
+    $message['id'] = 0;
+    $message['title'] = '';
+    $related = '';
+
+    $data = json_decode($data_json, true);
+    if ($data) {
+
+      // Related
+      if ($data['related']) {
+        $related = $data['related'];
+      }
+
+      // Message
+      if ($data['message']) {
+        if ($data['message']['id']) {
+          $message['id'] = (int)$data['message']['id'];
+        }
+        if ($data['message']['title']) {
+          $message['title'] = $data['message']['title'];
+        }
+      }
+
+      // TODO Deprecated
+      // Message
+      if ($data['message_id']) {
+        $message['id'] = (int)$data['message_id'];
+      }
+      if ($data['message_title']) {
+        $message['title'] = $data['message_title'];
+      }
+
 
 // Range
-    $range['from'] = (int)$data['range_from'];
-    $range['to'] = (int)$data['range_to'];
+      if ($data['range']) {
+        if ($data['range']['from']) {
+          $range['from'] = (int)$data['range']['from'];
+        }
+        if ($data['range']['to']) {
+          $range['to'] = $data['range']['to'];
+        }
+      }
+
+      // TODO Deprecated
+// Range
+      if ($data['range_from']) {
+        $range['from'] = (int)$data['range_from'];
+      }
+      if ($data['range_to']) {
+        $range['to'] = $data['range_to'];
+      }
+
+    }
+
 
     $this->data = [
       'id' => (int)$this->id,
@@ -73,6 +118,7 @@ class Task
       'created' => $this->created,
       'done' => (boolean)$this->done,
       'active' => (boolean)$this->active,
+      'related' => $related,
       'number' => (int)$data['number'],
       'part_of' => (int)$data['part_of'],
       'group' => (string)$data['group'],
@@ -84,7 +130,8 @@ class Task
 
   }
 
-  public function getTitle(): ?string
+  public
+  function getTitle(): ?string
   {
     return $this->title;
   }
@@ -135,7 +182,8 @@ class Task
    * @return int
    * @throws EntityStorageException
    */
-  public function setToDone(): int
+  public
+  function setToDone(): int
   {
     $this->node->set(self::field_done, 1);
     try {
@@ -151,7 +199,8 @@ class Task
    * @return int
    * @throws EntityStorageException
    */
-  public function setToUndone(): int
+  public
+  function setToUndone(): int
   {
     $this->node->set(self::field_done, 0);
     try {
@@ -167,7 +216,8 @@ class Task
    * @return int
    * @throws EntityStorageException
    */
-  public function setToActive(): int
+  public
+  function setToActive(): int
   {
     $this->node->set(self::field_active, 1);
     try {
@@ -183,7 +233,8 @@ class Task
    * @return int
    * @throws EntityStorageException
    */
-  public function setToInactive(): int
+  public
+  function setToInactive(): int
   {
     $this->node->set(self::field_active, 0);
     try {

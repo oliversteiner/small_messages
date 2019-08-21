@@ -203,6 +203,9 @@ class MessageController extends ControllerBase
     // round up
     $number_of_tasks = ceil($number_of_tasks);
 
+    // uuid for related tasks
+    $uuid = uniqid('mollo_task_', true);
+
     // for each 200 make one task
     for ($i = 0; $i < $number_of_tasks; $i++) {
       $task_number = $i + 1;
@@ -225,15 +228,25 @@ class MessageController extends ControllerBase
         $range_to = $number_of_subscribers;
       }
 
+
+      $message = [
+        'id' => (int)$nid,
+        'title' => $message_title,
+      ];
+
+      $range = [
+        'from' => (int)$range_from,
+        'to' => (int)$range_to,
+      ];
+
       // generate Data
       $data = [
         'number' => $task_number,
         'part_of' => $number_of_tasks,
         'group' => 'Newsletter',
-        'message_id' => (int)$nid,
-        'message_title' => $message_title,
-        'range_from' => $range_from,
-        'range_to' => $range_to,
+        'related' => $uuid,
+        'message' => $message,
+        'range' => $range,
       ];
 
       try {
