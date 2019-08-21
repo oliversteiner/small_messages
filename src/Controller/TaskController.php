@@ -8,6 +8,7 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
+use Drupal\small_messages\types\Task;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Exception;
@@ -89,6 +90,48 @@ class TaskController extends ControllerBase
     return new JsonResponse($response);
   }
 
+
+  /**
+   *
+   * @throws \Exception
+   *
+   * get all Tasks from DB
+   *
+   */
+  public function getTasks()
+  {
+    $tasks = [];
+
+    // Query with entity_type.manager (The way to go)
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_result = $query->getQuery()
+      ->condition('type', 'smmg_task')
+      ->sort('created', 'ASC')
+      ->execute();
+
+    $number_of_tasks = count($query_result);
+
+    if ($number_of_tasks === 0) {
+      $response = ['message' => 'no tasks found', 'tasksCount' => 0];
+      return new JsonResponse($response);
+    }
+
+
+    foreach ($query_result as $nid) {
+      $task = new Task($nid);
+
+      $tasks[] = $task->getData();
+    }
+
+    $response = [
+      'tasks' => $tasks,
+      'tasksCount' => $number_of_tasks,
+    ];
+
+    return new JsonResponse($response);
+  }
+
+
   /**
    *
    * @throws \Exception
@@ -113,7 +156,7 @@ class TaskController extends ControllerBase
     $first_id = reset($query_result);
 
     if ($number_of_active_tasks > 0) {
-      return $this->runTask($first_id );
+      return $this->runTask($first_id);
     }
 
     $response = ['message' => 'no open tasks found'];
