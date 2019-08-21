@@ -175,12 +175,8 @@ class Helper
         // check for 'field_field_NAME'
         $pos = strpos($field_name, 'field_');
 
-        if ($pos === 0) {
-          throw new \RuntimeException(
-            'Use $field_name without "field_" in HELPER:getFieldValue(' .
-            $field_name .
-            ')'
-          );
+        if ($pos !== 0) {
+          $field_name = 'field_' . $field_name;
         }
       }
     } catch (Exception $e) {
@@ -195,7 +191,6 @@ class Helper
       );
     }
 
-    $field_name = 'field_' . $field_name;
 
     try {
       if ($node->get($field_name)) {
