@@ -78,6 +78,7 @@ a.vat-button-send {
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
+  width: 60px;
 }
 
 .vat-button-send-icon {
@@ -251,6 +252,10 @@ a[data-drupal-link-system-path="admin/smmg/list/tasks"]::before {
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 20px;
+}
+
+.wiews-field-field-smmg-message-text {
+  max-width: 450px;
 }
 
 /*# sourceMappingURL=smmg_main.css.map */

@@ -65,6 +65,15 @@ small_messages.ajax.prepare_send:
     _permission: 'administer content'
 
 
+
+small_messages.tasks.get:
+  path: '/smmg/tasks/get'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::getTasks'
+    _title: 'Get All Tasks'
+  requirements:
+    _permission: 'access content'
+
 small_messages.task_controller_add:
   path: '/smmg/task/add'
   defaults:
@@ -81,6 +90,7 @@ small_messages.task_controller_remove:
   requirements:
     _permission: 'access content'
 
+
 small_messages.task_cron_test:
   path: '/smmg/task/cron/test'
   defaults:
@@ -88,6 +98,8 @@ small_messages.task_cron_test:
     _title: 'Task Cron Test'
   requirements:
     _permission: 'access content'
+
+
 
 small_messages.cron:
   path: '/smmg/task/cron'

@@ -657,13 +657,25 @@ class MessageController extends ControllerBase
 
     // all members with the subscriber tags of message
     foreach ($subscriber_groups as $group_id) {
-      // get all Subscriber with this tag
-      $node_subscribers = Drupal::entityTypeManager()
-        ->getStorage('node')
-        ->loadByProperties([
-          'type' => 'smmg_member',
-          'field_smmg_subscriber_group' => $group_id,
-        ]);
+
+
+      $bundle = 'smmg_member';
+
+      // Query with entity_type.manager (The way to go)
+      $query = \Drupal::entityTypeManager()->getStorage('node');
+      $query_result = $query
+        ->getQuery()
+        ->condition('type', $bundle)
+        ->condition('field_smmg_subscriber_group', $group_id)
+        ->condition('field_email', NULL, 'IS NOT NULL')
+        ->sort('created', 'ASC')
+        ->execute();
+
+      $number_of_nodes = count($query_result);
+
+      $node_subscribers = Node::loadMultiple($query_result);
+
+
 
       // get id and email from members
       // put in array: id => email
