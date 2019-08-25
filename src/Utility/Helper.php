@@ -142,7 +142,7 @@ class Helper
    * @param NodeInterface | Node $node
    * @param string $field_name
    * @param null $term_list_name
-   * @param bool $force_array
+   * @param bool | string $force_array
    * @return boolean | string | array
    */
   public static function getFieldValue(
@@ -152,6 +152,7 @@ class Helper
     $force_array = false
   )
   {
+    $default_fields = ['body'];
     $result = false;
     $term_list = [];
 
@@ -178,11 +179,15 @@ class Helper
       }
 
       if (is_string($field_name)) {
-        // check for 'field_field_NAME'
-        $pos = strpos($field_name, 'field_');
+        // check for 'body'
+        if (!in_array($field_name, $default_fields, false)) {
 
-        if ($pos === false) {
-          $field_name = 'field_' . $field_name;
+          // check for 'field_field_NAME'
+          $pos = strpos($field_name, 'field_');
+
+          if ($pos === false) {
+            $field_name = 'field_' . $field_name;
+          }
         }
       }
 
@@ -232,8 +237,17 @@ class Helper
             }
           }
 
-          if ($force_array) {
+          if ($force_array === true) {
             $arr[] = $result;
+            $result = $arr;
+          }
+          if ($force_array === 'full') {
+
+            $term = [];
+            $term['id'] = (int)$value[0]['target_id'];
+            $term['name'] = $term_list[$value[0]['target_id']];
+
+            $arr[] = $term;
             $result = $arr;
           }
         }
@@ -251,7 +265,16 @@ class Helper
             // Value is Taxonomy Term
             if ($term_list_name) {
               if ($term_list_name && $term_list[$item['target_id']]) {
-                $result[$i] = $term_list[$item['target_id']];
+
+                if ($force_array === 'full') {
+                  $term = [];
+                  $term['id'] = (int)$item['target_id'];
+                  $term['name'] = $term_list[$item['target_id']];
+                  $result[$i] = $term;
+                } else {
+                  $result[$i] = $term_list[$item['target_id']];
+                }
+
               } else {
                 $result[$i] = false;
                 $message =

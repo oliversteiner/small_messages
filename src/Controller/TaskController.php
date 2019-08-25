@@ -109,10 +109,10 @@ class TaskController extends ControllerBase
       ->sort('created', 'ASC')
       ->execute();
 
-    $number_of_tasks = count($query_result);
+    $number_of = count($query_result);
 
-    if ($number_of_tasks === 0) {
-      $response = ['message' => 'no tasks found', 'tasksCount' => 0];
+    if ($number_of === 0) {
+      $response = ['message' => 'no tasks found', 'count' => 0];
       return new JsonResponse($response);
     }
 
@@ -125,7 +125,7 @@ class TaskController extends ControllerBase
 
     $response = [
       'tasks' => $tasks,
-      'tasksCount' => $number_of_tasks,
+      'count' => $number_of,
     ];
 
     return new JsonResponse($response);

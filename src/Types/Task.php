@@ -122,8 +122,6 @@ class Task
       'group' => (string)$data['group'], // TODO Deprecated
       'message' => $message,
       'range' => $range,
-
-
     ];
 
   }
