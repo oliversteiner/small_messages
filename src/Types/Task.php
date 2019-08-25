@@ -16,17 +16,9 @@ class Task
   private $title;
   private $node;
   private $id;
-  /**
-   * @var bool
-   */
   private $created;
-  /**
-   * @var bool
-   */
+  private $changed;
   private $done;
-  /**
-   * @var bool
-   */
   private $active;
 
   /* Drupal fields */
@@ -41,6 +33,7 @@ class Task
     $this->id = 0;
     $this->title = '';
     $this->created = false;
+    $this->changed = false;
     $this->done = false;
     $this->active = false;
     $data_json = [];
@@ -52,6 +45,7 @@ class Task
       $this->id = $node->id();
       $this->title = $node->label();
       $this->created = $node->getCreatedTime();
+      $this->changed = $node->getChangedTime();
       $data_json = Helper::getFieldValue($node, self::field_json);
       $this->done = Helper::getFieldValue($node, self::field_done);
       $this->active = Helper::getFieldValue($node, self::field_active);
@@ -63,49 +57,52 @@ class Task
     $related = '';
 
     $data = json_decode($data_json, true);
-    if ($data) {
+    if (isset($data)) {
 
       // Related
-      if ($data['related']) {
+      if (isset($data['related'])) {
         $related = $data['related'];
       }
 
       // Message
-      if ($data['message']) {
-        if ($data['message']['id']) {
+
+      $message['category'] = (string)$data['group'];
+
+      if (isset($data['message'])) {
+        if (isset($data['message']['id'])) {
           $message['id'] = (int)$data['message']['id'];
         }
-        if ($data['message']['title']) {
+        if (isset($data['message']['title'])) {
           $message['title'] = $data['message']['title'];
         }
       }
 
       // TODO Deprecated
       // Message
-      if ($data['message_id']) {
+      if (isset($data['message_id'])) {
         $message['id'] = (int)$data['message_id'];
       }
-      if ($data['message_title']) {
+      if (isset($data['message_title'])) {
         $message['title'] = $data['message_title'];
       }
 
 
 // Range
-      if ($data['range']) {
-        if ($data['range']['from']) {
+      if (isset($data['range'])) {
+        if (isset($data['range']['from'])) {
           $range['from'] = (int)$data['range']['from'];
         }
-        if ($data['range']['to']) {
+        if (isset($data['range']['to'])) {
           $range['to'] = $data['range']['to'];
         }
       }
 
       // TODO Deprecated
 // Range
-      if ($data['range_from']) {
+      if (isset($data['range_from'])) {
         $range['from'] = (int)$data['range_from'];
       }
-      if ($data['range_to']) {
+      if (isset($data['range_to'])) {
         $range['to'] = $data['range_to'];
       }
 
@@ -116,12 +113,13 @@ class Task
       'id' => (int)$this->id,
       'title' => $this->title,
       'created' => $this->created,
+      'changed' => $this->changed,
       'done' => (boolean)$this->done,
       'active' => (boolean)$this->active,
       'related' => $related,
       'number' => (int)$data['number'],
       'part_of' => (int)$data['part_of'],
-      'group' => (string)$data['group'],
+      'group' => (string)$data['group'], // TODO Deprecated
       'message' => $message,
       'range' => $range,
 
