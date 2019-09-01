@@ -98,7 +98,7 @@ class TaskController extends ControllerBase
    * get all Tasks from DB
    *
    */
-  public function getTasks()
+  public function getTasks(): JsonResponse
   {
     $tasks = [];
 
@@ -106,7 +106,7 @@ class TaskController extends ControllerBase
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query->getQuery()
       ->condition('type', 'smmg_task')
-      ->sort('created', 'ASC')
+      ->sort('created', 'DESC' )
       ->execute();
 
     $number_of = count($query_result);
@@ -191,9 +191,9 @@ class TaskController extends ControllerBase
 // json data to array
     $data = json_decode($task_data, true);
 
-    $message_nid = $data['message_id'];
-    $range_from = $data['range_from'];
-    $range_to = $data['range_to'];
+    $message_nid = $data['message']['id'];
+    $range_from = $data['range']['from'];
+    $range_to = $data['range']['to'];
 
     if ($range_from === 1) {
       $range_from = 0;
@@ -256,9 +256,9 @@ class TaskController extends ControllerBase
       '%s: %s (%s) - From %s to %s',
       $data['group'],
       $short_title,
-      $data['message_id'],
-      $data['range_from'],
-      $data['range_to']
+      $data['message']['id'],
+      $data['range']['from'],
+      $data['range']['to']
     );
 
     if ($data) {

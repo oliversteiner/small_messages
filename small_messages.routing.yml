@@ -67,20 +67,13 @@ small_messages.ajax.prepare_send:
 
 
 small_messages.tasks.get:
-  path: '/smmg/tasks/get'
+  path: '/smmg/api/tasks'
   defaults:
     _controller: '\Drupal\small_messages\Controller\TaskController::getTasks'
     _title: 'Get All Tasks'
   requirements:
     _permission: 'access content'
 
-small_messages.task_controller_add:
-  path: '/smmg/task/add'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\TaskController::add'
-    _title: 'Add Task'
-  requirements:
-    _permission: 'access content'
 
 small_messages.task_controller_remove:
   path: '/smmg/task/remove'

@@ -6,7 +6,6 @@ use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Helper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
 /**
  * Class Newsletter
  * @package Drupal\smmg_newsletter\Types
@@ -36,11 +35,11 @@ class Message
 
   /* Drupal Fields */
   public const field_design_template = 'field_smmg_design_template';
-  public const field__is_send = 'field_smmg_message_is_send';
-  public const field__is_template = 'field_smmg_message_is_template';
+  public const field_is_send = 'field_smmg_message_is_send';
+  public const field_send_date = 'field_smmg_send_date';
+  public const field_is_template = 'field_smmg_message_is_template';
   public const field_group = 'field_smmg_message_group';
   public const field_text = 'field_smmg_message_text';
-  public const field_send_date = 'field_smmg_send_date';
   public const field_subscriber_group = 'field_smmg_subscriber_group';
   /**
    * @var array|bool|string
@@ -84,33 +83,56 @@ class Message
       $this->title = $node->label();
       $this->created = $node->getCreatedTime();
       $this->changed = $node->getChangedTime();
-      $this->is_send = Helper::getFieldValue($node, self::field__is_send);
-      $this->is_template = Helper::getFieldValue($node, self::field__is_template);
-      $this->group = Helper::getFieldValue($node, self::field_group, 'smmg_message_group', 'full');
+      $this->is_send = Helper::getFieldValue($node, self::field_is_send);
+      $this->is_template = Helper::getFieldValue(
+        $node,
+        self::field_is_template
+      );
+      $this->group = Helper::getFieldValue(
+        $node,
+        self::field_group,
+        'smmg_message_group',
+        'full'
+      );
       $this->text = Helper::getFieldValue($node, self::field_text);
       $this->send_date = Helper::getFieldValue($node, self::field_send_date);
-      $this->subscriber_group = Helper::getFieldValue($node, self::field_subscriber_group, 'smmg_subscriber_group', 'full');
-      $this->design_template = Helper::getFieldValue($node, self::field_design_template);
+      $this->subscriber_group = Helper::getFieldValue(
+        $node,
+        self::field_subscriber_group,
+        'smmg_subscriber_group',
+        'full'
+      );
+      $this->design_template = Helper::getFieldValue(
+        $node,
+        self::field_design_template
+      );
     }
 
+    // Counts
+    $count = [
+      'all' => 0,
+      'read' => 0,
+      'error' => 0,
+      'unsubscribe' => 0,
+    ];
 
     $this->data = [
-      'id' => (int)$this->id,
+      'id' => (int) $this->id,
       'title' => $this->title,
-      'created' => (int)$this->created,
-      'changed' => (int)$this->changed,
-      'group' => $this->group,
+      'created_ts' => (int) $this->created,
+      'changed_ts' => (int) $this->changed,
+      'category' => $this->group,
       'text' => $this->text,
-      'is_send' => (bool)$this->is_send,
-      'is_template' => (bool)$this->is_template,
-      'send_date' => $this->send_date,
+      'is_send' => (bool) $this->is_send,
+      'send_ts' => (int) $this->send_date,
+      'is_template' => (bool) $this->is_template,
       'subscriber_group' => $this->subscriber_group,
-      'design_template' => (int)$this->design_template,
+      'design_template' => (int) $this->design_template,
+      'count' => $count,
     ];
   }
 
-  public
-  function getTitle(): ?string
+  public function getTitle(): ?string
   {
     return $this->title;
   }
@@ -118,8 +140,7 @@ class Message
   /**
    * @return array
    */
-  public
-  function getData(): array
+  public function getData(): array
   {
     return $this->data;
   }
@@ -127,8 +148,7 @@ class Message
   /**
    * @return JsonResponse
    */
-  public
-  function getJson(): JsonResponse
+  public function getJson(): JsonResponse
   {
     return new JsonResponse($this->data);
   }
@@ -136,11 +156,8 @@ class Message
   /**
    * @return bool
    */
-  public
-  function created(): bool
+  public function created(): bool
   {
     return $this->created;
   }
-
-
 }

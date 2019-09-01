@@ -14,7 +14,6 @@ use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Exception;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -30,34 +29,27 @@ class MessageController extends ControllerBase
   {
     $node = Node::load($nid_member);
 
-    $json_data = Helper::getFieldValue($node, 'data');
-    $open_date = new DateTime();
-    $open_date_timestamp = $open_date->getTimestamp();
-    $open = [1, $open_date_timestamp];
+    if ($node) {
+      $json_data = Helper::getFieldValue($node, 'data');
+      $open_date = new DateTime();
+      $open_date_timestamp = $open_date->getTimestamp();
+      $open = [1, $open_date_timestamp];
 
-    $data = json_decode($json_data, true);
+      $data = json_decode($json_data, true);
 
-    // Add new entry
-    foreach ($data as $section_name => $items) {
-
-      // check each section
-      $i = 0;
-      foreach ($items as $item) {
-        if ((int)$item['message_id'] === (int)$nid_message) {
-          $data[$section_name][$i]['open'] = $open;
+      // Add new entry
+      foreach ($data as $item) {
+        if ((int) $item['message_id'] === (int) $nid_message) {
+          $item['open'] = $open;
         }
-        $i++;
+      }
+
+      try {
+        $node->set('field_data', json_encode($data));
+        $node->save();
+      } catch (EntityStorageException $e) {
       }
     }
-
-    $update = json_encode($data);
-
-    $node->set('field_data', $update);
-    try {
-      $node->save();
-    } catch (EntityStorageException $e) {
-    }
-
   }
 
   /**
@@ -70,48 +62,25 @@ class MessageController extends ControllerBase
     Node $subscriber_node,
     string $section,
     int $message_id
-  ): void
-  {
-
-    // load json Data,
-    // Add news Data
-    // save json Data
+  ): void {
+    $date = new DateTime();
+    $send_date_timestamp = $date->getTimestamp();
 
     $json_data = Helper::getFieldValue($subscriber_node, 'data', false, true);
-    $send_date = new DateTime();
-    $send_date_timestamp = $send_date->getTimestamp();
-    $open = 0;
-
     $data = json_decode($json_data, true);
-    $section_lower = mb_convert_case($section, MB_CASE_LOWER, 'UTF-8');
+
     $new_item = [
       'message_id' => $message_id,
       'send_date' => $send_date_timestamp,
-      'open' => $open,
+      'section' => $section,
+      'open' => 0,
+      'unsubscribe' => 0,
     ];
-    $new_data = [];
 
-    // check for section
-    if (!in_array($section_lower, $data, true)) {
-      $data[$section_lower] = [];
-    }
+    $data[] = $new_item;
 
-    // Add new entry
-    foreach ($data as $section_name => $items) {
-      // check each section
-      if ($section_name === $section_lower) {
-        // add new item
-        $items[] = $new_item;
-      }
-
-      $new_data[$section_name] = $items;
-    }
-
-
-    $update = json_encode($new_data);
-
-    $subscriber_node->set('field_data', $update);
     try {
+      $subscriber_node->set('field_data', json_encode($data));
       $subscriber_node->save();
     } catch (EntityStorageException $e) {
     }
@@ -223,20 +192,19 @@ class MessageController extends ControllerBase
       }
 
       // last
-      if ($task_number === (int)$number_of_tasks) {
+      if ($task_number === (int) $number_of_tasks) {
         // on the last Task add actual number of Subscribers
         $range_to = $number_of_subscribers;
       }
 
-
       $message = [
-        'id' => (int)$nid,
+        'id' => (int) $nid,
         'title' => $message_title,
       ];
 
       $range = [
-        'from' => (int)$range_from,
-        'to' => (int)$range_to,
+        'from' => (int) $range_from,
+        'to' => (int) $range_to,
       ];
 
       // generate Data
@@ -290,8 +258,7 @@ class MessageController extends ControllerBase
     $range_from = null,
     $range_to = null,
     $output_mode = 'html'
-  )
-  {
+  ) {
     $test_send_email_addresses = [];
     $message = [];
     $test_data = [];
@@ -358,9 +325,21 @@ class MessageController extends ControllerBase
 
       // Combine Message with HTML Design Template
       if (self::emailTest()) {
-        $message_html = Email::generateMessageHtml($message_nid, 0, $text, $template_nid, true); // render only body
+        $message_html = Email::generateMessageHtml(
+          $message_nid,
+          0,
+          $text,
+          $template_nid,
+          true
+        ); // render only body
       } else {
-        $message_html = Email::generateMessageHtml($message_nid, $member_nid, $text, $template_nid, false); // render with HTML-HEAD
+        $message_html = Email::generateMessageHtml(
+          $message_nid,
+          $member_nid,
+          $text,
+          $template_nid,
+          false
+        ); // render with HTML-HEAD
       }
 
       // replace Placeholders
@@ -385,7 +364,6 @@ class MessageController extends ControllerBase
         // continue to send email
         Email::sendNewsletterMail($module, $data);
         $section = 'newsletter';
-
       } else {
         $test_data = $data;
         $section = 'test';
@@ -584,8 +562,6 @@ class MessageController extends ControllerBase
   {
   }
 
-
-
   /**
    * @param bool $date
    * @return JsonResponse
@@ -670,8 +646,6 @@ class MessageController extends ControllerBase
 
     // all members with the subscriber tags of message
     foreach ($subscriber_groups as $group_id) {
-
-
       $bundle = 'smmg_member';
 
       // Query with entity_type.manager (The way to go)
@@ -680,15 +654,13 @@ class MessageController extends ControllerBase
         ->getQuery()
         ->condition('type', $bundle)
         ->condition('field_smmg_subscriber_group', $group_id)
-        ->condition('field_email', NULL, 'IS NOT NULL')
+        ->condition('field_email', null, 'IS NOT NULL')
         ->sort('created', 'ASC')
         ->execute();
 
       $number_of_nodes = count($query_result);
 
       $node_subscribers = Node::loadMultiple($query_result);
-
-
 
       // get id and email from members
       // put in array: id => email
@@ -766,22 +738,24 @@ class MessageController extends ControllerBase
 
   static function telemetry($base64): Response
   {
-
     [$nid_message, $nid_member] = self::unserializeTelemetry($base64);
 
     self::updateMemberNewsletterData($nid_message, $nid_member);
 
-    $file = "\x47\x49\x46\x38\x37\x61\x1\x0\x1\x0\x80\x0\x0\xfc\x6a\x6c\x0\x0\x0\x2c\x0\x0\x0\x0\x1\x0\x1\x0\x0\x2\x2\x44\x1\x0\x3b";
+    $file =
+      "\x47\x49\x46\x38\x37\x61\x1\x0\x1\x0\x80\x0\x0\xfc\x6a\x6c\x0\x0\x0\x2c\x0\x0\x0\x0\x1\x0\x1\x0\x0\x2\x2\x44\x1\x0\x3b";
     $filename = 'telemetry.gif';
     $response = new Response();
-    $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+    $disposition = $response->headers->makeDisposition(
+      ResponseHeaderBag::DISPOSITION_INLINE,
+      $filename
+    );
     $response->headers->set('Content-Disposition', $disposition);
     $response->headers->set('Content-Type', 'image/gif');
     $response->setContent($file);
 
     return $response;
   }
-
 
   /**
    * @param $nid_message
@@ -802,7 +776,6 @@ class MessageController extends ControllerBase
    */
   static function unserializeTelemetry($base64): array
   {
-
     $data = base64_decode($base64);
     return explode(',', $data);
   }

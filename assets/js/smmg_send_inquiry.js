@@ -25,7 +25,6 @@
           });
 
 
-
         });
     },
   };
@@ -55,7 +54,7 @@
 
     setIcon('ok');
     $('.smmg-start-task-trigger').text('beendet');
-    $('.smmg-start-task-trigger').parent().addClass('task-done')
+    $('.smmg-start-task-trigger').parent().addClass('task-done');
 
   }
 
@@ -76,14 +75,15 @@
     // change Page Title
     $('.title.page-title').text('Newsletter wird verarbeitet');
     const url = '/smmg/task/add/' + messageID;
-    $.ajax({
-      dataType: 'json',
-      url: url,
-      success: function(result) {
-        console.log('Result', result);
-        update(result);
-      },
-    });
+    alert(url);
+      $.get({
+        dataType: 'json',
+        url: url,
+        success: function(result) {
+          console.log('Result', result);
+          update(result);
+        },
+      });
   }
 
   /**
@@ -122,12 +122,12 @@
     $.each(tasks, function(i) {
       const tasknumber = i + 1;
       const title = 'Task ' + tasknumber;
-      const message_id = tasks[i].message_id;
+      const message_id = tasks[i].message.id;
       const number = tasks[i].number;
       const part_of = tasks[i].part_of;
       const range_from = tasks[i].range_from;
       const range_to = tasks[i].range_to;
-      const from_to = 'von ' + range_from + ' bis ' + range_to;
+      const from_to = 'von ' + range.from + ' bis ' + range.to;
       const task_id = tasks[i].task_id;
       const date = new Date();
       const next_action = roundToHour(date);
