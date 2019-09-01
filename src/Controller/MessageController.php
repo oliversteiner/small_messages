@@ -70,11 +70,11 @@ class MessageController extends ControllerBase
     $data = json_decode($json_data, true);
 
     $new_item = [
-      'message_id' => $message_id,
-      'send_date' => $send_date_timestamp,
+      'messageId' => $message_id,
+      'sendDate' => $send_date_timestamp,
       'section' => $section,
-      'open' => 0,
-      'unsubscribe' => 0,
+      'open' => false,
+      'unsubscribe' => false,
     ];
 
     $data[] = $new_item;

@@ -119,15 +119,15 @@ class Message
     $this->data = [
       'id' => (int) $this->id,
       'title' => $this->title,
-      'created_ts' => (int) $this->created,
-      'changed_ts' => (int) $this->changed,
+      'created' => (int) $this->created,
+      'changed' => (int) $this->changed,
       'category' => $this->group,
       'text' => $this->text,
-      'is_send' => (bool) $this->is_send,
-      'send_ts' => (int) $this->send_date,
-      'is_template' => (bool) $this->is_template,
-      'subscriber_group' => $this->subscriber_group,
-      'design_template' => (int) $this->design_template,
+      'isSend' => (bool) $this->is_send,
+      'send' => (int) $this->send_date,
+      'isTemplate' => (bool) $this->is_template,
+      'subscriberGroups' => $this->subscriber_group,
+      'designTemplate' => (int) $this->design_template,
       'count' => $count,
     ];
   }
