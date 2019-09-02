@@ -4,6 +4,7 @@ namespace Drupal\small_messages\Types;
 
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Helper;
+use Drupal\smmg_newsletter\Controller\NewsletterController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -96,7 +97,7 @@ class Message
       );
       $this->text = Helper::getFieldValue($node, self::field_text);
       $this->send_date = Helper::getFieldValue($node, self::field_send_date);
-      $this->subscriber_group = Helper::getFieldValue(
+      $subscriber_groups = Helper::getFieldValue(
         $node,
         self::field_subscriber_group,
         'smmg_subscriber_group',
@@ -108,6 +109,14 @@ class Message
       );
     }
 
+    $new_subscriber_groups = [];
+    foreach ($subscriber_groups as $group) {
+      $new_group = $group;
+      $new_group['subscribers'] = (int)NewsletterController::countAllSubscribers($group['id']);
+      $new_subscriber_groups[] = $new_group;
+    }
+    $this->subscriber_group = $new_subscriber_groups;
+
     // Counts
     $count = [
       'all' => 0,
@@ -117,17 +126,17 @@ class Message
     ];
 
     $this->data = [
-      'id' => (int) $this->id,
+      'id' => (int)$this->id,
       'title' => $this->title,
-      'created' => (int) $this->created,
-      'changed' => (int) $this->changed,
+      'created' => (int)$this->created,
+      'changed' => (int)$this->changed,
       'category' => $this->group,
       'text' => $this->text,
-      'isSend' => (bool) $this->is_send,
-      'send' => (int) $this->send_date,
-      'isTemplate' => (bool) $this->is_template,
+      'isSend' => (bool)$this->is_send,
+      'send' => (int)$this->send_date,
+      'isTemplate' => (bool)$this->is_template,
       'subscriberGroups' => $this->subscriber_group,
-      'designTemplate' => (int) $this->design_template,
+      'designTemplate' => (int)$this->design_template,
       'count' => $count,
     ];
   }

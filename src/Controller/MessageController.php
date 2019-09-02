@@ -13,6 +13,7 @@ use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
+use Drupal\smmg_member\Types\Member;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,14 +34,14 @@ class MessageController extends ControllerBase
       $json_data = Helper::getFieldValue($node, 'data');
       $open_date = new DateTime();
       $open_date_timestamp = $open_date->getTimestamp();
-      $open = [1, $open_date_timestamp];
 
       $data = json_decode($json_data, true);
 
       // Add new entry
       foreach ($data as $item) {
         if ((int) $item['message_id'] === (int) $nid_message) {
-          $item['open'] = $open;
+          $item['open'] = true;
+          $item['openTS'] = $open_date_timestamp;
         }
       }
 
@@ -49,40 +50,6 @@ class MessageController extends ControllerBase
         $node->save();
       } catch (EntityStorageException $e) {
       }
-    }
-  }
-
-  /**
-   * @param $subscriber_node
-   * @param string $section
-   * @param int $message_id
-   * @throws Exception
-   */
-  private static function addNewsletterDataToSubscriber(
-    Node $subscriber_node,
-    string $section,
-    int $message_id
-  ): void {
-    $date = new DateTime();
-    $send_date_timestamp = $date->getTimestamp();
-
-    $json_data = Helper::getFieldValue($subscriber_node, 'data', false, true);
-    $data = json_decode($json_data, true);
-
-    $new_item = [
-      'messageId' => $message_id,
-      'sendDate' => $send_date_timestamp,
-      'section' => $section,
-      'open' => false,
-      'unsubscribe' => false,
-    ];
-
-    $data[] = $new_item;
-
-    try {
-      $subscriber_node->set('field_data', json_encode($data));
-      $subscriber_node->save();
-    } catch (EntityStorageException $e) {
     }
   }
 
@@ -313,123 +280,137 @@ class MessageController extends ControllerBase
       $data = [];
       $node_subscriber = Node::load($member_nid);
 
-      $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
-      $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
-      $title = $node->label();
+      if ($node_subscriber) {
+        $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
+        $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
+        $title = $node->label();
 
-      $address['first_name'] = $first_name;
-      $address['last_name'] = $last_name;
-      $address['email'] = $email;
-      $address['title'] = $title;
-      $address['id'] = $member_nid;
+        $address['first_name'] = $first_name;
+        $address['last_name'] = $last_name;
+        $address['email'] = $email;
+        $address['title'] = $title;
+        $address['id'] = $member_nid;
 
-      // Combine Message with HTML Design Template
-      if (self::emailTest()) {
-        $message_html = Email::generateMessageHtml(
-          $message_nid,
-          0,
-          $text,
-          $template_nid,
+        // Combine Message with HTML Design Template
+        if (self::emailTest()) {
+          $message_html = Email::generateMessageHtml(
+            $message_nid,
+            0,
+            $text,
+            $template_nid,
+            true
+          ); // render only body
+        } else {
+          $message_html = Email::generateMessageHtml(
+            $message_nid,
+            $member_nid,
+            $text,
+            $template_nid,
+            false
+          ); // render with HTML-HEAD
+        }
+
+        // replace Placeholders
+        $message_plain = Email::replacePlaceholderInText($text, $address);
+
+        // replace Placeholders
+        $message_html_proceeded = Email::replacePlaceholderInText(
+          $message_html,
+          $address
+        );
+
+        // Add to Data
+        $data['title'] = $message['title'];
+        $data['from'] = Email::getEmailAddressesFromConfig($module);
+        $data['to'] = $email;
+        $data['message_plain'] = $message_plain;
+        $data['message_html'] = $message_html_proceeded;
+
+        $test_send_email_addresses[] = EMAIL::obfuscate_email($email);
+
+        if (!self::emailTest()) {
+          // continue to send email
+          Email::sendNewsletterMail($module, $data);
+          $section = 'newsletter';
+        } else {
+          $test_data = $data;
+          $test = true;
+        }
+
+        // add Newsletter Entry to Member in Field Data
+        $json_data = Helper::getFieldValue(
+          $node_subscriber,
+          'data',
+          false,
           true
-        ); // render only body
-      } else {
-        $message_html = Email::generateMessageHtml(
-          $message_nid,
-          $member_nid,
-          $text,
-          $template_nid,
-          false
-        ); // render with HTML-HEAD
+        );
+        $data = json_decode($json_data, true);
+        $test = self::emailTest() ? true : false;
+
+        $new_data = Member::buildJsonData($data, $message_nid, $test);
+
+        try {
+          $node_subscriber->set('field_data', json_encode($new_data));
+          $node_subscriber->save();
+        } catch (EntityStorageException $e) {
+        }
       }
 
-      // replace Placeholders
-      $message_plain = Email::replacePlaceholderInText($text, $address);
+      $result = [
+        'number_of_range_subscribers' => $number_of_range_subscribers,
+        'number_of_subscribers' => $number_of_subscribers,
+        'range_from' => $range_from,
+        'range_to' => $range_to,
+      ];
 
-      // replace Placeholders
-      $message_html_proceeded = Email::replacePlaceholderInText(
-        $message_html,
-        $address
-      );
+      // Test without send
+      if (self::emailTest()) {
+        Drupal::messenger()->addMessage(
+          t(
+            "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
+          )
+        );
 
-      // Add to Data
-      $data['title'] = $message['title'];
-      $data['from'] = Email::getEmailAddressesFromConfig($module);
-      $data['to'] = $email;
-      $data['message_plain'] = $message_plain;
-      $data['message_html'] = $message_html_proceeded;
+        // Show Email Test Warning
+        Drupal::messenger()->addWarning(
+          t(
+            'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+            array('@link' => $settings_link)
+          )
+        );
 
-      $test_send_email_addresses[] = EMAIL::obfuscate_email($email);
+        // Show all email-adresses
+        Drupal::messenger()->addWarning(
+          implode(', ', $test_send_email_addresses)
+        );
 
-      if (!self::emailTest()) {
-        // continue to send email
-        Email::sendNewsletterMail($module, $data);
-        $section = 'newsletter';
+        // Prepare Twig Template for Browser output
+        $build = Email::showEmail($module, $test_data);
       } else {
-        $test_data = $data;
-        $section = 'test';
+        // Show all email-adresses
+        Drupal::messenger()->addMessage(
+          implode(', ', $test_send_email_addresses)
+        );
       }
+      self::setSendDate($message_nid);
 
-      self::addNewsletterDataToSubscriber(
-        $node_subscriber,
-        $section,
-        $message_nid
-      );
-    }
+      switch ($output_mode) {
+        case 'row':
+          return self::returnRow($result);
+          break;
 
-    $result = [
-      'number_of_range_subscribers' => $number_of_range_subscribers,
-      'number_of_subscribers' => $number_of_subscribers,
-      'range_from' => $range_from,
-      'range_to' => $range_to,
-    ];
+        case 'html':
+          return self::returnHTML($result);
+          break;
 
-    // Test without send
-    if (self::emailTest()) {
-      Drupal::messenger()->addMessage(
-        t(
-          "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
-        )
-      );
+        case 'json':
+          return self::returnJSON($result);
+          break;
 
-      // Show Email Test Warning
-      Drupal::messenger()->addWarning(
-        t(
-          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
-          array('@link' => $settings_link)
-        )
-      );
-
-      // Show all email-adresses
-      Drupal::messenger()->addWarning(
-        implode(', ', $test_send_email_addresses)
-      );
-
-      // Prepare Twig Template for Browser output
-      $build = Email::showEmail($module, $test_data);
-    } else {
-      // Show all email-adresses
-      Drupal::messenger()->addMessage(
-        implode(', ', $test_send_email_addresses)
-      );
-    }
-    self::setSendDate($message_nid);
-
-    switch ($output_mode) {
-      case 'row':
-        return self::returnRow($result);
-        break;
-
-      case 'html':
-        return self::returnHTML($result, $build);
-        break;
-
-      case 'json':
-        return self::returnJSON($result);
-        break;
-
-      default:
-        return self::returnHTML($result, $build);
-        break;
+        default:
+          return self::returnHTML($result);
+          break;
+      }
     }
   }
 
