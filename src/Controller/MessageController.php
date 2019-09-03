@@ -32,14 +32,13 @@ class MessageController extends ControllerBase
 
     if ($node) {
       $json_data = Helper::getFieldValue($node, 'data');
-      $open_date = new DateTime();
-      $open_date_timestamp = $open_date->getTimestamp();
+      $open_date_timestamp = time();
 
       $data = json_decode($json_data, true);
 
       // Add new entry
       foreach ($data as $item) {
-        if ((int) $item['message_id'] === (int) $nid_message) {
+        if ((int)$item['message_id'] === (int)$nid_message) {
           $item['open'] = true;
           $item['openTS'] = $open_date_timestamp;
         }
@@ -159,19 +158,19 @@ class MessageController extends ControllerBase
       }
 
       // last
-      if ($task_number === (int) $number_of_tasks) {
+      if ($task_number === (int)$number_of_tasks) {
         // on the last Task add actual number of Subscribers
         $range_to = $number_of_subscribers;
       }
 
       $message = [
-        'id' => (int) $nid,
+        'id' => (int)$nid,
         'title' => $message_title,
       ];
 
       $range = [
-        'from' => (int) $range_from,
-        'to' => (int) $range_to,
+        'from' => (int)$range_from,
+        'to' => (int)$range_to,
       ];
 
       // generate Data
@@ -225,7 +224,8 @@ class MessageController extends ControllerBase
     $range_from = null,
     $range_to = null,
     $output_mode = 'html'
-  ) {
+  )
+  {
     $test_send_email_addresses = [];
     $message = [];
     $test_data = [];
@@ -344,10 +344,16 @@ class MessageController extends ControllerBase
           false,
           true
         );
-        $data = json_decode($json_data, true);
+
+        if (is_string($json_data)) {
+          $newsletter_send_data = json_decode($json_data, true);
+        } else {
+          $newsletter_send_data = array();
+        }
+
         $test = self::emailTest() ? true : false;
 
-        $new_data = Member::buildJsonData($data, $message_nid, $test);
+        $new_data = Member::buildJsonData($newsletter_send_data, $message_nid, $test);
 
         try {
           $node_subscriber->set('field_data', json_encode($new_data));
@@ -355,6 +361,7 @@ class MessageController extends ControllerBase
         } catch (EntityStorageException $e) {
         }
       }
+    }
 
       $result = [
         'number_of_range_subscribers' => $number_of_range_subscribers,
@@ -412,7 +419,7 @@ class MessageController extends ControllerBase
           break;
       }
     }
-  }
+
 
   /**
    * @param $result

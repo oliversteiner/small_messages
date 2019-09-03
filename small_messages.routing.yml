@@ -164,3 +164,15 @@ small_messages.telemetry:
     _base64: null
   requirements:
     _permission: 'access content'
+
+
+# ------------------------------------------------
+
+small_messages.api.task.run:
+  path: '/smmg/api/task/run/{nid}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::runTask'
+    _title: 'Run Task'
+    _nid: NULL
+  requirements:
+    _permission: 'access content' # TODO Warning! only Development
