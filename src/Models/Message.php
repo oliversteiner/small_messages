@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class Newsletter
- * @package Drupal\smmg_newsletter\Types
+ * @package Drupal\smmg_newsletter\Models
  *
  * Fields
  * -----------------------------

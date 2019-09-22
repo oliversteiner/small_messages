@@ -13,7 +13,7 @@ use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
-use Drupal\smmg_member\Types\Member;
+use Drupal\smmg_member\Models\Member;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
