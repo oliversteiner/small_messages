@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\small_messages\Types;
+namespace Drupal\small_messages\Models;
 
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Helper;

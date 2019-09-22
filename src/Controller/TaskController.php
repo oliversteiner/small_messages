@@ -8,7 +8,7 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\Node;
-use Drupal\small_messages\types\Task;
+use Drupal\small_messages\Models\Task;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Exception;
