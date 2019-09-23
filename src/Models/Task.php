@@ -54,6 +54,7 @@ class Task
 
     $message['id'] = 0;
     $message['title'] = '';
+
     $related = '';
 
     $data = json_decode($data_json, true);
