@@ -338,25 +338,25 @@ class MessageController extends ControllerBase
         }
 
         // add Newsletter Entry to Member in Field Data
-        $json_data = Helper::getFieldValue(
+        $telemetry = Helper::getFieldValue(
           $node_subscriber,
-          'data',
+          Member::field_telemetry,
           false,
           true
         );
 
-        if (is_string($json_data)) {
-          $newsletter_send_data = json_decode($json_data, true);
+        if (is_string($telemetry)) {
+          $newsletter_send_data = json_decode($telemetry, true);
         } else {
           $newsletter_send_data = array();
         }
 
         $test = self::emailTest() ? true : false;
 
-        $new_data = Member::buildJsonData($newsletter_send_data, $message_nid, $test);
+        $telemetry_new = Member::buildTelemetry($newsletter_send_data, $message_nid, $test);
 
         try {
-          $node_subscriber->set('field_data', json_encode($new_data));
+          $node_subscriber->set(Member::field_telemetry, json_encode($telemetry_new));
           $node_subscriber->save();
         } catch (EntityStorageException $e) {
         }
@@ -585,7 +585,7 @@ class MessageController extends ControllerBase
     $query_result = $query
       ->getQuery()
       ->condition('type', $bundle)
-      ->condition('field_smmg_subscriber_group', $import_tid)
+      ->condition(Member::field_subscriber_group, $import_tid)
       ->range(0, $range_max)
       ->execute();
 
