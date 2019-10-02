@@ -4,6 +4,7 @@ namespace Drupal\small_messages\Models;
 
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Helper;
+use Drupal\smmg_member\Models\Member;
 use Drupal\smmg_newsletter\Controller\NewsletterController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -112,7 +113,7 @@ class Message
     $new_subscriber_groups = [];
     foreach ($subscriber_groups as $group) {
       $new_group = $group;
-      $new_group['subscribers'] = (int)NewsletterController::countAllSubscribers($group['id']);
+      $new_group['subscribers'] = (int)self::countMembers(Message::field_subscriber_group, $group['id']);
       $new_subscriber_groups[] = $new_group;
     }
     $this->subscriber_group = $new_subscriber_groups;
@@ -168,5 +169,18 @@ class Message
   public function created(): bool
   {
     return $this->created;
+  }
+
+  public static function countMembers($field, $tid)
+  {
+    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query_count = $query
+      ->getQuery()
+      ->condition('type', Member::type)
+      ->condition($field, $tid)
+      ->count()
+      ->execute();
+
+    return $query_count;
   }
 }
