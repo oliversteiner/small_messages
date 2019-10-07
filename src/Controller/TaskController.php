@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *  - field_data (JSON)
  *  - field_smmg_is_active (Boolean)
  *  - field_smmg_is_done (Boolean)
+ *  - field_smmg_is_done_timestamp (ts)
  *
  */
 class TaskController extends ControllerBase
@@ -100,13 +101,19 @@ class TaskController extends ControllerBase
    */
   public function getTasks(): JsonResponse
   {
+    $name = 'Newsletter Tasks';
+    $action = 'list';
+    $path = '';
+    $base = 'smmg/api/tasks/';
+    $version = '1.0.1';
     $tasks = [];
+    $message = '';
 
     // Query with entity_type.manager (The way to go)
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query->getQuery()
-      ->condition('type', 'smmg_task')
-      ->sort('created', 'DESC' )
+      ->condition('type', Task::type)
+      ->sort('created', 'DESC')
       ->execute();
 
     $number_of = count($query_result);
@@ -120,12 +127,18 @@ class TaskController extends ControllerBase
     foreach ($query_result as $nid) {
       $task = new Task($nid);
 
-      $tasks[] = $task->getData();
+      $tasks[] = $task->getTelemetry();
     }
 
+
     $response = [
-      'tasks' => $tasks,
+      'name' => $name,
+      'path' => $base . $path,
+      'version' => $version,
+      'action' => $action,
+      'message' => $message,
       'count' => $number_of,
+      'tasks' => $tasks,
     ];
 
     return new JsonResponse($response);
@@ -145,9 +158,9 @@ class TaskController extends ControllerBase
     // Query with entity_type.manager (The way to go)
     $query = \Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query->getQuery()
-      ->condition('type', 'smmg_task')
-      ->condition('field_smmg_is_active', '1')
-      ->condition('field_smmg_is_done', '0')
+      ->condition('type', Task::type)
+      ->condition(Task::field_active, '1')
+      ->condition(Task::field_done, '0')
       ->sort('created', 'ASC')
       ->execute();
 
@@ -166,30 +179,44 @@ class TaskController extends ControllerBase
 
   public function runTask($nid): JsonResponse
   {
-    $task_id = $nid;
-    $task_title = '';
-    $task_data = '';
+    $name = 'Run Task';
+    $action = 'run';
+    $id = $nid;
+    $path = 'run/';
+    $base = 'smmg/api/task/';
+    $version = '1.0.0';
+    $message = '';
+    $label = '';
+    $telemetry = '';
     $is_done = 0;
 
 
-    $node = Node::load($nid);
+    $node_task = Node::load($nid);
 
-    if (!empty($node)) {
-      $task_id = $node->id();
-      $task_title = $node->label();
-      $task_data = Helper::getFieldValue($node, 'data');
-      $is_done = Helper::getFieldValue($node, 'smmg_is_done');
+    if (!empty($node_task)) {
+      $id = $node_task->id();
+      $label = $node_task->label();
+      $telemetry = Helper::getFieldValue($node_task, Task::field_telemetry);
+      $is_done = Helper::getFieldValue($node_task, Task::field_done);
     }
 
+    $task = [
+      'id' => $id,
+      'label' => $label,
+      'telemetry' => $telemetry,
+    ];
 
     $response = [
-      'task_id' => $task_id,
-      'task_title' => $task_title,
-      'task_data' => $task_data,
+      'name' => $name,
+      'path' => $base . $path . $id,
+      'version' => $version,
+      'action' => $action,
+      'message' => $message,
+      'task' => $task,
     ];
 
 // json data to array
-    $data = json_decode($task_data, true);
+    $data = json_decode($telemetry, true);
 
     $message_nid = $data['message']['id'];
     $range_from = $data['range']['from'];
@@ -202,7 +229,10 @@ class TaskController extends ControllerBase
     $result = MessageController::startRun($message_nid, $range_from, $range_to, 'row');
 
     if (!empty($result['error'])) {
-      throw new RuntimeException($result['error']);
+      // throw new RuntimeException($result['error']);
+      $response['error'] = 'run Task failed';
+      $response['message'] = $result;
+
     }
 
 
@@ -210,16 +240,16 @@ class TaskController extends ControllerBase
 
     // Set Task to done
     try {
-      $node->set('field_smmg_is_done', 1);
-      $node->set('field_smmg_is_done_timestamp', time());
+      $node_task->set(Task::field_done, 1);
+      $node_task->set(Task::field_done_timestamp, time());
 
-      $node->save();
+      $node_task->save();
     } catch (EntityStorageException $e) {
     }
 
 // Admin Mail
     $admin_text = "<h1>Task Run erfolgreich</h1>";
-    $admin_text .= "<h2>$task_title</h2>";
+    $admin_text .= "<h2>$label</h2>";
     $admin_text .= "<table style='text-align: left'>";
 
     foreach ($result as $key => $value) {
@@ -231,7 +261,7 @@ class TaskController extends ControllerBase
     $admin_text .= "</table>";
 
     $admin_mail_data = [
-      'title' => 'Task Run: ' . $task_title,
+      'title' => 'Task Run: ' . $label,
       'message_plain' => $admin_text,
       'message_html' => $admin_text,
     ];
@@ -244,24 +274,32 @@ class TaskController extends ControllerBase
 
   /**
    * @param $data
-   * @return bool
+   * @return array
    * @throws Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public static function newTask($data): bool
+  public static function newTask($data): array
   {
-    $short_title = substr($data['message_title'], 0, 8) . '...';
 
-    $title = sprintf(
-      '%s: %s (%s) - From %s to %s',
-      $data['group'],
-      $short_title,
-      $data['message']['id'],
-      $data['range']['from'],
-      $data['range']['to']
-    );
 
     if ($data) {
+
+      if (isset($data['message_title'])) {
+        $short_title = substr($data['message_title'], 0, 8) . '...';
+      } else {
+        $short_title = 'No Title';
+      }
+
+      $title = sprintf(
+        '%s: %s (%s) - From %s to %s',
+        $data['category'],
+        $short_title,
+        $data['message']['id'],
+        $data['range']['from'],
+        $data['range']['to']
+      );
+
+
       $node = Drupal::entityTypeManager()
         ->getStorage('node')
         ->create([
@@ -280,7 +318,7 @@ class TaskController extends ControllerBase
         $nid = $node->id();
         $data['task_id'] = (int)$nid;
       } catch (EntityStorageException $e) {
-        return false;
+        return ['error' => 'Creating task failed'];
       }
     }
 

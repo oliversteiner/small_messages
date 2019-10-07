@@ -9,11 +9,13 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Link;
+use Drupal\mollo_email\Controller\EmailController;
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Drupal\smmg_member\Models\Member;
+use Drupal\smmg_newsletter\Models\Newsletter;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -113,6 +115,8 @@ class MessageController extends ControllerBase
   {
     $max = 200;
     $result = [];
+    $message_title = '';
+    $send_date = '';
 
     // Test values
     // $number_of_subscribers = 4685;
@@ -123,14 +127,15 @@ class MessageController extends ControllerBase
       throw new \RuntimeException('No Message Nid given.');
     }
 
-    $node = NODE::load($nid);
+    $message_node = NODE::load($nid);
 
     // Message Title
-    if (!empty($node)) {
-      $message_title = $node->label();
+    if (!empty($message_node)) {
+      $message_title = $message_node->label();
+      $send_date = Helper::getFieldValue($message_node, Newsletter::field_send_date);
     }
 
-    $all_subscribers = $this->getSubscribersFromMessage($nid, $node);
+    $all_subscribers = $this->getSubscribersFromMessage($nid, $message_node);
     $number_of_subscribers = count($all_subscribers);
     // split subscriber to 200 groups
     $number_of_tasks = $number_of_subscribers / $max;
@@ -166,6 +171,9 @@ class MessageController extends ControllerBase
       $message = [
         'id' => (int)$nid,
         'title' => $message_title,
+        'category' => 'Newsletter',
+        'send' => $send_date,
+
       ];
 
       $range = [
@@ -177,9 +185,10 @@ class MessageController extends ControllerBase
       $data = [
         'number' => $task_number,
         'part_of' => $number_of_tasks,
-        'group' => 'Newsletter',
+        'category' => 'Newsletter',
         'related' => $uuid,
         'message' => $message,
+        'message_title' => $message_title,
         'range' => $range,
       ];
 
@@ -213,11 +222,10 @@ class MessageController extends ControllerBase
    * @param null $message_nid
    * @param int $range_from
    * @param int $range_to
-   * @param bool $json
+   * @param string $output_mode
    * @return array|JsonResponse
    * @throws InvalidPluginDefinitionException
    * @throws PluginNotFoundException
-   * @throws Exception
    */
   public static function startRun(
     $message_nid,
@@ -265,6 +273,9 @@ class MessageController extends ControllerBase
     $all_subscribers = self::getSubscribersFromMessage($message_nid, $node);
     $number_of_subscribers = count($all_subscribers);
 
+    // get Invalid Emails
+    $invalid_emails = EmailController::getInvalidAddresses();
+
     // process only range of subscribers
 
     $range_length = $range_to - $range_from;
@@ -279,8 +290,13 @@ class MessageController extends ControllerBase
     foreach ($range_subscribers as $member_nid => $email) {
       $data = [];
       $node_subscriber = Node::load($member_nid);
+      $email_invalid = in_array($email, $invalid_emails, false);
 
-      if ($node_subscriber) {
+      if ($email_invalid) {
+        \Drupal::logger('Newsletter')->warning('Email ' . $email . ' is in invalid addresses list');
+      }
+
+      if ($node_subscriber && !$email_invalid) {
         $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
         $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
         $title = $node->label();
@@ -363,62 +379,62 @@ class MessageController extends ControllerBase
       }
     }
 
-      $result = [
-        'number_of_range_subscribers' => $number_of_range_subscribers,
-        'number_of_subscribers' => $number_of_subscribers,
-        'range_from' => $range_from,
-        'range_to' => $range_to,
-      ];
+    $result = [
+      'number_of_range_subscribers' => $number_of_range_subscribers,
+      'number_of_subscribers' => $number_of_subscribers,
+      'range_from' => $range_from,
+      'range_to' => $range_to,
+    ];
 
-      // Test without send
-      if (self::emailTest()) {
-        Drupal::messenger()->addMessage(
-          t(
-            "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
-          )
-        );
+    // Test without send
+    if (self::emailTest()) {
+      Drupal::messenger()->addMessage(
+        t(
+          "<br>$number_of_range_subscribers of $number_of_subscribers Newsletter (from $range_from to $range_to) send to Subscribers<br>"
+        )
+      );
 
-        // Show Email Test Warning
-        Drupal::messenger()->addWarning(
-          t(
-            'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
-            array('@link' => $settings_link)
-          )
-        );
+      // Show Email Test Warning
+      Drupal::messenger()->addWarning(
+        t(
+          'Test mode active. No email was sent to the subscriber. Disable test mode on @link.',
+          array('@link' => $settings_link)
+        )
+      );
 
-        // Show all email-adresses
-        Drupal::messenger()->addWarning(
-          implode(', ', $test_send_email_addresses)
-        );
+      // Show all email-adresses
+      Drupal::messenger()->addWarning(
+        implode(', ', $test_send_email_addresses)
+      );
 
-        // Prepare Twig Template for Browser output
-        $build = Email::showEmail($module, $test_data);
-      } else {
-        // Show all email-adresses
-        Drupal::messenger()->addMessage(
-          implode(', ', $test_send_email_addresses)
-        );
-      }
-      self::setSendDate($message_nid);
-
-      switch ($output_mode) {
-        case 'row':
-          return self::returnRow($result);
-          break;
-
-        case 'html':
-          return self::returnHTML($result);
-          break;
-
-        case 'json':
-          return self::returnJSON($result);
-          break;
-
-        default:
-          return self::returnHTML($result);
-          break;
-      }
+      // Prepare Twig Template for Browser output
+      $build = Email::showEmail($module, $test_data);
+    } else {
+      // Show all email-adresses
+      Drupal::messenger()->addMessage(
+        implode(', ', $test_send_email_addresses)
+      );
     }
+    self::setSendDate($message_nid);
+
+    switch ($output_mode) {
+      case 'row':
+        return self::returnRow($result);
+        break;
+
+      case 'html':
+        return self::returnHTML($result);
+        break;
+
+      case 'json':
+        return self::returnJSON($result);
+        break;
+
+      default:
+        return self::returnHTML($result);
+        break;
+    }
+  }
 
 
   /**

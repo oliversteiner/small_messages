@@ -75,7 +75,6 @@
     // change Page Title
     $('.title.page-title').text('Newsletter wird verarbeitet');
     const url = '/smmg/task/add/' + messageID;
-    alert(url);
       $.get({
         dataType: 'json',
         url: url,
@@ -102,8 +101,8 @@
    *      - group
    *      - message_id
    *      - message_title
-   *      - range_from
-   *      - range_to
+   *      - range['from']
+   *      - range['to']
    *      - task_io
    */
   function update(result) {
@@ -125,8 +124,7 @@
       const message_id = tasks[i].message.id;
       const number = tasks[i].number;
       const part_of = tasks[i].part_of;
-      const range_from = tasks[i].range_from;
-      const range_to = tasks[i].range_to;
+      const range = tasks[i].range;
       const from_to = 'von ' + range.from + ' bis ' + range.to;
       const task_id = tasks[i].task_id;
       const date = new Date();
