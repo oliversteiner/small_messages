@@ -2,8 +2,10 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
+use Drupal\Core\Link;
 
 /**
  *
@@ -24,6 +26,29 @@ trait SendInquiryTemplateTrait
    */
   public function prepareSend($nid)
   {
+    // check Testmode in Settings:
+    $module = 'smmg_newsletter'; // TODO Clear things between 'Messages'- and 'Newsletter'-Module
+    $config = Drupal::config($module.'.settings');
+    $config_email_test = $config->get('email_test');
+
+
+
+    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
+    if ($config_email_test === 1) {
+      // test mode active
+      $link = Link::createFromRoute(
+        t('Config Page'),
+        $module . '.settings'
+      )->toString();
+      Drupal::messenger()->addWarning(
+        t(
+          ' Test mode active. No e-mails are sent to the subscribers. Disable Test Mode on @link.',
+          array('@link' => $link)
+        )
+      );
+    }
+
+
     $template_path = $this->getSendInquiryTemplatePath();
     $template = file_get_contents($template_path);
     $build = [
@@ -213,7 +238,7 @@ trait SendInquiryTemplateTrait
           'field_smmg_subscriber_group' => $term_id,
         ]);
 
-      $nummer = count($node_subscripters);
+      $number = count($node_subscripters);
 
       $list = [];
       $list_index = 0;
@@ -231,7 +256,7 @@ trait SendInquiryTemplateTrait
 
       $output[$group_index]['id'] = $term_id;
       $output[$group_index]['title'] = $title;
-      $output[$group_index]['number'] = $nummer;
+      $output[$group_index]['number'] = $number;
       $output[$group_index]['list'] = $list;
 
       $group_index++;
