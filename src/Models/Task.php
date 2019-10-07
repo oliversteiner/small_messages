@@ -21,9 +21,12 @@ class Task
   private $done;
   private $active;
 
+  public const type = 'smmg_task';
+
   /* Drupal fields */
   public const field_active = 'field_smmg_is_active';
-  public const field_json = 'field_data';
+  public const field_old_json = 'field_data';
+  public const field_telemetry = 'field_telemetry';
   public const field_done = 'field_smmg_is_done';
 
 
@@ -46,7 +49,7 @@ class Task
       $this->title = $node->label();
       $this->created = $node->getCreatedTime();
       $this->changed = $node->getChangedTime();
-      $data_json = Helper::getFieldValue($node, self::field_json);
+      $data_json = Helper::getFieldValue($node, self::field_telemetry);
       $this->done = Helper::getFieldValue($node, self::field_done);
       $this->active = Helper::getFieldValue($node, self::field_active);
     }

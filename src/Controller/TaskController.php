@@ -248,7 +248,7 @@ class TaskController extends ControllerBase
    * @throws Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public static function newTask($data)
+  public static function newTask($data): bool
   {
     $short_title = substr($data['message_title'], 0, 8) . '...';
 
@@ -265,13 +265,13 @@ class TaskController extends ControllerBase
       $node = Drupal::entityTypeManager()
         ->getStorage('node')
         ->create([
-          'type' => 'smmg_task',
+          'type' => Task::type,
           'status' => 0, //not  published or not
           'promote' => 0, //not promoted to front page
           'title' => $title,
-          'field_smmg_is_active' => 1,
-          'field_smmg_is_done' => 0,
-          'field_data' => json_encode($data),
+          Task::field_active => 1,
+          Task::field_done => 0,
+          Task::field_telemetry => json_encode($data),
         ]);
 
       // Save
@@ -298,7 +298,7 @@ class TaskController extends ControllerBase
   {
     // TODO: Add Date-Filter
 
-    $bundle = 'smmg_task';
+    $bundle = Task::type;
     $number_of_deleted = 0;
     $number_of_proceeded_nodes = 0;
     $max = 200; // Prepend Server from Memory out
