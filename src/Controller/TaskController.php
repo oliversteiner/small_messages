@@ -377,7 +377,7 @@ public static function APIDelete($id = null): JsonResponse{
 
   $name = 'Delete Task';
   $action = 'delete';
-  $path = '';
+  $path = 'delete';
   $base = 'smmg/api/task/';
   $version = '1.0.0';
 

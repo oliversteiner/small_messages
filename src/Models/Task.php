@@ -216,15 +216,18 @@ class Task
 
   public static function delete($id = null): ?bool
   {
-    $node = Node::load((int) $id);
+    $success = false;
+    $node = Node::load($id);
+
     $bundle = self::type;
     if (!empty($node) && $node->bundle() === $bundle) {
       try {
         $node->delete();
-        return true;
+        $success =  true;
       } catch (EntityStorageException $e) {
-        return false;
+        $success =  false;
       }
     }
+    return $success;
   }
 }

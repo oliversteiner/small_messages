@@ -139,13 +139,7 @@ small_messages.run_task:
   requirements:
     _permission: 'administer content'
 
-small_messages.api.task.delete:
-  path: '/smmg/task/delete/{nid}'
-  defaults:
-    _controller: '\Drupal\small_messages\Controller\TaskController::APIDelete'
-    _nid: NULL
-  requirements:
-    _permission: 'administer content'
+
 
 small_messages.delete_imported_nodes:
   path: '/smmg/import/delete'
@@ -173,7 +167,7 @@ small_messages.telemetry:
   requirements:
     _permission: 'access content'
 
-
+# API
 # ------------------------------------------------
 
 small_messages.api.task.run:
@@ -183,4 +177,13 @@ small_messages.api.task.run:
     _title: 'Run Task'
     _nid: NULL
   requirements:
+    _permission: 'access content' # TODO Warning! only Development
+
+small_messages.api.task.delete:
+  path: '/smmg/api/task/delete/{id}'
+  defaults:
+    _controller: '\Drupal\small_messages\Controller\TaskController::APIDelete'
+    _id: NULL
+  requirements:
+#    _permission: 'administer content'
     _permission: 'access content' # TODO Warning! only Development
