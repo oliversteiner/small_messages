@@ -33,7 +33,7 @@ class MessageController extends ControllerBase
     $node = Node::load($nid_member);
 
     if ($node) {
-      $json_data = Helper::getFieldValue($node, 'data');
+      $json_data = Helper::getFieldValue($node, Member::field_telemetry);
       $open_date_timestamp = time();
 
       $data = json_decode($json_data, true);
@@ -47,7 +47,7 @@ class MessageController extends ControllerBase
       }
 
       try {
-        $node->set('field_data', json_encode($data));
+        $node->set(Member::field_telemetry, json_encode($data));
         $node->save();
       } catch (EntityStorageException $e) {
       }
@@ -71,8 +71,8 @@ class MessageController extends ControllerBase
     $node = Node::load($target_nid);
 
     if ($target_nid && !empty($node)) {
-      $node->get('field_smmg_send_date')->value = time();
-      $node->get('field_smmg_message_is_send')->value = 1;
+      $node->get(Newsletter::field_send_date)->value = time();
+      $node->get(Newsletter::field_is_send)->value = 1;
     }
 
     try {

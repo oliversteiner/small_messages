@@ -75,7 +75,7 @@ class Task
           $message['title'] = $_telemetry['message']['title'];
         }
         if (isset($_telemetry['message']['send'])) {
-          $message['send'] = (int)$_telemetry['message']['send'];
+          $message['send'] = (int) $_telemetry['message']['send'];
         }
         if (isset($_telemetry['message']['category'])) {
           $message['category'] = $_telemetry['message']['category'];
@@ -211,6 +211,20 @@ class Task
     } catch (Exception $e) {
       Drupal::messenger()->addError('Error: Cant set True to inactive');
       return false;
+    }
+  }
+
+  public static function delete($id = null): ?bool
+  {
+    $node = Node::load((int) $id);
+    $bundle = self::type;
+    if (!empty($node) && $node->bundle() === $bundle) {
+      try {
+        $node->delete();
+        return true;
+      } catch (EntityStorageException $e) {
+        return false;
+      }
     }
   }
 }

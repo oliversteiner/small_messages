@@ -11,6 +11,7 @@ use Drupal\node\Entity\Node;
 use Drupal\small_messages\Models\Task;
 use Drupal\small_messages\Utility\Email;
 use Drupal\small_messages\Utility\Helper;
+use Drupal\smmg_member\Models\Member;
 use Exception;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -370,4 +371,35 @@ class TaskController extends ControllerBase
 
     return new JsonResponse($response);
   }
+
+public static function APIDelete($id = null): JsonResponse{
+
+
+  $name = 'Delete Task';
+  $action = 'delete';
+  $path = '';
+  $base = 'smmg/api/task/';
+  $version = '1.0.0';
+
+  $response = [
+    'name' => $name,
+    'path' => $base . $path,
+    'version' => $version,
+    'action' => $action,
+  ];
+
+  // Delete
+  $delete = Task::delete($id);
+
+  // Result
+  if ($delete) {
+    $response['message'] = 'Task successfully deleted.';
+    $response['id'] = $id;
+  }else{
+    $response['error'] = true;
+    $response['message'] = 'Task could not be deleted';
+  }
+
+  return new JsonResponse($response);}
 }
+
