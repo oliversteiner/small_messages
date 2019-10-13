@@ -28,7 +28,7 @@ class MessageController extends ControllerBase
 {
   use SendInquiryTemplateTrait;
 
-  private static function updateMemberNewsletterData($nid_message, $nid_member)
+  private static function updateMemberNewsletterData($nid_message, $nid_member): void
   {
     $node = Node::load($nid_member);
 
@@ -38,18 +38,25 @@ class MessageController extends ControllerBase
 
       $data = json_decode($json_data, true);
 
+
+      $new_data = [];
       // Add new entry
       foreach ($data as $item) {
-        if ((int)$item['message_id'] === (int)$nid_message) {
+
+        if ($item && (int)$item['messageId'] === (int)$nid_message) {
           $item['open'] = true;
           $item['openTS'] = $open_date_timestamp;
+          Drupal::logger('Mollo Newsletter')->info(t('Update Telemetry; Member: '.$nid_member.' - Message: '.$nid_message));
         }
+        $new_data[] = $item;
       }
 
       try {
-        $node->set(Member::field_telemetry, json_encode($data));
+        $node->set(Member::field_telemetry, json_encode($new_data));
         $node->save();
       } catch (EntityStorageException $e) {
+        Drupal::logger('Mollo Newsletter')->warning(t('Can\'t update Telemetry; Member: '.$nid_member.' - Message: '.$nid_message));
+
       }
     }
   }
@@ -274,7 +281,14 @@ class MessageController extends ControllerBase
     $number_of_subscribers = count($all_subscribers);
 
     // get Invalid Emails
-    $invalid_emails = EmailController::getInvalidAddresses();
+    $invalid_emails =[];
+    $config_email = Drupal::config('smmg_newsletter.settings');
+    $config_invalid_email_string = $config_email->get('invalid_email');
+    $list = explode(',', $config_invalid_email_string);
+    foreach ($list as $mail) {
+      $invalid_emails[] = trim($mail);
+    }
+
 
     // process only range of subscribers
 
@@ -289,16 +303,27 @@ class MessageController extends ControllerBase
 
     foreach ($range_subscribers as $member_nid => $email) {
       $data = [];
+      $newsletter = false;
       $node_subscriber = Node::load($member_nid);
       $email_invalid = in_array($email, $invalid_emails, false);
 
-      if ($email_invalid) {
-        \Drupal::logger('Newsletter')->warning('Email ' . $email . ' is in invalid addresses list');
+      if($node_subscriber){
+        $newsletter = Helper::getFieldValue($node_subscriber, 'field_smmg_accept_newsletter');
       }
 
-      if ($node_subscriber && !$email_invalid) {
+      if (!$newsletter) {
+        Drupal::logger('Newsletter')->warning('Member ' . $member_nid . ' do not want Newsletter');
+      }
+
+      if ($email_invalid) {
+        Drupal::logger('Newsletter')->warning('Email ' . $email . ' is in invalid addresses list');
+      }
+
+
+      if ($newsletter && !$email_invalid) {
         $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
         $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
+
         $title = $node->label();
 
         $address['first_name'] = $first_name;
@@ -588,7 +613,7 @@ class MessageController extends ControllerBase
     $import_tid = Helper::getTermIDByName($term_name, $vid);
 
     // Count all Member Nodes
-    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query = Drupal::entityTypeManager()->getStorage('node');
     $count_result = $query
       ->getQuery()
       ->condition('type', $bundle)
@@ -597,7 +622,7 @@ class MessageController extends ControllerBase
     $number_of_nodes = $count_result;
 
     // get all Nids of Imported Members
-    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query = Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query
       ->getQuery()
       ->condition('type', $bundle)
@@ -653,7 +678,7 @@ class MessageController extends ControllerBase
       $bundle = 'smmg_member';
 
       // Query with entity_type.manager (The way to go)
-      $query = \Drupal::entityTypeManager()->getStorage('node');
+      $query = Drupal::entityTypeManager()->getStorage('node');
       $query_result = $query
         ->getQuery()
         ->condition('type', $bundle)
@@ -705,7 +730,7 @@ class MessageController extends ControllerBase
     $step = 1;
 
     // Query with entity_type.manager (The way to go)
-    $query = \Drupal::entityTypeManager()->getStorage('node');
+    $query = Drupal::entityTypeManager()->getStorage('node');
     $query_result = $query
       ->getQuery()
       ->condition('type', $bundle)
