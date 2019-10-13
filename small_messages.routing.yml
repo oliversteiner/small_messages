@@ -177,7 +177,8 @@ small_messages.api.task.run:
     _title: 'Run Task'
     _nid: NULL
   requirements:
-    _permission: 'access content' # TODO Warning! only Development
+    _permission: 'administer content'
+   # _permission: 'access content' # TODO Warning! only Development
 
 small_messages.api.task.delete:
   path: '/smmg/api/task/delete/{id}'
@@ -185,5 +186,5 @@ small_messages.api.task.delete:
     _controller: '\Drupal\small_messages\Controller\TaskController::APIDelete'
     _id: NULL
   requirements:
-#    _permission: 'administer content'
-    _permission: 'access content' # TODO Warning! only Development
+    _permission: 'administer content'
+ #   _permission: 'access content' # TODO Warning! only Development
