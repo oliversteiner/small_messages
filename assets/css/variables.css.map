@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": "",
-"sources": [],
-"names": [],
-"file": "variables.css"
-}
+{"version":3,"sourceRoot":"","sources":["variables.scss"],"names":[],"mappings":"AA2GA;EA9CE;EACA;EACA;EACA;EAOA;EACA,kBAzBoB;EA0BpB,OAzBc;;;AA+DhB;EAlDE;EACA;EACA;EACA;EAyBA;EACA,kBAtCyB;EAuCzB,OAtCmB;;;AA8DrB;EAtDE;EACA;EACA;EACA;EAiCA;EACA;EACA,kBA1CuB;EA2CvB,OA1CiB","file":"variables.css"}

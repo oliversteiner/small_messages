@@ -1,3 +1,32 @@
+.ajax-message-ok {
+  margin: 20px 0;
+  border-radius: 5px;
+  color: black;
+  padding: 10px;
+  border: solid 1px #2eb741;
+  background-color: #daffd4;
+  color: #185746;
+}
 
+.ajax-message-warning {
+  margin: 20px 0;
+  border-radius: 5px;
+  color: black;
+  padding: 10px;
+  border: solid 1px #ffd29b;
+  background-color: #fff8cf;
+  color: #7f5930;
+}
+
+.ajax-message-error {
+  margin: 20px 0;
+  border-radius: 5px;
+  color: black;
+  padding: 10px;
+  padding: 10px;
+  border: solid 1px #ffb4aa;
+  background-color: #ffe6e5;
+  color: #7f2013;
+}
 
 /*# sourceMappingURL=variables.css.map */
