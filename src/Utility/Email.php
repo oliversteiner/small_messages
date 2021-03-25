@@ -50,6 +50,18 @@ class Email
       $mail_to = $data['to'][0];
     }
 
+    // Check for empty Addresses // TODO: Hack
+    if($mail_to === '' || empty($mail_to)){
+      $mail_to = 'admin@mollo.ch';
+      $message = t(
+        'Empty Email-Address. Module:  @module',
+        ['@module' => $module]
+      );
+      Drupal::messenger()->addMessage($message, 'error');
+      Drupal::logger('mail-log')->error($message);
+
+    }
+
     // Addresses
     $params['from'] = $mail_from;
     $to = $mail_to;

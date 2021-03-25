@@ -319,6 +319,11 @@ class MessageController extends ControllerBase
         Drupal::logger('Newsletter')->warning('Email ' . $email . ' is in invalid addresses list');
       }
 
+      if (!\Drupal::service('email.validator')->isValid($email)) {
+        Drupal::logger('Newsletter')->warning( t('Member ' . $member_nid .': The email address %mail is not valid.', array('%mail' => $email)));
+        continue;
+      }
+
 
       if ($newsletter && !$email_invalid) {
         $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
