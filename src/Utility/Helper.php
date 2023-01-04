@@ -329,7 +329,7 @@ class Helper
    */
   public static function generateToken()
   {
-    $token = bin2hex(Crypt::randomBytes(20));
+    $token = bin2hex(Crypt::randomBytesBase64());
     return $token;
   }
 
