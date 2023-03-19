@@ -4,8 +4,8 @@ namespace Drupal\small_messages\Models;
 
 use Drupal;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\node\Entity\Node;
-use Drupal\small_messages\Utility\Helper;
 use PHPUnit\Framework\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -47,11 +47,11 @@ class Task
       $this->title = $node->label();
       $this->created = $node->getCreatedTime();
       $this->changed = $node->getChangedTime();
-      $_telemetry = Helper::getFieldValue($node, self::field_telemetry);
+      $_telemetry = MolloUtils::getFieldValue($node, self::field_telemetry);
       $_telemetry = json_decode($_telemetry, true);
 
-      $this->done = Helper::getFieldValue($node, self::field_done);
-      $this->active = Helper::getFieldValue($node, self::field_active);
+      $this->done = MolloUtils::getFieldValue($node, self::field_done);
+      $this->active = MolloUtils::getFieldValue($node, self::field_active);
     }
 
     $message['id'] = 0;

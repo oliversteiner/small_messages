@@ -2,6 +2,8 @@
 
 namespace Drupal\small_messages\Utility;
 
+use Drupal\mollo_utils\Utility\MolloUtils;
+
 trait SubscriberTrait
 {
   /**
@@ -118,7 +120,7 @@ trait SubscriberTrait
       ->load($target_nid);
 
     try {
-      $subscribers = Helper::getFieldValue($entity, 'smmg_subscriber_group');
+      $subscribers = MolloUtils::getFieldValue($entity, 'smmg_subscriber_group');
       $subscribers_unique = array_unique($subscribers); // PERFORMING ?
       $position = array_search(
         $subscriber_group_nid,

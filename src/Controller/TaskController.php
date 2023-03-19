@@ -7,10 +7,10 @@ use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Models\Task;
 use Drupal\small_messages\Utility\Email;
-use Drupal\small_messages\Utility\Helper;
 use Drupal\smmg_member\Models\Member;
 use Exception;
 use RuntimeException;
@@ -197,8 +197,8 @@ class TaskController extends ControllerBase
     if (!empty($node_task)) {
       $id = $node_task->id();
       $label = $node_task->label();
-      $telemetry = Helper::getFieldValue($node_task, Task::field_telemetry);
-      $is_done = Helper::getFieldValue($node_task, Task::field_done);
+      $telemetry = MolloUtils::getFieldValue($node_task, Task::field_telemetry);
+      $is_done = MolloUtils::getFieldValue($node_task, Task::field_done);
     }
 
     $task = [

@@ -29,8 +29,9 @@ class Email
     $mail_to = $data['to'];
 
     // Text
+    $message_as_string = implode(" ",$data['message_plain']);
     $params['title'] = $data['title'];
-    $params['message_plain'] = (string)$data['message_plain'];
+    $params['message_plain'] = $message_as_string;
     $params['message_html'] = $message_html;
 
     // 'From' Addresses
