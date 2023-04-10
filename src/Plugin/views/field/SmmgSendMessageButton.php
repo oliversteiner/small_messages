@@ -9,7 +9,7 @@ namespace Drupal\small_messages\Plugin\views\field;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\small_messages\Utility\Helper;
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\Core\Url;
 use Drupal\views\ResultRow;
@@ -62,7 +62,7 @@ class SmmgSendMessageButton extends FieldPluginBase
     $node = $values->_entity;
     $nid = $values->_entity->id();
     $field_name = 'smmg_message_is_send';
-    $is_send = Helper::getFieldValue($node, $field_name);
+    $is_send = MolloUtils::getFieldValue($node, $field_name);
     $modal_info['width'] = 700;
     $modal_info['height'] = '90%';
 

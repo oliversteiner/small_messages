@@ -10,9 +10,9 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Link;
 use Drupal\mollo_email\Controller\EmailController;
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\node\Entity\Node;
 use Drupal\small_messages\Utility\Email;
-use Drupal\small_messages\Utility\Helper;
 use Drupal\small_messages\Utility\SendInquiryTemplateTrait;
 use Drupal\smmg_member\Models\Member;
 use Drupal\smmg_newsletter\Models\Newsletter;
@@ -33,7 +33,7 @@ class MessageController extends ControllerBase
     $node = Node::load($nid_member);
 
     if ($node) {
-      $json_data = Helper::getFieldValue($node, Member::field_telemetry);
+      $json_data = MolloUtils::getFieldValue($node, Member::field_telemetry);
       $open_date_timestamp = time();
 
       $data = json_decode($json_data, true);
@@ -139,7 +139,7 @@ class MessageController extends ControllerBase
     // Message Title
     if (!empty($message_node)) {
       $message_title = $message_node->label();
-      $send_date = Helper::getFieldValue($message_node, Newsletter::field_send_date);
+      $send_date = MolloUtils::getFieldValue($message_node, Newsletter::field_send_date);
     }
 
     $all_subscribers = $this->getSubscribersFromMessage($nid, $message_node);
@@ -270,11 +270,11 @@ class MessageController extends ControllerBase
     $message['title'] = $node->label();
 
     // Template
-    $template_nid = Helper::getFieldValue($node, 'smmg_design_template');
+    $template_nid = MolloUtils::getFieldValue($node, 'smmg_design_template');
     $message['template_nid'] = $template_nid;
 
     // Plaintext and HTML Text
-    $text = Helper::getFieldValue($node, 'smmg_message_text');
+    $text = MolloUtils::getFieldValue($node, 'smmg_message_text');
 
     // subscribers
     $all_subscribers = self::getSubscribersFromMessage($message_nid, $node);
@@ -308,7 +308,7 @@ class MessageController extends ControllerBase
       $email_invalid = in_array($email, $invalid_emails, false);
 
       if($node_subscriber){
-        $newsletter = Helper::getFieldValue($node_subscriber, 'field_smmg_accept_newsletter');
+        $newsletter = MolloUtils::getFieldValue($node_subscriber, 'field_smmg_accept_newsletter');
       }
 
       if (!$newsletter) {
@@ -326,8 +326,8 @@ class MessageController extends ControllerBase
 
 
       if ($newsletter && !$email_invalid) {
-        $first_name = Helper::getFieldValue($node_subscriber, 'first_name');
-        $last_name = Helper::getFieldValue($node_subscriber, 'last_name');
+        $first_name = MolloUtils::getFieldValue($node_subscriber, 'first_name');
+        $last_name = MolloUtils::getFieldValue($node_subscriber, 'last_name');
 
         $title = $node->label();
 
@@ -384,7 +384,7 @@ class MessageController extends ControllerBase
         }
 
         // add Newsletter Entry to Member in Field Data
-        $telemetry = Helper::getFieldValue(
+        $telemetry = MolloUtils::getFieldValue(
           $node_subscriber,
           Member::field_telemetry,
           false,
@@ -615,7 +615,7 @@ class MessageController extends ControllerBase
     $range_max = 100; // Prepend Server from Memory out
     $step = 1;
 
-    $import_tid = Helper::getTermIDByName($term_name, $vid);
+    $import_tid = MolloUtils::getTermIDByName($term_name, $vid);
 
     // Count all Member Nodes
     $query = Drupal::entityTypeManager()->getStorage('node');
@@ -676,7 +676,7 @@ class MessageController extends ControllerBase
 
     // get subscriber tags
     $field_name = 'smmg_subscriber_group';
-    $subscriber_groups = Helper::getFieldValue($node, $field_name, false, true);
+    $subscriber_groups = MolloUtils::getFieldValue($node, $field_name, false, true);
 
     // all members with the subscriber tags of message
     foreach ($subscriber_groups as $group_id) {
@@ -699,7 +699,7 @@ class MessageController extends ControllerBase
       // get id and email from members
       // put in array: id => email
       foreach ($node_subscribers as $node_subscriber) {
-        $email = Helper::getFieldValue($node_subscriber, 'email');
+        $email = MolloUtils::getFieldValue($node_subscriber, 'email');
 
         $_all_subscribers[$node_subscriber->id()] = $email;
       }
@@ -753,7 +753,7 @@ class MessageController extends ControllerBase
 
         try {
           $node->set('field_smmg_accept_newsletter', 0);
-          $node->set('field_smmg_token', Helper::generateToken());
+          $node->set('field_smmg_token', MolloUtils::generateToken());
           $node->save();
         } catch (EntityStorageException $e) {
         }

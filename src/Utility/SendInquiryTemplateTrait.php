@@ -6,6 +6,7 @@ use Drupal;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Link;
+use Drupal\mollo_utils\Utility\MolloUtils;
 
 /**
  *
@@ -131,14 +132,14 @@ trait SendInquiryTemplateTrait
     $title = $entity->label();
 
 // Template
-    $template_nid = Helper::getFieldValue(
+    $template_nid = MolloUtils::getFieldValue(
       $entity,
       'smmg_design_template'
     );
 
     // Text
     // Plaintext and HTML Text
-    $text = Helper::getFieldValue(
+    $text = MolloUtils::getFieldValue(
       $entity,
       'smmg_message_text'
     );
@@ -244,7 +245,7 @@ trait SendInquiryTemplateTrait
       $list_index = 0;
       foreach ($node_subscripters as $item) {
 
-        $email = Helper::getFieldValue($item, 'email');
+        $email = MolloUtils::getFieldValue($item, 'email');
 
         $list[$list_index]['id'] = $item->id();
         $list[$list_index]['name'] = $item->label();

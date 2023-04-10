@@ -2,10 +2,9 @@
 
 namespace Drupal\small_messages\Models;
 
+use Drupal\mollo_utils\Utility\MolloUtils;
 use Drupal\node\Entity\Node;
-use Drupal\small_messages\Utility\Helper;
 use Drupal\smmg_member\Models\Member;
-use Drupal\smmg_newsletter\Controller\NewsletterController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -85,26 +84,26 @@ class Message
       $this->title = $node->label();
       $this->created = $node->getCreatedTime();
       $this->changed = $node->getChangedTime();
-      $this->is_send = Helper::getFieldValue($node, self::field_is_send);
-      $this->is_template = Helper::getFieldValue(
+      $this->is_send = MolloUtils::getFieldValue($node, self::field_is_send);
+      $this->is_template = MolloUtils::getFieldValue(
         $node,
         self::field_is_template
       );
-      $this->group = Helper::getFieldValue(
+      $this->group = MolloUtils::getFieldValue(
         $node,
         self::field_group,
         'smmg_message_group',
         'full'
       );
-      $this->text = Helper::getFieldValue($node, self::field_text);
-      $this->send_date = Helper::getFieldValue($node, self::field_send_date);
-      $subscriber_groups = Helper::getFieldValue(
+      $this->text = MolloUtils::getFieldValue($node, self::field_text);
+      $this->send_date = MolloUtils::getFieldValue($node, self::field_send_date);
+      $subscriber_groups = MolloUtils::getFieldValue(
         $node,
         self::field_subscriber_group,
         'smmg_subscriber_group',
         'full'
       );
-      $this->design_template = Helper::getFieldValue(
+      $this->design_template = MolloUtils::getFieldValue(
         $node,
         self::field_design_template
       );
