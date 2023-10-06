@@ -577,14 +577,12 @@ class MessageController extends ControllerBase
         'There was a problem sending your email notification to @email.',
         ['@email' => $to]
       );
-      drupal_set_message($message, 'error');
       Drupal::logger('mail-log')->error($message);
       return;
     } else {
       $message = t('An email notification has been sent to @email.', [
         '@email' => $to,
       ]);
-      drupal_set_message($message);
       Drupal::logger('mail-log')->notice($message);
     }
   }
@@ -739,7 +737,7 @@ class MessageController extends ControllerBase
     $query_result = $query
       ->getQuery()
       ->condition('type', $bundle)
-      ->condition('field_smmg_token', '')
+      ->condition('field_mollo_token', '')
       ->sort('created', 'ASC')
       ->execute();
 
@@ -753,7 +751,7 @@ class MessageController extends ControllerBase
 
         try {
           $node->set('field_smmg_accept_newsletter', 0);
-          $node->set('field_smmg_token', MolloUtils::generateToken());
+          $node->set('field_mollo_token', MolloUtils::generateToken());
           $node->save();
         } catch (EntityStorageException $e) {
         }

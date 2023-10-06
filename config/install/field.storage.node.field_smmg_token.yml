@@ -4,8 +4,8 @@ status: true
 dependencies:
   module:
     - node
-id: node.field_smmg_token
-field_name: field_smmg_token
+id: node.field_mollo_token
+field_name: field_mollo_token
 entity_type: node
 type: string
 settings:
