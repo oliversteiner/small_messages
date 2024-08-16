@@ -17,7 +17,7 @@ class Email
    * @param $data
    * @param bool $notification
    */
-  public static function sendmail($module, $data, $notification = true): void
+  public static function sendmail($module, $data, bool $notification = false): void
   {
     // Debug
     $send = true;
@@ -45,20 +45,20 @@ class Email
         '$data[\'to\'] cant be an array. Email is send only to first Item of the array.  Module:  @module.',
         ['@module' => $module]
       );
-      Drupal::messenger()->addMessage($message, 'error');
+     // Drupal::messenger()->addMessage($message, 'error');
       Drupal::logger('mail-log')->error($message);
 
       $mail_to = $data['to'][0];
     }
 
     // Check for empty Addresses // TODO: Hack
-    if($mail_to === '' || empty($mail_to)){
+    if(empty($mail_to)){
       $mail_to = 'admin@mollo.ch';
       $message = t(
         'Empty Email-Address. Module:  @module',
         ['@module' => $module]
       );
-      Drupal::messenger()->addMessage($message, 'error');
+    //  Drupal::messenger()->addMessage($message, 'error');
       Drupal::logger('mail-log')->error($message);
 
     }
@@ -84,7 +84,7 @@ class Email
     );
 
     // Result
-    if ($result && isset($result['result']) && $result['result'] != true) {
+    if ($result && isset($result['result']) && !$result['result']) {
       $message = t(
         'There was a problem sending your email notification to @email.',
         ['@email' => $to]
@@ -156,7 +156,7 @@ class Email
     $email_address_from = $config_email_addresses['from'];
     $email_addresses_to = $config_email_addresses['to'];
 
-    // Testmode - Dont send email to Subscriber if "test mode" is checked on settings page.
+    // Testmode - Don't send email to Subscriber if "test mode" is checked on settings page.
     if ($config_email_test) {
       // test mode active
       $link = Link::createFromRoute(
